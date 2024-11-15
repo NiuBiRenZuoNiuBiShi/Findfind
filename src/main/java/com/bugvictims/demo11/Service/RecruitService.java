@@ -12,7 +12,7 @@ public class RecruitService {
     private RecruitMapper recruitMapper;
 
     public void releaseRecruit(Recruit recruit) {
-        recruitMapper.insertRecruit(recruit);
+        recruitMapper.insertRecruit(recruit); // 调用Mapper
     }
 
 }
