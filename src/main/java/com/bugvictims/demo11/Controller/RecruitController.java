@@ -15,11 +15,11 @@ public class RecruitController {
     private RecruitService recruitService;
 
     @PostMapping("plaza")
-    public Result releaseRecruit(@RequestBody Recruit recruit) {
-        recruit.setCreateTime(LocalDateTime.now());
+    public Result releaseRecruit(@RequestBody Recruit recruit) { // 前端传入的数据，会自动绑定到这个对象上
+        recruit.setCreateTime(LocalDateTime.now()); // 添加一些数据
         recruit.setUpdateTime(LocalDateTime.now());
 
-        recruitService.releaseRecruit(recruit);
+        recruitService.releaseRecruit(recruit); //调用Service
 
         return new Result().success();
     }
