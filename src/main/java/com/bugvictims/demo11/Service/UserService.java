@@ -8,4 +8,5 @@ public interface UserService {
     //注册新用户
     void register(User user);
 
+    User getLoginUser();
 }

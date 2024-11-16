@@ -22,4 +22,11 @@ public class UserServiceImpl implements UserService{
         //添加
         userMapper.add(user);
     }
+
+    //获取当前登录用户
+    @Override
+    public User getLoginUser() {
+        //获取当前登录用户
+        return null;
+    }
 }

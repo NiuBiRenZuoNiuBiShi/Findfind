@@ -1,32 +1,22 @@
 package com.bugvictims.demo11.Pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@NoArgsConstructor//生成无参构造方法
+@AllArgsConstructor//生成全参构造方法
+@Data//生成get set方法
 public class Team {
-    private String description;
-    private String id;
-    private String[] label;
-    private TeamMember[] members;
-    private String name;
-    private String postion;
-    private String status;
-
-    public String getDescription() { return description; }
-    public void setDescription(String value) { this.description = value; }
-
-    public String getid() { return id; }
-    public void setid(String value) { this.id = value; }
-
-    public String[] getLabel() { return label; }
-    public void setLabel(String[] value) { this.label = value; }
-
-    public TeamMember[] getMembers() { return members; }
-    public void setMembers(TeamMember[] value) { this.members = value; }
-
-    public String getName() { return name; }
-    public void setName(String value) { this.name = value; }
-
-    public String getPostion() { return postion; }
-    public void setPostion(String value) { this.postion = value; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String value) { this.status = value; }
+    private String description;//队伍描述
+    private Integer id;//主键ID
+    private String[] label;//队伍标签
+    private TeamUser[] members;
+    private String name;//队伍名称
+    private String position;//队伍地理位置
+    private Integer status;//队伍状态  1可被搜索到  2不可被搜索到
+    private LocalDateTime createTime;//创建时间
+    private LocalDateTime updateTime;//更新时间
 }
