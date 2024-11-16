@@ -8,4 +8,5 @@ public interface UserService {
     //注册新用户
     void register(String username, String password);
 
+    User getLoginUser();
 }
