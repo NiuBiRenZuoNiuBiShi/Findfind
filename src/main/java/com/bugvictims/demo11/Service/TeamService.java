@@ -13,4 +13,10 @@ public interface TeamService {
 
     //获取队伍信息By id
     Team getTeamById(int id);
+
+    //获取队伍人数
+    int getTeamUserCount(int teamId);
+
+    //退出队伍
+    void quitTeam(int teamId, User loginUser);
 }

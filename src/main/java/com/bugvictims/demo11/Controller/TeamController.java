@@ -46,11 +46,20 @@ public class TeamController {
             return new Result().error("队伍id不合法");
         }
         Team team = teamService.getTeamById(id);
-        if (team == null) {
+        if (team == null || team.getStatus() == 3) {
             return new Result().error("队伍不存在");
         }
         return new Result().success(team);
     }
 
-
+    //退出队伍
+    @PostMapping("/quit")
+    public Result quitTeam(int teamId) {
+        if (teamId <= 0) {
+            return new Result().error("队伍id不合法");
+        }
+        User loginUser = userService.getLoginUser();
+        teamService.quitTeam(teamId, loginUser);
+        return new Result().success();
+    }
 }

@@ -16,7 +16,7 @@ public class Team {
     private TeamUser[] members;
     private String name;//队伍名称
     private String position;//队伍地理位置
-    private Integer status;//队伍状态  1可被搜索到  2不可被搜索到
+    private Integer status;//队伍状态  1可被搜索到  2不可被搜索到 3已解散
     private LocalDateTime createTime;//创建时间
     private LocalDateTime updateTime;//更新时间
 }

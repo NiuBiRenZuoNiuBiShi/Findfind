@@ -17,6 +17,16 @@ public interface TeamMapper {
     @Update("update teams set name=#{name}, description=#{description}, type=#{type}, status=#{status}, position=#{position}, update_time=now() where id=#{id}")
     void updateTeam(Team team);
 
-    @Select("select * from teams where id = #{id}")
+    //获取队伍信息By id 排除已解散队伍
+    @Select("select * from teams where id = #{id} and status != 3")
     Team getTeamById(int id);
+
+    //获取队伍人数
+    @Select("select count(*) from team_user where team_id = #{teamId}")
+    int getTeamUserCount(int teamId);
+
+    //删除队伍
+    @Update("update teams set status=3 where id=#{teamId}")
+    void deleteTeam(int teamId);
+    
 }
