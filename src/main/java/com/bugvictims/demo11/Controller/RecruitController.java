@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 public class RecruitController {
 
     @Autowired
-    private RecruitService recruitService;
+    private RecruitService recruitServiceImpl;
 
     @PostMapping("plaza")
     public Result releaseRecruit(@RequestBody Recruit recruit) { // 前端传入的数据，会自动绑定到这个对象上
         recruit.setCreateTime(LocalDateTime.now()); // 添加一些数据
         recruit.setUpdateTime(LocalDateTime.now());
 
-        recruitService.releaseRecruit(recruit); //调用Service
+        recruitServiceImpl.releaseRecruit(recruit); //调用Service
 
         return new Result().success();
     }
