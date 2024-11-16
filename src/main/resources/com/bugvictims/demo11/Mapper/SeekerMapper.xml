@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bugvictims.demo11.Mapper.SeekerMapper">
+    <select id="selectSeekers" parameterType="list" resultType="com.bugvictims.demo11.Pojo.Seeker">
+        SELECT s.*
+        FROM seeker s
+        WHERE s.id IN (
+            SELECT seeker_label.id
+            FROM seeker_label
+            WHERE 
+                <foreach collection="labels" item="labelItem" open="" separator="AND" close="">
+                    seeker_label.label = #{labelItem}
+                </foreach>
+            )
+    </select>
+</mapper>

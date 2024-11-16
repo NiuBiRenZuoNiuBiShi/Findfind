@@ -36,6 +36,7 @@ public class RecruitServiceImpl implements RecruitService {
 
     public void updateRecruit(Recruit recruit) {
         recruitMapper.updateRecruit(recruit);
+        recruitLabelMapper.deleteRecruitLabel(recruit.getId());
         recruitLabelMapper.addRecruitLabel(recruit);
     }
 

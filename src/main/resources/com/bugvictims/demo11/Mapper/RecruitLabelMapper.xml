@@ -10,11 +10,4 @@
             (#{id}, #{labelItem}, #{createTime}, #{updateTime})
         </foreach>
     </insert>
-    <update id="updateRecruitLabel" parameterType="com.bugvictims.demo11.Pojo.Recruit">
-        <foreach collection="label" item="labelItem" open="" separator=";" close="">
-            UPDATE recruit_label
-            SET label = #{labelItem}, update_time = #{updateTime}
-            WHERE recruit_id = #{id}
-        </foreach>
-    </update>
 </mapper>

@@ -17,7 +17,7 @@ public class RecruitController {
     @Autowired
     private RecruitService recruitService;
 
-    @PostMapping("plaza")
+    @PostMapping("/plaza")
     public Result releaseRecruit(@RequestBody Recruit recruit // 前端传入的数据，会自动绑定到这个对象上
             , @RequestAttribute("userID") int userID) { // 拦截器拦截放行后，可以得到这个
         recruit.setReleaserID(userID);
@@ -25,26 +25,26 @@ public class RecruitController {
         return new Result().success();
     }
 
-    @PutMapping("plaza")
+    @PutMapping("/plaza")
     public Result updateRecruit(@RequestBody Recruit recruit) {
         recruit.setUpdateTime(LocalDateTime.now());
         recruitService.updateRecruit(recruit);
         return new Result().success();
     }
 
-    @GetMapping("plaza") // 通过label来筛选，所需要的Recruit，分页查询
+    @GetMapping("/plaza") // 通过label来筛选，所需要的Recruit，分页查询
     public Result getRecruits(@RequestParam List<String> labels
     , @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return new Result().success(recruitService.getRecruits(labels, page, size));
     }
 
-    @DeleteMapping("plaza/{id}")
+    @DeleteMapping("/plaza/{id}")
     public Result deleteRecruit(@PathVariable int id) {
         recruitService.deleteRecruit(id);
         return new Result().success();
     }
 
-    @PostMapping("plaza/{recruitID}") // 传入recruitID,在Body里传入具体的内容
+    @PostMapping("/plaza/{recruitID}") // 传入recruitID,在Body里传入具体的内容
     public Result addJoinRequest(@PathVariable int recruitID, @RequestBody JoinRequest joinRequest
             , @RequestAttribute("userID") int userID) {
         joinRequest.setUserId(userID);
