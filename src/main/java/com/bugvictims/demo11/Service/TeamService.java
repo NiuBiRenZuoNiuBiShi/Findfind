@@ -10,4 +10,7 @@ public interface TeamService {
 
     //更新队伍
     void updateTeam(Team team, User loginUser);
+
+    //获取队伍信息By id
+    Team getTeamById(int id);
 }

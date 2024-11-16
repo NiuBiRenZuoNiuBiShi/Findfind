@@ -14,19 +14,19 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamMapper teamMapper;
 
-   @Autowired
-   private TeamUserService teamUserService;
+    @Autowired
+    private TeamUserService teamUserService;
 
     @Override
     public void createTeam(Team team, User loginUser) {
 
         //请求参数不能为空
-        if(team==null){
+        if (team == null) {
             throw new RuntimeException("队伍信息不能为空");
         }
 
         //是否存在登录用户
-        if(loginUser==null){
+        if (loginUser == null) {
             throw new RuntimeException("未登录");
         }
 
@@ -36,29 +36,34 @@ public class TeamServiceImpl implements TeamService {
         teamMapper.createTeam(team);
 
         //添加队伍成员为队长
-        teamUserService.addTeamUser(team.getId(),id,"leader");
+        teamUserService.addTeamUser(team.getId(), id, "leader");
     }
 
     @Override
     public void updateTeam(Team team, User loginUser) {
 
-            //请求参数不能为空
-            if(team==null){
-                throw new RuntimeException("队伍信息不能为空");
-            }
+        //请求参数不能为空
+        if (team == null) {
+            throw new RuntimeException("队伍信息不能为空");
+        }
 
-            //是否存在登录用户
-            if(loginUser==null){
-                throw new RuntimeException("未登录");
-            }
+        //是否存在登录用户
+        if (loginUser == null) {
+            throw new RuntimeException("未登录");
+        }
 
-            //检测用户身份
-            if(!teamUserService.isTeamAdminOrLeader(team.getId(), loginUser.getId())){
-                throw new RuntimeException("权限不足，无法修改队伍信息");
-            }
+        //检测用户身份
+        if (!teamUserService.isTeamAdminOrLeader(team.getId(), loginUser.getId())) {
+            throw new RuntimeException("权限不足，无法修改队伍信息");
+        }
 
-            //更新队伍信息
-            teamMapper.updateTeam(team);
+        //更新队伍信息
+        teamMapper.updateTeam(team);
+    }
+
+    @Override
+    public Team getTeamById(int id) {
+        return teamMapper.getTeamById(id);
     }
 
 }
