@@ -17,9 +17,9 @@ public class UserServiceImpl implements UserService{
     }
     //注册新用户
     @Override
-    public void register(String username, String password) {
+    public void register(User user) {
         //加密处理，此处暂无，后期再加
         //添加
-        userMapper.add(username,password);
+        userMapper.add(user);
     }
 }

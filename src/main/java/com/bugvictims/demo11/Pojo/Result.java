@@ -12,14 +12,14 @@ public class Result {
     String message;
     Object data;
     public Result success(Object data) {
-        return new Result(code, message, data);
+        return new Result(1,"success", data);
     }
 
     public Result success() {
-        return new Result(code, message, null);
+        return new Result(1, "success", null);
     }
 
     public Result error(String message) {
-        return new Result(code, message, null);
+        return new Result(0, message, null);
     }
 }
