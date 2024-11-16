@@ -5,5 +5,9 @@ import com.bugvictims.demo11.Pojo.User;
 
 public interface TeamService {
 
+    //创建队伍
     void createTeam(Team team, User loginUser);
+
+    //更新队伍
+    void updateTeam(Team team, User loginUser);
 }

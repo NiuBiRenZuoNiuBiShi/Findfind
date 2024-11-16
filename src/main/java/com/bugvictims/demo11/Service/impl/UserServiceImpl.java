@@ -2,8 +2,11 @@ package com.bugvictims.demo11.Service.impl;
 import com.bugvictims.demo11.Mapper.UserMapper;
 import com.bugvictims.demo11.Pojo.User;
 import  com.bugvictims.demo11.Service.UserService;
+import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -26,7 +29,9 @@ public class UserServiceImpl implements UserService{
     //获取当前登录用户
     @Override
     public User getLoginUser() {
-        //获取当前登录用户
-        return null;
+        Map<String,Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        //根据用户名查询用户
+        return findByUserName(username);
     }
 }

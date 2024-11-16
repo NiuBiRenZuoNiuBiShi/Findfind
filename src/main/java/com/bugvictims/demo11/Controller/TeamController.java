@@ -26,8 +26,19 @@ public class TeamController {
         if(team == null){
             return new Result().error("队伍信息不能为空");
         }
-        User loginUser = userService.getLoginUser();// 暂无实现
+        User loginUser = userService.getLoginUser();
         teamService.createTeam(team, loginUser);
+        return new Result().success();
+    }
+
+    //修改队伍信息
+    @PostMapping("/update")
+    public Result updateTeam(@RequestBody Team team){
+        if(team == null){
+            return new Result().error("队伍信息不能为空");
+        }
+        User loginUser = userService.getLoginUser();
+        teamService.updateTeam(team, loginUser);
         return new Result().success();
     }
 
