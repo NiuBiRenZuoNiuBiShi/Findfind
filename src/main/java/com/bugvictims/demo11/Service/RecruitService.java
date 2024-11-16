@@ -1,5 +1,6 @@
 package com.bugvictims.demo11.Service;
 
+import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.github.pagehelper.PageInfo;
 
@@ -13,4 +14,6 @@ public interface RecruitService {
     PageInfo<Recruit> getRecruits(List<String> labels, int pageNum, int pageSize);
 
     void deleteRecruit(int id);
+
+    void addJoinRequest(int recruitID, JoinRequest joinRequest);
 }

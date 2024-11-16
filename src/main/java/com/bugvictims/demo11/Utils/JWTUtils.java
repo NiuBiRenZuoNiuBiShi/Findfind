@@ -26,9 +26,24 @@ public class JWTUtils {
                     .setSigningKey(SECRET_KEY)
                     .build()
                     .parseClaimsJws(token)
-                    .getPayload();
+                    .getBody();
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public static String getUsernameFromToken(String token) {
+        Claims claims = validateToken(token);
+        return claims.get("username", String.class);
+    }
+
+    public static int getUserIdFromToken(String token) {
+        Claims claims = validateToken(token);
+        String userIdString = claims.get("userId", String.class);  // 获取 String 类型的 userId
+        try {
+            return Integer.parseInt(userIdString);  // 将 String 转换为 int 类型
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid userId format");  // 如果格式不对，抛出异常
         }
     }
 
