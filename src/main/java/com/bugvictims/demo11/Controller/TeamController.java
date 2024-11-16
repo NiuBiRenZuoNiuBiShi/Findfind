@@ -8,6 +8,8 @@ import com.bugvictims.demo11.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/teams")
 public class TeamController {
@@ -62,4 +64,27 @@ public class TeamController {
         teamService.quitTeam(teamId, loginUser);
         return new Result().success();
     }
+
+    //删除队伍
+    @PostMapping("/delete")
+    public Result deleteTeam(int teamId) {
+        if (teamId <= 0) {
+            return new Result().error("队伍id不合法");
+        }
+        User loginUser = userService.getLoginUser();
+        teamService.deleteTeam(teamId, loginUser);
+        return new Result().success();
+    }
+
+    //获取队伍信息
+    @GetMapping("/list")
+    public Result listTeams() {
+        List<Team> teamList = teamService.listTeams();
+        if (teamList == null || teamList.isEmpty()) {
+            return new Result().error("队伍列表为空");
+        }
+        return new Result().success(teamList);
+    }
+
+
 }

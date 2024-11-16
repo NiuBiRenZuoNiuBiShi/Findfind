@@ -6,9 +6,11 @@ import com.bugvictims.demo11.Pojo.TeamUser;
 import com.bugvictims.demo11.Pojo.User;
 import com.bugvictims.demo11.Service.TeamService;
 import com.bugvictims.demo11.Service.TeamUserService;
+import com.bugvictims.demo11.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +23,9 @@ public class TeamServiceImpl implements TeamService {
     private TeamUserService teamUserService;
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void createTeam(Team team, User loginUser) {
@@ -107,5 +112,39 @@ public class TeamServiceImpl implements TeamService {
             //删除队伍成员
             teamUserService.deleteTeamUser(teamId, userId);
         }
+    }
+
+    @Override
+    public void deleteTeam(int teamId, User loginUser) {
+        int userId = loginUser.getId();
+
+        //检测用户身份
+        if (!teamUserService.isTeamLeader(teamId, userId)) {
+            throw new RuntimeException("权限不足，无法删除队伍");
+        }
+
+        //删除队伍
+        teamMapper.deleteTeam(teamId);
+    }
+
+    @Override
+    public List<User> listTeamUsers(int teamId) {
+        //获取队伍成员
+        List<TeamUser> teamUsers = teamUserService.findTeamUsersByTeamId(teamId);
+
+        List<User> users = new ArrayList<>();
+        for (TeamUser teamUser : teamUsers) {
+            int userId = teamUser.getUserId();
+            //查询用户信息
+            User user = userService.getUserById(userId);
+            users.add(user);
+        }
+        return users;
+    }
+
+    @Override
+    public List<Team> listTeams() {
+        //获取队伍列表
+        return teamMapper.listTeams();
     }
 }

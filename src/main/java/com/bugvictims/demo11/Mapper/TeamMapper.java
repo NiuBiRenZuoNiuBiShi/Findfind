@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface TeamMapper {
 
@@ -28,5 +30,8 @@ public interface TeamMapper {
     //删除队伍
     @Update("update teams set status=3 where id=#{teamId}")
     void deleteTeam(int teamId);
-    
+
+    //获取队伍列表
+    @Select("select * from teams where status != 3 AND status != 2")
+    List<Team> listTeams();
 }

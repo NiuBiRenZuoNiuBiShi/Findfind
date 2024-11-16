@@ -3,6 +3,8 @@ package com.bugvictims.demo11.Service;
 import com.bugvictims.demo11.Pojo.Team;
 import com.bugvictims.demo11.Pojo.User;
 
+import java.util.List;
+
 public interface TeamService {
 
     //创建队伍
@@ -19,4 +21,13 @@ public interface TeamService {
 
     //退出队伍
     void quitTeam(int teamId, User loginUser);
+
+    //删除队伍
+    void deleteTeam(int teamId, User loginUser);
+
+    //获取队伍成员
+    List<User> listTeamUsers(int teamId);
+
+    //获取队伍列表
+    List<Team> listTeams();
 }
