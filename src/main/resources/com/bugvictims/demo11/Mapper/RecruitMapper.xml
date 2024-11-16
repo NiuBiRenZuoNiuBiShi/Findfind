@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bugvictims.demo11.Mapper.RecruitMapper">
+
+    <select id="getRecruits" parameterType="list" resultType="com.bugvictims.demo11.Pojo.Recruit">
+        SELECT r.* # 查询所有信息，将Recruit表别名r
+        From recruit r
+        WHERE r.id IN ( # 查询条件，r的id值，符合recruit_label通过label查询到的所有recruit_id的值
+            SELECT recruit_label.recruit_id
+            FROM recruit_label
+            WHERE 
+                <foreach collection="labelConditions" item="labelCondition" open="" separator="AND" close="">
+                    recruit_label.label = #{labelCondition}
+                </foreach>
+            )
+    </select>
+</mapper>

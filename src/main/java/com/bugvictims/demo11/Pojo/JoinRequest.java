@@ -9,16 +9,13 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Recruit {
-    private Integer id;
-    private Integer teamID;
-    private Integer releaserID;
-    private Integer needNum;
-    private Integer hasNum;
-    private Integer receiveNum;
-    private String header;
+public class JoinRequest {
+    private int id;
+    private int userId;
+    private int teamId;
     private String message;
-    private String[] label;
+    private String response;
+    private int status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }
