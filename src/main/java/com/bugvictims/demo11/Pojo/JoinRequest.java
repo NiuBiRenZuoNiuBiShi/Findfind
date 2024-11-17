@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JoinRequest {
-    private int id;
-    private int userId;
-    private int teamId;
+    private Integer id;
+    private Integer userId;
+    private Integer teamId;
     private String message;
     private String response;
-    private int status;
+    private Integer status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

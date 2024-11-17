@@ -11,9 +11,9 @@ public interface RecruitService {
 
     void updateRecruit(Recruit recruit);
 
-    PageInfo<Recruit> getRecruits(List<String> labels, int pageNum, int pageSize);
+    PageInfo<Recruit> getRecruits(List<String> labels, Integer pageNum, Integer pageSize);
 
-    void deleteRecruit(int id);
+    void deleteRecruit(Integer id);
 
-    void addJoinRequest(int recruitID, JoinRequest joinRequest);
+    void addJoinRequest(Integer recruitID, JoinRequest joinRequest);
 }

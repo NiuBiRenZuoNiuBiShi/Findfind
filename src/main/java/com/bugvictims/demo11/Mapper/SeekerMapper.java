@@ -16,10 +16,10 @@ public interface SeekerMapper {
     void createSeeker(Seeker seeker);
 
     @Delete("DELETE FROM seeker WHERE seeker_id = #{id}")
-    void deleteSeeker(int id);
+    void deleteSeeker(Integer id);
 
     @Update("UPDATE seeker SET header = #{header}, message = #{message}" +
-            ", position = #{position}, update_time = #{updateTime}")
+            ", position = #{position}, update_time = #{updateTime} WHERE id = #{id}")
     void updateSeeker(Seeker seeker);
 
     List<Seeker> selectSeekers(List<String> labels);

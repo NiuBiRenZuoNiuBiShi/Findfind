@@ -1,5 +1,6 @@
 package com.bugvictims.demo11.Controller;
 
+import com.bugvictims.demo11.Pojo.InviteRequest;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
@@ -25,7 +26,7 @@ public class SeekerController {
     }
 
     @DeleteMapping("/plaza/seeker/{id}")
-    Result deleteSeeker(@PathVariable int id) {
+    Result deleteSeeker(@PathVariable Integer id) {
         seekerService.deleteSeeker(id);
         return new Result().success();
     }
@@ -40,5 +41,13 @@ public class SeekerController {
     @GetMapping("/plaza/seeker")
     Result selectSeeker(@RequestParam("label") List<String> labels) {
         return new Result().success(seekerService.getSeekers(labels));
+    }
+
+    @PostMapping("/plaza/seeker/invite")
+    Result inviteSeeker(@RequestBody InviteRequest inviteRequest
+            , @RequestAttribute("userID") int userID) {
+        inviteRequest.setReleaserID(userID);
+        seekerService.inviteSeeker(inviteRequest);
+        return new Result().success();
     }
 }

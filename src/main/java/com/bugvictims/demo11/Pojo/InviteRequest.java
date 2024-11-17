@@ -5,21 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Recruit {
+public class InviteRequest {
+
     private Integer id;
+    private Integer userID;
     private Integer teamID;
     private Integer releaserID;
-    private Integer needNum;
-    private Integer hasNum;
-    private Integer receiveNum;
-    private String header;
+    private Integer header;
     private String message;
-    private List<String> label;
+    private String response;
+    private Integer status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

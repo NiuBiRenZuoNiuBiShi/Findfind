@@ -40,18 +40,18 @@ public class RecruitServiceImpl implements RecruitService {
         recruitLabelMapper.addRecruitLabel(recruit);
     }
 
-    public PageInfo<Recruit> getRecruits(List<String> labels, int pageNum, int pageSize) {
+    public PageInfo<Recruit> getRecruits(List<String> labels, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize); //分页查询...
         List<Recruit> recruits = recruitMapper.getRecruits(labels);
         return new PageInfo<>(recruits);
     }
 
-    public void deleteRecruit(int id) {
+    public void deleteRecruit(Integer id) {
         recruitMapper.deleteRecruit(id);
         recruitLabelMapper.deleteRecruitLabel(id);
     }
 
-    public void addJoinRequest(int recruitID, JoinRequest joinRequest) {
+    public void addJoinRequest(Integer recruitID, JoinRequest joinRequest) {
         Recruit recruit = recruitMapper.getRecruitById(recruitID); // 需要通过recruitID来得到team_id
         joinRequest.setTeamId(recruit.getTeamID());
         joinRequest.setCreateTime(LocalDateTime.now());

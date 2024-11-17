@@ -21,9 +21,9 @@ public interface RecruitMapper {
     List<Recruit> getRecruits(@Param("labelCondition") List<String> labelConditions);
 
     @Delete("DELETE FROM recruit WHERE id = #{id}")
-    void deleteRecruit(int id);
+    void deleteRecruit(Integer id);
 
     @Select("SELECT id, team_id, releaser_id, need_num, has_num, receive_num, header, message, create_time, update_time" +
             " FROM recruit WHERE id = #{id}")
-    Recruit getRecruitById(int id);
+    Recruit getRecruitById(Integer id);
 }
