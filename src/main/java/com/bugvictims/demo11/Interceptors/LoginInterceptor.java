@@ -1,4 +1,5 @@
 package com.bugvictims.demo11.Interceptors;
+
 import com.bugvictims.demo11.Utils.JWTUtils;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             } else {
                 response.setStatus(401);
-                return false;
+                return true;
             }
         } catch (Exception e) {
             //设置http状态码401

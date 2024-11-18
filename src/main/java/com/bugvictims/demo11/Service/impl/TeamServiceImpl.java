@@ -21,8 +21,10 @@ public class TeamServiceImpl implements TeamService {
 
     @Autowired
     private TeamUserService teamUserService;
-    @Autowired
-    private TeamService teamService;
+//
+//    @Autowired
+//    private TeamService teamService;
+
 
     @Autowired
     private UserService userService;
@@ -91,7 +93,7 @@ public class TeamServiceImpl implements TeamService {
         }
 
         //检测队伍人数
-        int count = teamService.getTeamUserCount(teamId);
+        int count = teamMapper.getTeamUserCount(teamId);
 
         if (count == 1) {
             //队伍只有一个人，删除队伍
@@ -158,7 +160,7 @@ public class TeamServiceImpl implements TeamService {
         }
 
         //检测队伍人数
-        int count = teamService.getTeamUserCount(teamId);
+        int count = teamMapper.getTeamUserCount(teamId);
 
         if (count >= 5) {
             throw new RuntimeException("队伍人数已满，无法加入");
