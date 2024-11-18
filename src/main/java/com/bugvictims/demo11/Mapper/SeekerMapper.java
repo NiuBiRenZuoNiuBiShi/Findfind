@@ -1,10 +1,7 @@
 package com.bugvictims.demo11.Mapper;
 
 import com.bugvictims.demo11.Pojo.Seeker;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -23,4 +20,7 @@ public interface SeekerMapper {
     void updateSeeker(Seeker seeker);
 
     List<Seeker> selectSeekers(List<String> labels);
+
+    @Select("SELECT id, seeker_id, header, message, position, create_time, update_time FROM seeker WHERE id = #{id}")
+    Seeker selectSeekerById(Integer id);
 }

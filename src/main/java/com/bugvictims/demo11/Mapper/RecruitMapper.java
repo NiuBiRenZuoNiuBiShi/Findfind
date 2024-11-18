@@ -26,4 +26,7 @@ public interface RecruitMapper {
     @Select("SELECT id, team_id, releaser_id, need_num, has_num, receive_num, header, message, create_time, update_time" +
             " FROM recruit WHERE id = #{id}")
     Recruit getRecruitById(Integer id);
+
+    @Update("UPDATE recruit SET receive_num = receive_num + 1")
+    void addJoinRequest(Integer recruitID);
 }

@@ -5,7 +5,6 @@ import com.bugvictims.demo11.Mapper.RecruitMapper;
 import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Service.RecruitService;
-import com.bugvictims.demo11.Utils.JWTUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +55,7 @@ public class RecruitServiceImpl implements RecruitService {
         joinRequest.setTeamId(recruit.getTeamID());
         joinRequest.setCreateTime(LocalDateTime.now());
         joinRequest.setUpdateTime(LocalDateTime.now());
+        recruitMapper.addJoinRequest(recruitID);
         joinRequestMapper.insertJoinRequest(joinRequest);
     }
 }

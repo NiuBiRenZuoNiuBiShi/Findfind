@@ -43,11 +43,14 @@ public class SeekerController {
         return new Result().success(seekerService.getSeekers(labels));
     }
 
-    @PostMapping("/plaza/seeker/invite")
+    @PostMapping("/plaza/seeker/invite/{seekerID}/{teamID}")
     Result inviteSeeker(@RequestBody InviteRequest inviteRequest
-            , @RequestAttribute("userID") int userID) {
+            , @RequestAttribute("userID") int userID
+            , @PathVariable("seekerID") Integer seekerID
+            , @PathVariable("teamID") Integer teamID )  {
         inviteRequest.setReleaserID(userID);
-        seekerService.inviteSeeker(inviteRequest);
+        inviteRequest.setTeamID(teamID);
+        seekerService.inviteSeeker(inviteRequest, seekerID);
         return new Result().success();
     }
 }

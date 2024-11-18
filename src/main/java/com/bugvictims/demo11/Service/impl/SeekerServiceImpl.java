@@ -44,9 +44,11 @@ public class SeekerServiceImpl implements SeekerService {
         return seekerMapper.selectSeekers(labels);
     }
 
-    public void inviteSeeker(InviteRequest inviteRequest) {
+    public void inviteSeeker(InviteRequest inviteRequest, Integer seekerID) {
         inviteRequest.setCreateTime(LocalDateTime.now());
-        inviteRequest.setUpdateTime(LocalDateTime.now());
+        inviteRequest.setUpdateTime(LocalDateTime.now()); // time
+        Seeker seeker = seekerMapper.selectSeekerById(seekerID);
+        inviteRequest.setUserID(seeker.getSeekerID()); // specific invited user
         inviteRequestMapper.insertInviteRequest(inviteRequest);
     }
 }

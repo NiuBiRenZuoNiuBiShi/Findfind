@@ -16,5 +16,5 @@ public interface SeekerService {
 
     List<Seeker> getSeekers(List<String> labels);
 
-    void inviteSeeker(InviteRequest inviteRequest);
+    void inviteSeeker(InviteRequest inviteRequest, Integer seekerID);
 }
