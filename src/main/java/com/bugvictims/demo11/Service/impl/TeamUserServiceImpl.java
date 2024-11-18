@@ -27,16 +27,7 @@ public class TeamUserServiceImpl implements TeamUserService {
         teamUser.setType(type);
         teamUserMapper.addTeamUser(teamUser);
     }
-
-    @Override
-    public boolean isTeamAdminOrLeader(int teamId, int userId) {
-        TeamUser teamUser = teamUserMapper.findTeamUserByTeamIdAndUserId(teamId, userId);
-        if (teamUser == null) {
-            return false;
-        }
-        return "admin".equals(teamUser.getType()) || "leader".equals(teamUser.getType());
-    }
-
+    
     @Override
     public boolean isTeamMember(int teamId, int userId) {
         TeamUser teamUser = teamUserMapper.findTeamUserByTeamIdAndUserId(teamId, userId);

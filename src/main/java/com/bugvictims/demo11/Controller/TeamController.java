@@ -42,8 +42,8 @@ public class TeamController {
     }
 
     //获取队伍信息By id
-    @GetMapping("/get")
-    public Result getTeamById(int id) {
+    @GetMapping("/get/{id}")
+    public Result getTeamById(@PathVariable("id") int id) {
         if (id <= 0) {
             return new Result().error("队伍id不合法");
         }
@@ -55,8 +55,8 @@ public class TeamController {
     }
 
     //退出队伍
-    @PostMapping("/quit")
-    public Result quitTeam(int teamId) {
+    @PostMapping("/quit/{teamId}")
+    public Result quitTeam(@PathVariable("teamId") int teamId) {
         if (teamId <= 0) {
             return new Result().error("队伍id不合法");
         }
@@ -66,8 +66,8 @@ public class TeamController {
     }
 
     //删除队伍
-    @PostMapping("/delete")
-    public Result deleteTeam(int teamId) {
+    @PostMapping("/delete/{teamId}")
+    public Result deleteTeam(@PathVariable("teamId") int teamId) {
         if (teamId <= 0) {
             return new Result().error("队伍id不合法");
         }
@@ -86,5 +86,29 @@ public class TeamController {
         return new Result().success(teamList);
     }
 
+    //加入队伍
+    @PostMapping("/join/{teamId}")
+    public Result joinTeam(@PathVariable("teamId") int teamId) {
+        if (teamId <= 0) {
+            return new Result().error("队伍id不合法");
+        }
+        User loginUser = userService.getLoginUser();
+        teamService.joinTeam(teamId, loginUser);
+        return new Result().success();
+    }
 
+    //获取队伍成员
+    @GetMapping("/listUsers/{teamId}")
+    public Result listTeamUsers(@PathVariable("teamId") int teamId) {
+        if (teamId <= 0) {
+            return new Result().error("队伍id不合法");
+        }
+        List<User> userList = teamService.listTeamUsers(teamId);
+        if (userList == null || userList.isEmpty()) {
+            return new Result().error("队伍成员为空");
+        }
+        return new Result().success(userList);
+    }
+
+    //
 }

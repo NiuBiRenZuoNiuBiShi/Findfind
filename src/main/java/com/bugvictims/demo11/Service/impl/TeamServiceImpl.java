@@ -63,7 +63,7 @@ public class TeamServiceImpl implements TeamService {
         }
 
         //检测用户身份
-        if (!teamUserService.isTeamAdminOrLeader(team.getId(), loginUser.getId())) {
+        if (!teamUserService.isTeamLeader(team.getId(), loginUser.getId())) {
             throw new RuntimeException("权限不足，无法修改队伍信息");
         }
 
@@ -146,5 +146,25 @@ public class TeamServiceImpl implements TeamService {
     public List<Team> listTeams() {
         //获取队伍列表
         return teamMapper.listTeams();
+    }
+
+    @Override
+    public void joinTeam(int teamId, User loginUser) {
+        int userId = loginUser.getId();
+
+        //检测用户是否已加入队伍
+        if (teamUserService.isTeamMember(teamId, userId)) {
+            throw new RuntimeException("已加入队伍，无法重复加入");
+        }
+
+        //检测队伍人数
+        int count = teamService.getTeamUserCount(teamId);
+
+        if (count >= 5) {
+            throw new RuntimeException("队伍人数已满，无法加入");
+        }
+
+        //加入队伍
+        teamUserService.addTeamUser(teamId, userId, "member");
     }
 }

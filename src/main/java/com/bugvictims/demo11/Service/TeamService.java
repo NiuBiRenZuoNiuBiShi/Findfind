@@ -30,4 +30,7 @@ public interface TeamService {
 
     //获取队伍列表
     List<Team> listTeams();
+
+    //加入队伍
+    void joinTeam(int teamId, User loginUser);
 }

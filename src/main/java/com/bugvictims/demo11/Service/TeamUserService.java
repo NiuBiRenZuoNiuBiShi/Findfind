@@ -12,8 +12,6 @@ public interface TeamUserService {
     // 添加团队成员
     void addTeamUser(int teamId, int userId, String type);
 
-    //是否为管理员或队长
-    boolean isTeamAdminOrLeader(int teamId, int userId);
 
     //是否为组员
     boolean isTeamMember(int teamId, int userId);
