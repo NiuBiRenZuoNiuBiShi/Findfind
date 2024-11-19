@@ -22,7 +22,7 @@ public interface UserMapper {
 
     //更新用户信息
     @Update("update user set nick_name=#{nickName},email=#{email},phone=#{phone}," +
-            "biology=#{biology},postion=#{postion},status=#{status}," +
-            "update_time=#{updateTime} where id=#{id}")
+            "biology=#{biology},status=#{status}," +
+            "update_time=#{updateTime},position=#{position}  where id=#{id}")
     void update(User user);
 }

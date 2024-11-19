@@ -3,8 +3,8 @@ package com.bugvictims.demo11.Controller;
 import com.bugvictims.demo11.Pojo.*;
 import com.bugvictims.demo11.Service.impl.UserServiceImpl;
 import com.bugvictims.demo11.Utils.JWTUtils;
-import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,14 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Validated
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
     @PostMapping("/register")
-    public Result register(@RequestBody User user) {
+    public Result register(@RequestBody @Validated  User user) {
         // 检查必填字段是否已提供
-        if (user.getUsername() == null || user.getPassword() == null || user.getPhone() == null || user.getBiology() == null || user.getStatus() == 2) {
+        if (user.getUsername() == null || user.getPassword() == null || user.getPhone() == null || user.getBiology() == null || (user.getStatus()!=1&&user.getStatus()!=0)){
             return new Result().error("All required fields must be filled out.");
         }
         User u = userServiceImpl.findByUserName(user.getUsername());
@@ -54,16 +55,23 @@ public class UserController {
     //查看用户信息
     @PostMapping("/userInfo")
     public Result userInfo(){
-        Map<String,Object>map=ThreadLocalUtil.get();
-        String username=(String)map.get("username");
-        User user=userServiceImpl.findByUserName(username);
-        return new Result().success(user);
+        User user=userServiceImpl.getLoginUser();
+        if(user!=null) {
+            return new Result().success(user);
+        }
+        else
+            return new Result().error("无用户登录");
     }
     //更新用户信息
     @PostMapping("/update")
-    public Result update(@RequestBody User user){
-      userServiceImpl.update(user);
-      return new Result().success();
+    public Result update(@RequestBody @Validated User user){
+        User u=userServiceImpl.getLoginUser();
+        if(u!=null){
+            userServiceImpl.update(user);
+            return new Result().success();
+        }
+        else
+            return new Result().error("无用户登录");
     }
 
 

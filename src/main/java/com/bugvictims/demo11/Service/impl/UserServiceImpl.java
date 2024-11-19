@@ -41,10 +41,7 @@ public class UserServiceImpl implements UserService {
 
     //更新用户信息
     @Override public void update(User user){
-        //是否存在登录用户
-        if (user == null) {
-            throw new RuntimeException("未登录");
-        }
+
         user.setUpdateTime(LocalDateTime.now());
         userMapper.update(user);
     }
