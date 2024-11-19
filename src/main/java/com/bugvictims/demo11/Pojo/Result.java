@@ -14,7 +14,6 @@ public class Result {
     public Result success(Object data) {
         return new Result(1,"success", data);
     }
-
     public Result success() {
         return new Result(1, "success", null);
     }

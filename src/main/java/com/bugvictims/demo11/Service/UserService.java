@@ -14,4 +14,6 @@ public interface UserService {
 
     //通过id获取用户
     User getUserById(int id);
+
+    void update(User user);
 }

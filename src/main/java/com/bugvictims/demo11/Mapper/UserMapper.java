@@ -4,6 +4,7 @@ import com.bugvictims.demo11.Pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
@@ -18,4 +19,10 @@ public interface UserMapper {
     //通过id获取用户
     @Select("select * from user where id=#{id}")
     User getUserById(int id);
+
+    //更新用户信息
+    @Update("update user set nick_name=#{nickName},email=#{email},phone=#{phone}," +
+            "biology=#{biology},postion=#{postion},status=#{status}," +
+            "update_time=#{updateTime} where id=#{id}")
+    void update(User user);
 }

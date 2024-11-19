@@ -13,12 +13,9 @@ public class JWTUtils {
     public static String generateToken(Map<String, Object> claims) { // 登录成功后，返回JWT令牌
         return JWT.create().withClaim("claims", claims).withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).sign(Algorithm.HMAC256(SECRET_KEY));
     }
-
-
     public static Map<String, Object> validateToken(String token) {// 检测JWT令牌是否有效，并返回JWT令牌所携带的信息
         return JWT.require(Algorithm.HMAC256(SECRET_KEY)).build().verify(token).getClaim("claims").asMap();
     }
-
     public static String getUsernameFromToken(String token) {
         Map<String, Object> claims = validateToken(token);
         return (String) claims.get("username");

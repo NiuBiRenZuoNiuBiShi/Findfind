@@ -3,6 +3,7 @@ package com.bugvictims.demo11.Controller;
 import com.bugvictims.demo11.Pojo.*;
 import com.bugvictims.demo11.Service.impl.UserServiceImpl;
 import com.bugvictims.demo11.Utils.JWTUtils;
+import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,6 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
-
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
         // 检查必填字段是否已提供
@@ -34,7 +34,6 @@ public class UserController {
             return new Result().error("用户名已被占用");
         }
     }
-    
     @PostMapping("/login")
     public Result login(String username, String password) {
         User loginUser = userServiceImpl.findByUserName(username);
@@ -52,5 +51,24 @@ public class UserController {
             return new Result().error("密码错误");
         }
     }
+    //查看用户信息
+    @PostMapping("/userInfo")
+    public Result userInfo(){
+        Map<String,Object>map=ThreadLocalUtil.get();
+        String username=(String)map.get("username");
+        User user=userServiceImpl.findByUserName(username);
+        return new Result().success(user);
+    }
+    //更新用户信息
+    @PostMapping("/update")
+    public Result update(@RequestBody User user){
+      userServiceImpl.update(user);
+      return new Result().success();
+    }
+
+
+
+
+
 
 }
