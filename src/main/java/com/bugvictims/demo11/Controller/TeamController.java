@@ -25,6 +25,10 @@ public class TeamController {
         if (team == null) {
             return new Result().error("队伍信息不能为空");
         }
+        String name = team.getName();
+        if (teamService.getTeamByName(name) != null) {
+            return new Result().error("队伍名称已存在");
+        }
         User loginUser = userService.getLoginUser();
         teamService.createTeam(team, loginUser);
         return new Result().success();

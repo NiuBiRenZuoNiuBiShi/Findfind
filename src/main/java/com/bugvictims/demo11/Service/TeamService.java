@@ -33,4 +33,7 @@ public interface TeamService {
 
     //加入队伍
     void joinTeam(int teamId, User loginUser);
+
+    //根据队伍名称获取队伍信息
+    Team getTeamByName(String name);
 }

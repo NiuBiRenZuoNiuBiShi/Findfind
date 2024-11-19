@@ -1,10 +1,7 @@
 package com.bugvictims.demo11.Mapper;
 
 import com.bugvictims.demo11.Pojo.Team;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -12,7 +9,7 @@ import java.util.List;
 public interface TeamMapper {
 
     //创建队伍
-    @Insert("insert into teams( name, description, type, status, position, create_time, update_time) " + "values(#{name}, #{description}, #{type}, #{status}, #{position}, now(), now())")
+    @Insert("insert into teams(name, description, type, status, position, create_time, update_time) " + "values(#{name}, #{description}, #{type}, #{status}, #{position}, now(), now())")
     void createTeam(Team team);
 
     //更新队伍
@@ -24,14 +21,18 @@ public interface TeamMapper {
     Team getTeamById(int id);
 
     //获取队伍人数
-    @Select("select count(*) from team_user where team_id = #{teamId}")
+    @Select("select count(*) from team_user where team_id = #{teamId} and type != 'none'")
     int getTeamUserCount(int teamId);
 
     //删除队伍
-    @Update("update teams set status=3 where id=#{teamId}")
+    @Delete("delete from teams where id = #{teamId}")
     void deleteTeam(int teamId);
 
     //获取队伍列表
     @Select("select * from teams where status != 3 AND status != 2")
     List<Team> listTeams();
+
+    //根据队伍名称获取队伍信息
+    @Select("select * from teams where name = #{name}")
+    Team getTeamByName(String name);
 }

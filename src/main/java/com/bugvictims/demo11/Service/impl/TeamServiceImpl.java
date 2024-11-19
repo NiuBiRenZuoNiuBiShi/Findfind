@@ -46,9 +46,9 @@ public class TeamServiceImpl implements TeamService {
         int id = loginUser.getId();
         //创建队伍
         teamMapper.createTeam(team);
-
+        int teamId = teamMapper.getTeamByName(team.getName()).getId();
         //添加队伍成员为队长
-        teamUserService.addTeamUser(team.getId(), id, "leader");
+        teamUserService.addTeamUser(teamId, id, "leader");
     }
 
     @Override
@@ -94,8 +94,8 @@ public class TeamServiceImpl implements TeamService {
 
         //检测队伍人数
         int count = teamMapper.getTeamUserCount(teamId);
-
         if (count == 1) {
+            teamUserService.deleteTeamUser(teamId, userId);
             //队伍只有一个人，删除队伍
             teamMapper.deleteTeam(teamId);
         } else {
@@ -168,5 +168,10 @@ public class TeamServiceImpl implements TeamService {
 
         //加入队伍
         teamUserService.addTeamUser(teamId, userId, "member");
+    }
+
+    @Override
+    public Team getTeamByName(String name) {
+        return teamMapper.getTeamByName(name);
     }
 }

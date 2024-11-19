@@ -27,11 +27,14 @@ public class TeamUserServiceImpl implements TeamUserService {
         teamUser.setType(type);
         teamUserMapper.addTeamUser(teamUser);
     }
-    
+
     @Override
     public boolean isTeamMember(int teamId, int userId) {
         TeamUser teamUser = teamUserMapper.findTeamUserByTeamIdAndUserId(teamId, userId);
-        return teamUser != null;
+        if (teamUser == null) {
+            return false;
+        }
+        return "leader".equals(teamUser.getType()) || "member".equals(teamUser.getType());
     }
 
     @Override
@@ -52,6 +55,6 @@ public class TeamUserServiceImpl implements TeamUserService {
 
     @Override
     public void deleteTeamUser(int teamId, int userId) {
-        teamUserMapper.deleteTeamUser(teamId, userId, "none");
+        teamUserMapper.deleteTeamUser(teamId, userId);
     }
 }

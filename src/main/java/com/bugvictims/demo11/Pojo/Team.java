@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 @Data//生成get set方法
 public class Team {
     private String description;//队伍描述
-    private Integer id;//主键ID
+    private int id;//主键ID
     private String[] label;//队伍标签
+    private String type;//队伍类型
     private String name;//队伍名称
     private String position;//队伍地理位置
     private Integer status;//队伍状态  1可被搜索到  2不可被搜索到 3已解散

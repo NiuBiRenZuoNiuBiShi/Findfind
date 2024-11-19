@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 public class TeamUser {
     private String id;//主键ID
-    private Integer teamId;//所属队伍ID
+    private int teamId;//所属队伍ID
     private Integer userId;//用户ID
     private String type;//用户身份
     private LocalDateTime createTime;//创建时间
