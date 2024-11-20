@@ -1,6 +1,7 @@
 package com.bugvictims.demo11.Service.impl;
 
-import com.bugvictims.demo11.Mapper.UserMapper;
+import com.bugvictims.demo11.Mapper.*;
+import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.User;
 import com.bugvictims.demo11.Pojo.UserIgnorePassword;
 import com.bugvictims.demo11.Service.UserService;
@@ -14,6 +15,8 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private JoinRequestMapper joinRequestMapper;
     //寻找用户名
     @Override
     public User findByUserName(String username) {
@@ -46,4 +49,11 @@ public class UserServiceImpl implements UserService {
         user.setUpdateTime(LocalDateTime.now());
         userMapper.update(user);
     }
+     //用户申请加入队伍
+     @Override
+     public void userJoin(JoinRequest joinRequest){
+        joinRequest.setCreateTime(LocalDateTime.now());
+        joinRequest.setUpdateTime(LocalDateTime.now());
+        joinRequestMapper.insertJoinRequest(joinRequest);
+     }
 }

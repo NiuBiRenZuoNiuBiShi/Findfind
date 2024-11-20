@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+import com.bugvictims.demo11.Service.TeamService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,9 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserServiceImpl userService;
+    @Autowired
+    private TeamService teamService;
     @PostMapping("/register")
     public Result register(@RequestBody @Validated  UserIgnorePassword user) {
         //注册用的是UserIgnore类，让password也能反序列化
@@ -26,10 +29,10 @@ public class UserController {
         if (user.getUsername() == null || user.getPassword()== null || user.getPhone() == null || user.getBiology() == null || (user.getStatus()!=1&&user.getStatus()!=0)){
             return new Result().error("All required fields must be filled out.");
         }
-        User u = userServiceImpl.findByUserName(user.getUsername());
+        User u = userService.findByUserName(user.getUsername());
         if (u == null) {
             //没注册
-            userServiceImpl.register(user);
+            userService.register(user);
             return new Result().success();
         } else {
             //占用
@@ -38,7 +41,7 @@ public class UserController {
     }
     @PostMapping("/login")
     public Result login(String username, String password) {
-        User loginUser = userServiceImpl.findByUserName(username);
+        User loginUser = userService.findByUserName(username);
         if (loginUser == null) {
             return new Result().error("用户名不存在");
         }
@@ -56,7 +59,7 @@ public class UserController {
     //查看用户信息
     @PostMapping("/userInfo")
     public Result userInfo(){
-        User user=userServiceImpl.getLoginUser();
+        User user=userService.getLoginUser();
         if(user!=null) {
             return new Result().success(user);
         }
@@ -66,15 +69,32 @@ public class UserController {
     //更新用户信息
     @PostMapping("/update")
     public Result update(@RequestBody @Validated User user){
-        User u=userServiceImpl.getLoginUser();
+        User u=userService.getLoginUser();
         if(u!=null){
             user.setId(u.getId());
-            userServiceImpl.update(user);
+            userService.update(user);
             return new Result().success();
         }
         else
             return new Result().error("无用户登录");
     }
-
-
+    @PostMapping("/join/{teamID}")
+    public Result userJoin(@PathVariable Integer teamID,
+                           @RequestBody JoinRequest joinRequest){
+        if (teamID<= 0){
+            return new Result().error("队伍id不合法");
+        }
+        joinRequest.setTeamId(teamID);
+        Team team=teamService.getTeamById(teamID);
+        User user=userService.getLoginUser();
+        if(user!=null){
+            joinRequest.setUserId(user.getId());
+            if(team==null)
+                return new Result().error("当前队伍不存在");
+            userService.userJoin(joinRequest);
+            return new Result().success();
+        }
+        else
+            return new Result().error("无用户登录");
+    }
 }

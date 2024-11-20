@@ -1,5 +1,6 @@
 package com.bugvictims.demo11.Service;
 
+import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.User;
 import com.bugvictims.demo11.Pojo.UserIgnorePassword;
 
@@ -17,4 +18,6 @@ public interface UserService {
     User getUserById(int id);
 
     void update(User user);
+
+    void userJoin(JoinRequest joinRequest);
 }
