@@ -2,6 +2,7 @@ package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.UserMapper;
 import com.bugvictims.demo11.Pojo.User;
+import com.bugvictims.demo11.Pojo.UserIgnorePassword;
 import com.bugvictims.demo11.Service.UserService;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
     }
     //注册新用户
     @Override
-    public void register(User user) {
+    public void register(UserIgnorePassword user) {
         //加密处理，此处暂无，后期再加
         //添加
         userMapper.add(user);

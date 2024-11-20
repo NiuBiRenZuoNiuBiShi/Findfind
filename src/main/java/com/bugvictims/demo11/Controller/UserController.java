@@ -20,14 +20,15 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
     @PostMapping("/register")
-    public Result register(@RequestBody @Validated  User user) {
+    public Result register(@RequestBody @Validated  UserIgnorePassword user) {
+        //注册用的是UserIgnore类，让password也能反序列化
         // 检查必填字段是否已提供
-        if (user.getUsername() == null || user.getPassword() == null || user.getPhone() == null || user.getBiology() == null || (user.getStatus()!=1&&user.getStatus()!=0)){
+        if (user.getUsername() == null || user.getPassword()== null || user.getPhone() == null || user.getBiology() == null || (user.getStatus()!=1&&user.getStatus()!=0)){
             return new Result().error("All required fields must be filled out.");
         }
         User u = userServiceImpl.findByUserName(user.getUsername());
         if (u == null) {
-            //没注册过
+            //没注册
             userServiceImpl.register(user);
             return new Result().success();
         } else {
@@ -67,16 +68,13 @@ public class UserController {
     public Result update(@RequestBody @Validated User user){
         User u=userServiceImpl.getLoginUser();
         if(u!=null){
+            user.setId(u.getId());
             userServiceImpl.update(user);
             return new Result().success();
         }
         else
             return new Result().error("无用户登录");
     }
-
-
-
-
 
 
 }
