@@ -8,10 +8,7 @@ import com.bugvictims.demo11.Service.TeamService;
 import com.bugvictims.demo11.Service.TeamUserService;
 import com.bugvictims.demo11.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/join")
@@ -54,7 +51,7 @@ public class JoinController {
     }
 
     //获取加入请求
-    @PostMapping("/get/{requestId}")
+    @GetMapping("/get/{requestId}")
     public Result getJoinRequest(@PathVariable("requestId") int requestId) {
 
         User loginUser = userService.getLoginUser();
@@ -68,8 +65,7 @@ public class JoinController {
         }
 
 
-        if (!teamUserService.isTeamLeader(joinRequest.getTeamId(), loginUser.getId())
-                && joinRequest.getUserId() != loginUser.getId()) {
+        if (!teamUserService.isTeamLeader(joinRequest.getTeamId(), loginUser.getId()) && joinRequest.getUserId() != loginUser.getId()) {
             return new Result().error("无权限");
         }
         return new Result().success(joinRequest);
@@ -77,16 +73,13 @@ public class JoinController {
 
     //处理加入请求
     @PostMapping("/handle/{requestId}/{statue}/{response}")
-    public Result handleJoinRequest(@PathVariable("requestId") int requestId,
-                                    @PathVariable(value = "statue") int statue,
-                                    @PathVariable(value = "response", required = false) String response) {
+    public Result handleJoinRequest(@PathVariable("requestId") int requestId, @PathVariable(value = "statue") int statue, @PathVariable(value = "response", required = false) String response) {
         //判断是否为请求队伍的队长
         User loginUser = userService.getLoginUser();
         if (loginUser == null) {
             return new Result().error("未登录");
         }
-        if (!teamUserService.isTeamLeader(joinRequestService
-                .getJoinRequestById(requestId).getTeamId(), loginUser.getId())) {
+        if (!teamUserService.isTeamLeader(joinRequestService.getJoinRequestById(requestId).getTeamId(), loginUser.getId())) {
             return new Result().error("无权限");
         }
 
@@ -109,4 +102,21 @@ public class JoinController {
         return new Result().success("加入成功");
     }
 
+    //删除加入请求(只有发布者可以删除)
+    @PostMapping("/delete/{requestId}")
+    public Result deleteJoinRequest(@PathVariable("requestId") int requestId) {
+        User loginUser = userService.getLoginUser();
+        if (loginUser == null) {
+            return new Result().error("未登录");
+        }
+        JoinRequest joinRequest = joinRequestService.getJoinRequestById(requestId);
+        if (joinRequest == null) {
+            return new Result().error("请求不存在");
+        }
+        if (joinRequest.getUserId() != loginUser.getId()) {
+            return new Result().error("无权限");
+        }
+        joinRequestService.deleteJoinRequest(requestId);
+        return new Result().success();
+    }
 }

@@ -1,10 +1,7 @@
 package com.bugvictims.demo11.Mapper;
 
 import com.bugvictims.demo11.Pojo.JoinRequest;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface JoinRequestMapper {
@@ -22,4 +19,8 @@ public interface JoinRequestMapper {
     //更新请求状态
     @Update("UPDATE join_request SET status = #{status}, response = #{response} WHERE id = #{requestId}")
     void updateJoinRequestStatus(int requestId, int statue, String response);
+
+    //删除请求
+    @Delete("DELETE FROM join_request WHERE id = #{requestId}")
+    void deleteJoinRequest(int requestId);
 }

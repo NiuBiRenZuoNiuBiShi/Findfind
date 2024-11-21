@@ -47,5 +47,10 @@ public class JoinRequestServiceImpl implements JoinRequestService {
         joinRequestMapper.updateJoinRequestStatus(requestId, statue, response);
     }
 
+    @Override
+    public void deleteJoinRequest(int requestId) {
+        joinRequestMapper.deleteJoinRequest(requestId);
+    }
+
 
 }

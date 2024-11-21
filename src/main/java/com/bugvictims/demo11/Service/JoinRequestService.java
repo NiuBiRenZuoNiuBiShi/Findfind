@@ -18,4 +18,7 @@ public interface JoinRequestService {
 
     //处理加入请求
     void handleJoinRequest(int requestId, int statue, String response);
+
+    //删除加入请求
+    void deleteJoinRequest(int requestId);
 }
