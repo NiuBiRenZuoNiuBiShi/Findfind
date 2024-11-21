@@ -21,9 +21,6 @@ public class TeamServiceImpl implements TeamService {
 
     @Autowired
     private TeamUserService teamUserService;
-//
-//    @Autowired
-//    private TeamService teamService;
 
 
     @Autowired
@@ -32,15 +29,6 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void createTeam(Team team, User loginUser) {
 
-        //请求参数不能为空
-        if (team == null) {
-            throw new RuntimeException("队伍信息不能为空");
-        }
-
-        //是否存在登录用户
-        if (loginUser == null) {
-            throw new RuntimeException("未登录");
-        }
 
         //创建者id
         int id = loginUser.getId();
@@ -53,22 +41,6 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void updateTeam(Team team, User loginUser) {
-
-        //请求参数不能为空
-        if (team == null) {
-            throw new RuntimeException("队伍信息不能为空");
-        }
-
-        //是否存在登录用户
-        if (loginUser == null) {
-            throw new RuntimeException("未登录");
-        }
-
-        //检测用户身份
-        if (!teamUserService.isTeamLeader(team.getId(), loginUser.getId())) {
-            throw new RuntimeException("权限不足，无法修改队伍信息");
-        }
-
         //更新队伍信息
         teamMapper.updateTeam(team);
     }

@@ -4,6 +4,7 @@ import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Team;
 import com.bugvictims.demo11.Pojo.User;
 import com.bugvictims.demo11.Service.TeamService;
+import com.bugvictims.demo11.Service.TeamUserService;
 import com.bugvictims.demo11.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +21,29 @@ public class TeamController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TeamUserService teamUserService;
+
     @PostMapping("/create")
     public Result createTeam(@RequestBody Team team) {
         if (team == null) {
             return new Result().error("队伍信息不能为空");
         }
+
         String name = team.getName();
         if (teamService.getTeamByName(name) != null) {
             return new Result().error("队伍名称已存在");
         }
+
         User loginUser = userService.getLoginUser();
+
+        //是否存在登录用户
+        if (loginUser == null) {
+            throw new RuntimeException("未登录");
+        }
+
         teamService.createTeam(team, loginUser);
+
         return new Result().success();
     }
 
@@ -40,7 +53,21 @@ public class TeamController {
         if (team == null) {
             return new Result().error("队伍信息不能为空");
         }
+        if (teamService.getTeamByName(team.getName()) != null) {
+            return new Result().error("队伍名称已存在");
+        }
         User loginUser = userService.getLoginUser();
+
+        //是否存在登录用户
+        if (loginUser == null) {
+            throw new RuntimeException("未登录");
+        }
+
+        //检测用户身份
+        if (!teamUserService.isTeamLeader(team.getId(), loginUser.getId())) {
+            throw new RuntimeException("权限不足，无法修改队伍信息");
+        }
+
         teamService.updateTeam(team, loginUser);
         return new Result().success();
     }
@@ -113,6 +140,4 @@ public class TeamController {
         }
         return new Result().success(userList);
     }
-
-    //
 }
