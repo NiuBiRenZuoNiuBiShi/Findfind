@@ -15,6 +15,11 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     private JoinRequestMapper joinRequestMapper;
 
     @Override
+    public JoinRequest getJoinRequestByTeamIdAndUserId(int teamId, int userId) {
+        return joinRequestMapper.getJoinRequestByTeamIdAndUserId(teamId, userId);
+    }
+
+    @Override
     public void createJoinRequest(int teamId, int userId, String message) {
         JoinRequest joinRequest = new JoinRequest();
         joinRequest.setTeamId(teamId);
@@ -30,4 +35,17 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     public JoinRequest getJoinRequestById(int requestId) {
         return joinRequestMapper.getJoinRequestById(requestId);
     }
+
+    @Override
+    public boolean isHandled(int requestId) {
+        JoinRequest joinRequest = joinRequestMapper.getJoinRequestById(requestId);
+        return joinRequest.getStatus() != 0;
+    }
+
+    @Override
+    public void handleJoinRequest(int requestId, int statue, String response) {
+        joinRequestMapper.updateJoinRequestStatus(requestId, statue, response);
+    }
+
+
 }
