@@ -1,11 +1,9 @@
 package com.bugvictims.demo11.Mapper;
-
 import com.bugvictims.demo11.Pojo.User;
 import com.bugvictims.demo11.Pojo.UserIgnorePassword;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -26,4 +24,8 @@ public interface UserMapper {
             "biology=#{biology},status=#{status}," +
             "update_time=#{updateTime},position=#{position}  where id=#{id}")
     void update(User user);
+
+    //用户列表
+    @Select("select * from user")
+    List<User> getUsers();
 }

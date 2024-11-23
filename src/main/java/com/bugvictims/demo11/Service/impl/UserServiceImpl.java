@@ -2,13 +2,18 @@ package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.*;
 import com.bugvictims.demo11.Pojo.JoinRequest;
+import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Pojo.User;
 import com.bugvictims.demo11.Pojo.UserIgnorePassword;
 import com.bugvictims.demo11.Service.UserService;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,4 +61,15 @@ public class UserServiceImpl implements UserService {
         joinRequest.setUpdateTime(LocalDateTime.now());
         joinRequestMapper.insertJoinRequest(joinRequest);
      }
+     //退出登录
+    @Override
+    public void logout(User loginUser){
+    }
+    //用户列表
+    @Override
+    public PageInfo<User> getUser(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize); //分页查询...
+        List<User> users = userMapper.getUsers();
+        return new PageInfo<>(users);
+    }
 }

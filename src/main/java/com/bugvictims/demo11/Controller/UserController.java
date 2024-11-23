@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.bugvictims.demo11.Service.TeamService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -96,5 +97,21 @@ public class UserController {
         }
         else
             return new Result().error("无用户登录");
+    }
+    //退出登录
+    @PostMapping("/logout")
+    public Result logout()
+    {
+        User loginUser = userService.getLoginUser();
+        if(loginUser!=null) {
+            userService.logout(loginUser);
+            return new Result().success();
+        }else
+            return new Result().error("当前无用户登录");
+    }
+    //用户列表
+    @PostMapping("/list")
+    public Result getRecruits(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+        return new Result().success(userService.getUser(page, size));
     }
 }

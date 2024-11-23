@@ -9,7 +9,6 @@ import com.bugvictims.demo11.Service.TeamUserService;
 import com.bugvictims.demo11.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/join")
 public class JoinController {
@@ -42,7 +41,6 @@ public class JoinController {
         if (teamUserService.isTeamMember(teamId, userId)) {
             return new Result().error("已经是队伍成员");
         }
-
         if (joinRequestService.getJoinRequestByTeamIdAndUserId(teamId, userId) != null) {
             return new Result().error("已经发送过请求");
         }
@@ -63,8 +61,7 @@ public class JoinController {
         if (joinRequest == null) {
             return new Result().error("请求不存在");
         }
-
-
+        //用户申请加入团队的已经写到usercontroller里面了
         if (!teamUserService.isTeamLeader(joinRequest.getTeamId(), loginUser.getId()) && joinRequest.getUserId() != loginUser.getId()) {
             return new Result().error("无权限");
         }
