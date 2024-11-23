@@ -119,14 +119,29 @@ public class UserController {
     public Result getTeams(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
         User loginUser = userService.getLoginUser();
         if(loginUser!=null) {
-            userService.logout(loginUser);
             int id=loginUser.getId();
             return new Result().success(userService.getTeams(id,page, size));
         }else
             return new Result().error("当前无用户登录");
     }
     //用户查看自己所有邀请
-
+    @PostMapping("/invites")
+    public Result getInvites(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
+        User loginUser = userService.getLoginUser();
+        if(loginUser!=null) {
+            int id=loginUser.getId();
+            return new Result().success(userService.getInvites(id,page, size));
+        }else
+            return new Result().error("当前无用户登录");
+    }
     //用户查看自己的所有请求
-
+    @PostMapping("/joins")
+    public Result getJoins(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
+        User loginUser = userService.getLoginUser();
+        if(loginUser!=null) {
+            int id=loginUser.getId();
+            return new Result().success(userService.getJoins(id,page, size));
+        }else
+            return new Result().error("当前无用户登录");
+    }
 }

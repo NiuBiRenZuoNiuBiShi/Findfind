@@ -33,4 +33,14 @@ public interface UserMapper {
             "INNER JOIN team_user tu ON t.id = tu.team_id " +
             "WHERE tu.user_id = #{id}")
     List<Team> getTeams(int id);
+
+    //当前用户所有邀请
+    @Select("select * from invite_request  where user_id=#{id}")
+    List<InviteRequest> getInviteRequests(int id);
+
+    //用户所有申请
+    @Select("select * from join_request  where user_id=#{id}")
+    List<JoinRequest> getJoinRequests(int id);
+
+
 }
