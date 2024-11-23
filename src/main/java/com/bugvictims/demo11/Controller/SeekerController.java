@@ -4,11 +4,13 @@ import com.bugvictims.demo11.Pojo.InviteRequest;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
+import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class SeekerController {
@@ -17,8 +19,9 @@ public class SeekerController {
     SeekerService seekerService;
 
     @PostMapping("/plaza/seeker")
-    Result createSeeker(@RequestBody Seeker seeker, @RequestAttribute("userID") int userID) {
-        seeker.setId(userID);
+    Result createSeeker(@RequestBody Seeker seeker) {
+        Map<String, Object> userClaims = ThreadLocalUtil.get();
+        seeker.setSeekerID((int)userClaims.get("userID"));
         seeker.setCreateTime(LocalDateTime.now());
         seeker.setUpdateTime(LocalDateTime.now());
         seekerService.createSeeker(seeker);
@@ -45,10 +48,10 @@ public class SeekerController {
 
     @PostMapping("/plaza/seeker/invite/{seekerID}/{teamID}")
     Result inviteSeeker(@RequestBody InviteRequest inviteRequest
-            , @RequestAttribute("userID") int userID
             , @PathVariable("seekerID") Integer seekerID
             , @PathVariable("teamID") Integer teamID )  {
-        inviteRequest.setReleaserID(userID);
+        Map<String, Object> userClaims = ThreadLocalUtil.get();
+        inviteRequest.setReleaserID((int)userClaims.get("userID"));
         inviteRequest.setTeamID(teamID);
         seekerService.inviteSeeker(inviteRequest, seekerID);
         return new Result().success();

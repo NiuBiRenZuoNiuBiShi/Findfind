@@ -4,12 +4,13 @@ import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Service.RecruitService;
-import jakarta.servlet.http.HttpServletResponse;
+import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RecruitController {
@@ -18,9 +19,9 @@ public class RecruitController {
     private RecruitService recruitService;
 
     @PostMapping("/plaza")
-    public Result releaseRecruit(@RequestBody Recruit recruit // 前端传入的数据，会自动绑定到这个对象上
-            , @RequestAttribute("userID") int userID) { // 拦截器拦截放行后，可以得到这个
-        recruit.setReleaserID(userID);
+    public Result releaseRecruit(@RequestBody Recruit recruit) {
+        Map<String, Object> userClaims = ThreadLocalUtil.get();
+        recruit.setReleaserID((int)userClaims.get("userID"));
         recruitService.releaseRecruit(recruit); //调用Service
         return new Result().success();
     }
@@ -40,14 +41,18 @@ public class RecruitController {
 
     @DeleteMapping("/plaza/{id}")
     public Result deleteRecruit(@PathVariable Integer id) {
+        if (id < 0) {
+            return new Result().error("id not legal");
+        }
         recruitService.deleteRecruit(id);
         return new Result().success();
     }
 
     @PostMapping("/plaza/{recruitID}") // 传入recruitID,在Body里传入具体的内容
-    public Result addJoinRequest(@PathVariable Integer recruitID, @RequestBody JoinRequest joinRequest
-            , @RequestAttribute("userID") Integer userID) {
-        joinRequest.setUserId(userID);
+    public Result addJoinRequest(@PathVariable Integer recruitID
+            , @RequestBody JoinRequest joinRequest) {
+        Map<String, Object> userClaims = ThreadLocalUtil.get();
+        joinRequest.setUserId((int)userClaims.get("userID"));
         recruitService.addJoinRequest(recruitID, joinRequest);
         return new Result().success();
     }
