@@ -1,0 +1,62 @@
+.content {
+    box-sizing: border-box;
+    margin-top: 23vh;
+}
+#backToTopButton {
+    position: fixed;
+    bottom: 26vh;
+    right: 3vw;
+    z-index: 99;
+    border: none;
+    font-size: larger;
+    outline: none;
+    background-color: #005bac; /* Bootstrap 主题蓝色 */
+    color: white;
+    cursor: pointer;
+    padding: 2.2vh 1.7vw;
+    border-radius: 50px; /* 更大的圆角 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 添加阴影 */
+    opacity: 0;
+    transition: opacity 0.5s ease-out, transform 0.2s ease-out;
+}
+#backToTopButton:hover {
+    background-color: #47b2d0; /* 鼠标悬停时颜色加深 */
+    transform: scale(1.2); /* 轻微放大 */
+}
+#backToTopButton i {
+    margin-right: 5px; /* 图标和文本之间的间隔 */
+}
+.return-container{
+    position: fixed;
+    top:50vh;
+    right:3vw;
+    width:5vw;
+    height:4vh;
+    z-index: 99;
+    border: none;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    padding: 2vh 2vw;
+    border-radius: 0px;
+}
+.return{
+    position:fixed;
+    right:10vw;
+    width:3.5vw;
+    height:7.4vh;
+    font-size: 30px;
+    text-align: center; /* 文本居中 */
+    background-color: #005bac; /* Bootstrap 主题蓝色 */
+    opacity: 0.5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 添加阴影 */
+}
+.return a {
+    color: white;
+    text-decoration: none;
+  }
+.return:hover{
+    background-color: #47b2d0; /* 鼠标悬停时颜色加深 */
+    transform: scale(1.2); /* 轻微放大 */
+}
