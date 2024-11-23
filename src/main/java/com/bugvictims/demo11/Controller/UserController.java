@@ -112,6 +112,21 @@ public class UserController {
     //用户列表
     @PostMapping("/list")
     public Result getRecruits(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
-        return new Result().success(userService.getUser(page, size));
+        return new Result().success(userService.getUsers(page, size));
     }
+    //用户查看自己当前队伍
+    @PostMapping("/teams")
+    public Result getTeams(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
+        User loginUser = userService.getLoginUser();
+        if(loginUser!=null) {
+            userService.logout(loginUser);
+            int id=loginUser.getId();
+            return new Result().success(userService.getTeams(id,page, size));
+        }else
+            return new Result().error("当前无用户登录");
+    }
+    //用户查看自己所有邀请
+
+    //用户查看自己的所有请求
+
 }

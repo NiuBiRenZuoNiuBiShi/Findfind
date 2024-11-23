@@ -1,8 +1,6 @@
 package com.bugvictims.demo11.Service;
 
-import com.bugvictims.demo11.Pojo.JoinRequest;
-import com.bugvictims.demo11.Pojo.User;
-import com.bugvictims.demo11.Pojo.UserIgnorePassword;
+import com.bugvictims.demo11.Pojo.*;
 import com.github.pagehelper.PageInfo;
 
 public interface UserService {
@@ -24,5 +22,7 @@ public interface UserService {
 
     void logout(User loginUser);
     //用户列表
-    PageInfo<User>getUser(Integer page, Integer size);
+    PageInfo<User>getUsers(Integer page, Integer size);
+    //队伍列表
+    PageInfo<Team>getTeams(int id,Integer page, Integer size);
 }

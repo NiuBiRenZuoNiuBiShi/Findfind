@@ -1,6 +1,5 @@
 package com.bugvictims.demo11.Mapper;
-import com.bugvictims.demo11.Pojo.User;
-import com.bugvictims.demo11.Pojo.UserIgnorePassword;
+import com.bugvictims.demo11.Pojo.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -28,4 +27,10 @@ public interface UserMapper {
     //用户列表
     @Select("select * from user")
     List<User> getUsers();
+
+    //用户队伍列表
+    @Select("SELECT t.* FROM teams t " +
+            "INNER JOIN team_user tu ON t.id = tu.team_id " +
+            "WHERE tu.user_id = #{id}")
+    List<Team> getTeams(int id);
 }

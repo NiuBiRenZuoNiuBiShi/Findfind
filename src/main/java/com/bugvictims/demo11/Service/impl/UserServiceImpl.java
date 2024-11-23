@@ -1,10 +1,7 @@
 package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.*;
-import com.bugvictims.demo11.Pojo.JoinRequest;
-import com.bugvictims.demo11.Pojo.Recruit;
-import com.bugvictims.demo11.Pojo.User;
-import com.bugvictims.demo11.Pojo.UserIgnorePassword;
+import com.bugvictims.demo11.Pojo.*;
 import com.bugvictims.demo11.Service.UserService;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import com.github.pagehelper.Page;
@@ -67,9 +64,16 @@ public class UserServiceImpl implements UserService {
     }
     //用户列表
     @Override
-    public PageInfo<User> getUser(Integer pageNum, Integer pageSize) {
+    public PageInfo<User> getUsers(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize); //分页查询...
         List<User> users = userMapper.getUsers();
         return new PageInfo<>(users);
+    }
+    //队伍列表
+    @Override
+    public PageInfo<Team>getTeams(int id,Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize); //分页查询...
+        List<Team> teams = userMapper.getTeams(id);
+        return new PageInfo<>(teams);
     }
 }
