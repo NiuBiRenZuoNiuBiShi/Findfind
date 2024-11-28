@@ -18,5 +18,6 @@ public class Seeker {
     private String message;
     private String position;
     private LocalDateTime createTime;
+    private List<PojoFile> files;
     private LocalDateTime updateTime;
 }

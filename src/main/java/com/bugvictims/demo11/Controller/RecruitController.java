@@ -4,9 +4,11 @@ import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Service.RecruitService;
+import com.bugvictims.demo11.Utils.FileConverter;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,16 +21,21 @@ public class RecruitController {
     private RecruitService recruitService;
 
     @PostMapping("/plaza")
-    public Result releaseRecruit(@RequestBody Recruit recruit) {
+    public Result releaseRecruit(@ModelAttribute Recruit recruit
+    , @RequestParam("files") List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         recruit.setReleaserID((int)userClaims.get("userID"));
-        recruitService.releaseRecruit(recruit); //调用Service
+        Integer recruitID = recruitService.releaseRecruit(recruit);
+        recruit.setFiles(FileConverter.convertToPojoFileList(files, recruitID));
+        recruitService.insertRecruitFiles(recruit);
         return new Result().success();
     }
 
     @PutMapping("/plaza")
-    public Result updateRecruit(@RequestBody Recruit recruit) {
+    public Result updateRecruit(@ModelAttribute Recruit recruit
+    , @RequestParam("files") List<MultipartFile> files) {
         recruit.setUpdateTime(LocalDateTime.now());
+        recruit.setFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
         recruitService.updateRecruit(recruit);
         return new Result().success();
     }

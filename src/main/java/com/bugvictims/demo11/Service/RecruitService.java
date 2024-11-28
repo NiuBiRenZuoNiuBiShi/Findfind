@@ -7,7 +7,7 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface RecruitService {
-    void releaseRecruit(Recruit recruit);
+    Integer releaseRecruit(Recruit recruit);
 
     void updateRecruit(Recruit recruit);
 
@@ -16,4 +16,6 @@ public interface RecruitService {
     void deleteRecruit(Integer id);
 
     void addJoinRequest(Integer recruitID, JoinRequest joinRequest);
+
+    void insertRecruitFiles(Recruit recruit);
 }

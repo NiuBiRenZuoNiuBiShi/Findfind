@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bugvictims.demo11.Mapper.RecruitFileMapper">
+    <insert id="insertRecruitFiles" parameterType="com.bugvictims.demo11.Pojo.Recruit" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO recruit_file(recruit_id, file, type, create_time, update_time)
+        VALUES
+        <foreach collection="files" item="file" separator="," >
+            (#{linkedID}, #{fileData}, #{fileType}, #{createTime}, #{updateTime})
+        </foreach>
+    </insert>
+
+    <select id="selectRecruitFiles" parameterType="com.bugvictims.demo11.Pojo.Recruit" resultType="com.bugvictims.demo11.Pojo.PojoFile">
+        SELECT (id, recruit_id, file, type, create_time, update_time)
+        FROM recruit_file
+        WHERE recruit_id = #{id}
+    </select>
+</mapper>

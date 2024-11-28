@@ -1,6 +1,7 @@
 package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.JoinRequestMapper;
+import com.bugvictims.demo11.Mapper.RecruitFileMapper;
 import com.bugvictims.demo11.Mapper.RecruitMapper;
 import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.Recruit;
@@ -26,28 +27,38 @@ public class RecruitServiceImpl implements RecruitService {
     @Autowired
     private JoinRequestMapper joinRequestMapper;
 
-    public void releaseRecruit(Recruit recruit) {
+    @Autowired
+    private RecruitFileMapper recruitFileMapper;
+
+    public Integer releaseRecruit(Recruit recruit) {
         recruit.setCreateTime(LocalDateTime.now()); // 添加一些数据
         recruit.setUpdateTime(LocalDateTime.now());
-        recruitMapper.insertRecruit(recruit); // 调用Mapper
+        Integer recruitID =  recruitMapper.insertRecruit(recruit); // 调用Mapper
         recruitLabelMapper.addRecruitLabel(recruit);
+        return recruitID;
     }
 
     public void updateRecruit(Recruit recruit) {
         recruitMapper.updateRecruit(recruit);
         recruitLabelMapper.deleteRecruitLabel(recruit.getId());
         recruitLabelMapper.addRecruitLabel(recruit);
+        recruitFileMapper.deleteRecruitFile(recruit.getId());
+        recruitFileMapper.insertRecruitFiles(recruit);
     }
 
     public PageInfo<Recruit> getRecruits(List<String> labels, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize); //分页查询...
         List<Recruit> recruits = recruitMapper.getRecruits(labels);
+        for (Recruit recruit: recruits) {
+            recruit.setFiles(recruitFileMapper.selectRecruitFiles(recruit));
+        }
         return new PageInfo<>(recruits);
     }
 
     public void deleteRecruit(Integer id) {
         recruitMapper.deleteRecruit(id);
         recruitLabelMapper.deleteRecruitLabel(id);
+        recruitFileMapper.deleteRecruitFile(id);
     }
 
     public void addJoinRequest(Integer recruitID, JoinRequest joinRequest) {
@@ -57,5 +68,10 @@ public class RecruitServiceImpl implements RecruitService {
         joinRequest.setUpdateTime(LocalDateTime.now());
         recruitMapper.addJoinRequest(recruitID);
         joinRequestMapper.insertJoinRequest(joinRequest);
+    }
+
+    @Override
+    public void insertRecruitFiles(Recruit recruit) {
+        recruitFileMapper.insertRecruitFiles(recruit);
     }
 }

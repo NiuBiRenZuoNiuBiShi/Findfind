@@ -19,6 +19,7 @@ public class Recruit {
     private Integer receiveNum;
     private String header;
     private String message;
+    private List<PojoFile> files;
     private List<String> label;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

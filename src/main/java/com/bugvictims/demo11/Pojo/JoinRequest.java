@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +17,7 @@ public class JoinRequest {
     private String message;
     private String response;
     private Integer status;//0:未处理 1:已同意 2:已拒绝
+    private List<PojoFile> files;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

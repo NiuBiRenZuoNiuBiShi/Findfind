@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bugvictims.demo11.Mapper.JoinRequestFileMapper">
+    <insert id="insertJoinFile" parameterType="com.bugvictims.demo11.Pojo.JoinRequest">
+        INSERT INTO join_request_file(join_id, file, type, create_time, update_time)
+        VALUES
+        <foreach collection="files" item="file" separator="," >
+            (#{linkedID}, #{fileData}, #{fileType}, #{createTime}, #{updateTime})
+        </foreach>
+    </insert>
+
+
+</mapper>

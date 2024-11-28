@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class InviteRequest {
     private String message;
     private String response;
     private Integer status;
+    private List<PojoFile> files;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }
