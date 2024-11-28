@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bugvictims.demo11.Mapper.SeekerLabelMapper">
-    <insert id="insertSeekerLabel" parameterType="com.bugvictims.demo11.Pojo.Seeker">
+    <insert id="insertSeekerLabel" parameterType="com.bugvictims.demo11.Pojo.Seeker" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO seekerLabel (seeker_id, label, create_time, update_time)
         VALUES
         <foreach collection="label" item="labelItem" separator=",">

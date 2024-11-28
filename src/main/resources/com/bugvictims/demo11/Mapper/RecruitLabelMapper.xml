@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bugvictims.demo11.Mapper.RecruitLabelMapper">
-    <insert id="addRecruitLabel" parameterType="com.bugvictims.demo11.Pojo.Recruit">
+    <insert id="addRecruitLabel" parameterType="com.bugvictims.demo11.Pojo.Recruit" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO recruit_label (recruit_id, label, create_time, update_time)
         VALUES
         <foreach collection="label" item="labelItem" separator=",">

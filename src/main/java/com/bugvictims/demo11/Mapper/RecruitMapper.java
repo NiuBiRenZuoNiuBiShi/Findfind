@@ -9,6 +9,7 @@ import java.util.List;
 public interface RecruitMapper {
     @Insert("INSERT INTO recruit (team_id, releaser_id, need_num, header, message, create_time, update_time)" +
             " VALUES (#{teamID}, #{releaserID}, #{needNum}, #{header}, #{message}, #{createTime}, #{updateTime})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void insertRecruit(Recruit recruit); // 插入数据，具体怎么插入，看数据库相应表的数据，notNull的规定，默认值的实现
 
     @Update("UPDATE recruit SET need_num = #{needNum}, " +
