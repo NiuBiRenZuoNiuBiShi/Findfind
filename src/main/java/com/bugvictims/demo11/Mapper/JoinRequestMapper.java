@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 public interface JoinRequestMapper {
     @Insert("INSERT INTO join_request (user_id, team_id, message, response, create_time, update_time)" + "VALUES (#{userId}, #{teamId}, #{message}, #{response}, #{createTime}, #{updateTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    void insertJoinRequest(JoinRequest joinRequest);
+    Integer insertJoinRequest(JoinRequest joinRequest);
 
     //查找加入请求
     @Select("SELECT * FROM join_request WHERE id = #{requestId}")

@@ -4,9 +4,11 @@ import com.bugvictims.demo11.Pojo.InviteRequest;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
+import com.bugvictims.demo11.Utils.FileConverter;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,12 +21,15 @@ public class SeekerController {
     SeekerService seekerService;
 
     @PostMapping("/plaza/seeker")
-    Result createSeeker(@RequestBody Seeker seeker) {
+    Result createSeeker(@ModelAttribute Seeker seeker
+                        , @RequestParam("files") List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         seeker.setSeekerID((int)userClaims.get("userID"));
         seeker.setCreateTime(LocalDateTime.now());
         seeker.setUpdateTime(LocalDateTime.now());
-        seekerService.createSeeker(seeker);
+        Integer seekerID = seekerService.insertSeeker(seeker);
+        seeker.setFiles(FileConverter.convertToPojoFileList(files, seekerID));
+        seekerService.insertSeekerFiles(seeker);
         return new Result().success();
     }
 
@@ -42,18 +47,26 @@ public class SeekerController {
     }
 
     @GetMapping("/plaza/seeker")
-    Result selectSeeker(@RequestParam("label") List<String> labels) {
-        return new Result().success(seekerService.getSeekers(labels));
+    Result selectSeeker(@RequestParam("label") List<String> labels
+                        , @RequestParam(defaultValue = "1") Integer page
+                        , @RequestParam(defaultValue = "10") Integer size) {
+        return new Result().success(seekerService.selectSeekers(labels, page, size));
     }
 
     @PostMapping("/plaza/seeker/invite/{seekerID}/{teamID}")
     Result inviteSeeker(@RequestBody InviteRequest inviteRequest
             , @PathVariable("seekerID") Integer seekerID
-            , @PathVariable("teamID") Integer teamID )  {
+            , @PathVariable("teamID") Integer teamID
+            , @RequestParam("files") List<MultipartFile> files)  {
+
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         inviteRequest.setReleaserID((int)userClaims.get("userID"));
         inviteRequest.setTeamID(teamID);
-        seekerService.inviteSeeker(inviteRequest, seekerID);
+
+        Integer inviteID = seekerService.insertInviteRequest(inviteRequest, seekerID);
+        inviteRequest.setFiles(FileConverter.convertToPojoFileList(files, inviteID));
+        seekerService.insertInviteFiles(inviteRequest);
+
         return new Result().success();
     }
 }

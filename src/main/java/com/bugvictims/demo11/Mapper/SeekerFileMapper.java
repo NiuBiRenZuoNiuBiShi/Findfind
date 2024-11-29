@@ -16,8 +16,11 @@ public interface SeekerFileMapper {
     @Delete("DELETE FROM seeker_file WHERE seeker_id = #{id}")
     void deleteSeekerFile(Seeker seeker);
 
+    @Delete("DELETE FROM seeker_file WHERE seeker_id = #{id}")
+    void deleteSeekerFile(Integer id);
+
     @Select("SELECT (id, seeker_id, file, type, create_time, update_time)" +
             "FROM seeker_file" +
             " WHERE seeker_id = #{id}")
-    List<PojoFile> SelectSeekerFile(Seeker seeker);
+    List<PojoFile> selectSeekerFile(Seeker seeker);
 }

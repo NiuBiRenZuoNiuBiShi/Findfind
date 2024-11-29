@@ -20,12 +20,17 @@ public class RecruitController {
     @Autowired
     private RecruitService recruitService;
 
+    /*
+        由于recruit的PojoFile需要一个linkID,才能插入文件到数据库中，否则两个数据库没有关联
+        因此先流程先把recruit插入到相应的数据库中,返回recruit在数据库的id
+        在插入文件
+    */
     @PostMapping("/plaza")
     public Result releaseRecruit(@ModelAttribute Recruit recruit
     , @RequestParam("files") List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         recruit.setReleaserID((int)userClaims.get("userID"));
-        Integer recruitID = recruitService.releaseRecruit(recruit);
+        Integer recruitID = recruitService.insertRecruit(recruit);
         recruit.setFiles(FileConverter.convertToPojoFileList(files, recruitID));
         recruitService.insertRecruitFiles(recruit);
         return new Result().success();
@@ -43,7 +48,7 @@ public class RecruitController {
     @GetMapping("/plaza") // 通过label来筛选，所需要的Recruit，分页查询
     public Result getRecruits(@RequestParam List<String> labels
     , @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
-        return new Result().success(recruitService.getRecruits(labels, page, size));
+        return new Result().success(recruitService.selectRecruits(labels, page, size));
     }
 
     @DeleteMapping("/plaza/{id}")
@@ -57,10 +62,13 @@ public class RecruitController {
 
     @PostMapping("/plaza/{recruitID}") // 传入recruitID,在Body里传入具体的内容
     public Result addJoinRequest(@PathVariable Integer recruitID
-            , @RequestBody JoinRequest joinRequest) {
+            , @ModelAttribute JoinRequest joinRequest
+            , @RequestParam("files") List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         joinRequest.setUserId((int)userClaims.get("userID"));
-        recruitService.addJoinRequest(recruitID, joinRequest);
+        Integer joinRequestID = recruitService.insertJoinRequest(recruitID, joinRequest);
+        joinRequest.setFiles(FileConverter.convertToPojoFileList(files, joinRequestID));
+        recruitService.insertJoinFiles(joinRequest);
         return new Result().success();
     }
 }
