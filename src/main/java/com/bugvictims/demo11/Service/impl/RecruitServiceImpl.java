@@ -5,6 +5,7 @@ import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Service.RecruitService;
+import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,10 +68,16 @@ public class RecruitServiceImpl implements RecruitService {
         return new PageInfo<>(recruits);
     }
 
-    public void deleteRecruit(Integer id) {
+    public boolean deleteRecruit(Integer id) {
+        Map<String, Object> UserClaims = ThreadLocalUtil.get();
+        int userID = Integer.parseInt(UserClaims.get("userID").toString());
+        if (userID != recruitMapper.selectUserIDByRecruitID(id)) {
+            return false;
+        }
         recruitMapper.deleteRecruit(id);
         recruitLabelMapper.deleteRecruitLabel(id);
         recruitFileMapper.deleteRecruitFile(id);
+        return true;
     }
 
     public Integer insertJoinRequest(Integer recruitID, JoinRequest joinRequest) {
@@ -90,4 +98,5 @@ public class RecruitServiceImpl implements RecruitService {
     public void insertJoinFiles(JoinRequest joinRequest) {
         joinRequestFileMapper.insertJoinFile(joinRequest);
     }
+
 }

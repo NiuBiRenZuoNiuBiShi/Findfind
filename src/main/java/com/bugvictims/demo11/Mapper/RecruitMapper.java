@@ -30,4 +30,7 @@ public interface RecruitMapper {
 
     @Update("UPDATE recruit SET receive_num = receive_num + 1")
     void addJoinRequest(Integer recruitID);
+
+    @Select("SELECT (releaser_id) FROM recruit WHERE id = #{recruitID}")
+    Integer selectUserIDByRecruitID(Integer recruitID);
 }

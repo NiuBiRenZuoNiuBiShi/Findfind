@@ -11,7 +11,7 @@ import java.util.List;
 public interface SeekerService {
     Integer insertSeeker(Seeker seeker);
 
-    void deleteSeeker(Integer id);
+    boolean deleteSeeker(Integer id);
 
     void updateSeeker(Seeker seeker);
 

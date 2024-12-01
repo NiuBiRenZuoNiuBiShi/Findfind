@@ -24,4 +24,7 @@ public interface SeekerMapper {
 
     @Select("SELECT id, seeker_id, header, message, position, create_time, update_time FROM seeker WHERE id = #{id}")
     Seeker selectSeekerById(Integer id);
+
+    @Select("SELECT seeker_id FROM seeker WHERE id = #{id}")
+    Integer selectUserIDBySeekerID(Integer id);
 }

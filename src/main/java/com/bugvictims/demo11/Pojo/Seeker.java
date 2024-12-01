@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Seeker {
     private Integer id;
-    private Integer seekerID;
+    private Integer releaserID;
     private String Header;
     private List<String> label;
     private String message;

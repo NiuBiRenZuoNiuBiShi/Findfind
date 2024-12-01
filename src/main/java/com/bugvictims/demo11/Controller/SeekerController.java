@@ -24,7 +24,7 @@ public class SeekerController {
     Result createSeeker(@ModelAttribute Seeker seeker
                         , @RequestParam("files") List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        seeker.setSeekerID((int)userClaims.get("userID"));
+        seeker.setReleaserID((int)userClaims.get("userID"));
         seeker.setCreateTime(LocalDateTime.now());
         seeker.setUpdateTime(LocalDateTime.now());
         Integer seekerID = seekerService.insertSeeker(seeker);
@@ -35,8 +35,10 @@ public class SeekerController {
 
     @DeleteMapping("/plaza/seeker/{id}")
     Result deleteSeeker(@PathVariable Integer id) {
-        seekerService.deleteSeeker(id);
-        return new Result().success();
+        if (seekerService.deleteSeeker(id))
+            return new Result().success();
+        else
+            return new Result().error("delete seeker failed maybe cuz it is released by U");
     }
 
     @PutMapping("/plaza/seeker")

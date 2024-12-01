@@ -59,8 +59,11 @@ public class RecruitController {
         if (id < 0) {
             return new Result().error("id not legal");
         }
-        recruitService.deleteRecruit(id);
-        return new Result().success();
+        if (recruitService.deleteRecruit(id))
+            return new Result().success();
+        else {
+            return new Result().error("delete failed because the recruit is not published by U");
+        }
     }
 
     @PostMapping("/plaza/{recruitID}") // 传入recruitID,在Body里传入具体的内容

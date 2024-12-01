@@ -13,7 +13,7 @@ public interface RecruitService {
 
     PageInfo<Recruit> selectRecruits(List<String> labels, Integer pageNum, Integer pageSize);
 
-    void deleteRecruit(Integer id);
+    boolean deleteRecruit(Integer id);
 
     Integer insertJoinRequest(Integer recruitID, JoinRequest joinRequest);
 

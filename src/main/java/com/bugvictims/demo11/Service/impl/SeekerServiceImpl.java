@@ -5,12 +5,12 @@ import com.bugvictims.demo11.Pojo.InviteRequest;
 import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
+import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,10 +39,16 @@ public class SeekerServiceImpl implements SeekerService {
         return seekerID;
     }
 
-    public void deleteSeeker(Integer id) {
+    public boolean deleteSeeker(Integer id) {
+        Map<String, Object> userClaims = ThreadLocalUtil.get();
+        int userID = Integer.parseInt(userClaims.get("userID").toString());
+        if (userID != seekerMapper.selectUserIDBySeekerID(userID)) {
+            return false;
+        }
         seekerMapper.deleteSeeker(id);
         seekerLabelMapper.deleteSeekerLabelBySeekerID(id);
         seekerFileMapper.deleteSeekerFile(id);
+        return true;
     }
 
     public void updateSeeker(Seeker seeker) {
@@ -72,7 +78,7 @@ public class SeekerServiceImpl implements SeekerService {
         inviteRequest.setCreateTime(LocalDateTime.now());
         inviteRequest.setUpdateTime(LocalDateTime.now()); // time
         Seeker seeker = seekerMapper.selectSeekerById(seekerID);
-        inviteRequest.setUserID(seeker.getSeekerID()); // specific invited user
+        inviteRequest.setUserID(seeker.getReleaserID()); // specific invited user
 
         return inviteRequestMapper.insertInviteRequest(inviteRequest);
     }
