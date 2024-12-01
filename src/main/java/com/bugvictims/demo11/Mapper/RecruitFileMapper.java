@@ -16,6 +16,8 @@ public interface RecruitFileMapper {
 
     List<PojoFile> selectRecruitFiles(Recruit recruit);
 
+    List<PojoFile> selectRecruitFilesByRecruitIds(List<Integer> recruitIds);
+
     @Delete("DELETE FROM recruit_file WHERE id = #{id}")
     void deleteRecruitFile(Integer id);
 }

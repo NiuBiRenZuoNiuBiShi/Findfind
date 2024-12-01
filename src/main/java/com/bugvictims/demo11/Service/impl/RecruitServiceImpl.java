@@ -2,6 +2,7 @@ package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.*;
 import com.bugvictims.demo11.Pojo.JoinRequest;
+import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Service.RecruitService;
 import com.github.pagehelper.PageHelper;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class RecruitServiceImpl implements RecruitService {
@@ -49,8 +52,16 @@ public class RecruitServiceImpl implements RecruitService {
     public PageInfo<Recruit> selectRecruits(List<String> labels, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize); //分页查询...
         List<Recruit> recruits = recruitMapper.getRecruits(labels);
-        for (Recruit recruit: recruits) {
-            recruit.setFiles(recruitFileMapper.selectRecruitFiles(recruit));
+        List<Integer> recruitIds = recruits.stream()
+                .map(Recruit::getId)
+                .collect(Collectors.toList());
+        if (!recruitIds.isEmpty()) {
+            List<PojoFile> files = recruitFileMapper.selectRecruitFilesByRecruitIds(recruitIds);
+            Map<Integer, List<PojoFile>> filesMap = files.stream()
+                    .collect(Collectors.groupingBy(PojoFile::getLinkedID));
+            recruits.forEach(recruit -> {
+                recruit.setFiles(filesMap.get(recruit.getId()));
+            });
         }
         return new PageInfo<>(recruits);
     }

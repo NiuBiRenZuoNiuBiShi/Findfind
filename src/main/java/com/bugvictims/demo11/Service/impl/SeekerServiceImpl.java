@@ -2,6 +2,7 @@ package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.*;
 import com.bugvictims.demo11.Pojo.InviteRequest;
+import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
 import com.github.pagehelper.PageInfo;
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SeekerServiceImpl implements SeekerService {
@@ -51,8 +55,15 @@ public class SeekerServiceImpl implements SeekerService {
 
     public PageInfo<Seeker> selectSeekers(List<String> labels, Integer page, Integer size) {
         List<Seeker> seekers = seekerMapper.selectSeekers(labels);
-        for (Seeker seeker : seekers) {
-            seeker.setFiles(seekerFileMapper.selectSeekerFile(seeker));
+        List<Integer> seekerIDs = seekers.stream().map(Seeker::getId).toList();
+        if (!seekerIDs.isEmpty()) {
+            Map<Integer, List<PojoFile>> fileMap = seekerFileMapper
+                    .selectSeekerFileByIds(seekerIDs)
+                    .stream()
+                    .collect(Collectors.groupingBy(PojoFile::getId));
+            seekers.forEach(seeker -> {
+                seeker.setFiles(fileMap.get(seeker.getId()));
+            });
         }
         return new PageInfo<>(seekers);
     }

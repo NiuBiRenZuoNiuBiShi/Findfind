@@ -23,4 +23,6 @@ public interface SeekerFileMapper {
             "FROM seeker_file" +
             " WHERE seeker_id = #{id}")
     List<PojoFile> selectSeekerFile(Seeker seeker);
+
+    List<PojoFile> selectSeekerFileByIds(List<Integer> seekerIds);
 }

@@ -30,9 +30,12 @@ public class RecruitController {
     , @RequestParam("files") List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         recruit.setReleaserID((int)userClaims.get("userID"));
-        Integer recruitID = recruitService.insertRecruit(recruit);
+
+        Integer recruitID = recruitService.insertRecruit(recruit); // 得到插入的ID
+
         recruit.setFiles(FileConverter.convertToPojoFileList(files, recruitID));
         recruitService.insertRecruitFiles(recruit);
+
         return new Result().success();
     }
 

@@ -16,4 +16,13 @@
         FROM recruit_file
         WHERE recruit_id = #{id}
     </select>
+    
+    <select id="selectRecruitFilesByRecruitIds" parameterType="java.util.List" resultType="com.bugvictims.demo11.Pojo.PojoFile">
+        SELECT (id, recruit_id, file, type, create_time, update_time)
+        FROM recruit_file
+        WHERE recruit_id IN 
+        <foreach collection="recruitIds" separator="," open="(" close=")" item="recruitID">
+            #{recruitID}
+        </foreach>
+    </select>
 </mapper>
