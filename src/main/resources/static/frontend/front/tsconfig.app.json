@@ -6,6 +6,7 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "types": ["vite/client"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -16,7 +17,7 @@
     "jsx": "preserve",
 
     /* Linting */
-    "strict": true,
+    //"strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,

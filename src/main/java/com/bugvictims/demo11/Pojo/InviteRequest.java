@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InviteRequest {
-
     private Integer id;
     private Integer userID;
     private Integer teamID;

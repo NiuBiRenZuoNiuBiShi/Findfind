@@ -40,6 +40,7 @@ public class UserController {
             return new Result().error("用户名已被占用");
         }
     }
+
     @PostMapping("/login")
     public Result login(String username, String password) {
         User loginUser = userService.findByUserName(username);

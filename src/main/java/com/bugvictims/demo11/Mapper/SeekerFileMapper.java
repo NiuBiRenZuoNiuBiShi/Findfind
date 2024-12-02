@@ -13,8 +13,6 @@ public interface SeekerFileMapper {
 
     void insertSeekerFile(Seeker seeker);
 
-    @Delete("DELETE FROM seeker_file WHERE seeker_id = #{id}")
-    void deleteSeekerFile(Seeker seeker);
 
     @Delete("DELETE FROM seeker_file WHERE seeker_id = #{id}")
     void deleteSeekerFile(Integer id);
