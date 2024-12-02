@@ -1,5 +1,5 @@
 <template>
-  <div class = "loginContainer">
+  <div class="loginContainer">
     <div class="loginBox">
       <h2 class="loginTitle"> 登录 </h2>
       <el-form
@@ -14,12 +14,12 @@
         <el-form-item label="UserName" prop="username">
           <el-input v-model="dataForm.username" placeholder="请输入用户名"/>
         </el-form-item>
-        <el-form-item label="Password" prop="password" >
+        <el-form-item label="Password" prop="password">
           <el-input v-model="dataForm.password" type="password" autocomplete="new-password" placeholder="请输入密码"/>
         </el-form-item>
         <el-form-item label=" ">
           <el-button @click="handleLogin" type="primary" style="width: 100% ;
-          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);" > 登录
+          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);"> 登录
           </el-button>
         </el-form-item>
       </el-form>
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import {reactive, ref} from 'vue'
 import axios from "axios";
 import router from "../router";
 import {useUserStore} from "../stores/userStore";
@@ -46,12 +46,12 @@ const dataForm = ref(
 
 const rules = {
   username: [
-    {required:true, message: "请输入用户名", trigger: "blur"},
-    {required:true, message: "请输入用户名", trigger: "change"}
+    {required: true, message: "请输入用户名", trigger: "blur"},
+    {required: true, message: "请输入用户名", trigger: "change"}
   ],
   password: [
-    {required:true, message: "请输入密码", trigger: "blur"},
-    {required:true, message: "请输入密码", trigger: "change"}
+    {required: true, message: "请输入密码", trigger: "blur"},
+    {required: true, message: "请输入密码", trigger: "change"}
   ]
 }
 
@@ -59,7 +59,10 @@ const handleLogin = async () => {
   dataFormRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        const response = await axios.post('/user/login', dataForm.value)
+        const params = new URLSearchParams()
+        params.append('username', dataForm.value.username)
+        params.append('password', dataForm.value.password)
+        const response = await axios.post('/user/login', params)
         const result = response.data
 
         if (result.code === 1) {
@@ -94,16 +97,18 @@ const handleLogin = async () => {
   height: 100vh;
   width: 100vw;
   background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+
   .loginBox {
     .loginTitle {
       text-align: center;
       margin-bottom: 20px;
     }
+
     border-radius: 4px;
     height: 200px;
     width: 400px;
     padding: 16px 36px 36px 30px;
-    border: 1px solid #dddddd ;
+    border: 1px solid #dddddd;
     backdrop-filter: blur(10px) brightness(90%);
     background-color: rgba(255, 255, 255, 0.5);
   }
