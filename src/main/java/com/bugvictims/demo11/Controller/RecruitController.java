@@ -45,6 +45,7 @@ public class RecruitController {
         recruit.setUpdateTime(LocalDateTime.now());
         recruit.setFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
         recruitService.updateRecruit(recruit);
+        
         return new Result().success();
     }
 

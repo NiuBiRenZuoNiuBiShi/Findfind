@@ -43,6 +43,7 @@ public class UserController {
 
     @PostMapping("/login")
     public Result login(String username, String password) {
+        System.out.println(username + " " + password);
         User loginUser = userService.findByUserName(username);
         if (loginUser == null) {
             return new Result().error("用户名不存在");
