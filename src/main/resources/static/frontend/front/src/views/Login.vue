@@ -1,76 +1,73 @@
-<script setup lang="ts">
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
-import { ElMessage } from "element-plus";
-
-const router = useRouter();
-
-const form = reactive({
-  username: "",
-  password: "",
-});
-
-const rules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-};
-
-const loginForm = ref();
-
-const handleLogin = async () => {
-  await loginForm.value?.validate();
-  const response = await fetch("/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(form),
-  });
-  const result = await response.json();
-  if (result.code === 1) {
-    ElMessage.success("登录成功");
-    await router.push("/plaza");
-  } else {
-    ElMessage.error("登录失败，请检查用户名和密码");
-  }
-};
-
-</script>
-
 <template>
-  <div class="login-container">
-    <el-form
-        :model="form"
-        :rules="rules"
-        ref="loginForm"
-        label-width="80px"
-        class="login-form"
-    >
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="handleLogin">登录</el-button>
-      </el-form-item>
-    </el-form>
+  <div class = "loginContainer">
+    <div class="loginBox">
+      <h2 class="loginTitle"> 登录 </h2>
+      <el-form
+          ref="ruleForm"
+          style="max-width: 600px"
+          :model="dataFrom"
+          :rules="rules"
+          label-width="auto"
+          class="demo-ruleForm"
+          :size="formSize"
+      >
+        <el-form-item label="UserName" prop="username">
+          <el-input v-model="dataFrom.username" placeholder="请输入用户名"/>
+        </el-form-item>
+        <el-form-item label="Password" prop="password" >
+          <el-input v-model="dataFrom.password" type="password" autocomplete="new-password" placeholder="请输入密码"/>
+        </el-form-item>
+        <el-form-item label=" ">
+          <el-button type="primary" style="width: 100% "> 登录 </el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.login-container {
+<script setup>
+import { reactive, ref } from 'vue'
+
+const dataFrom = ref(
+    {
+      username: "",
+      password: "",
+    }
+)
+
+const rules = {
+  username: [
+    {required:true, message: "请输入用户名", trigger: "blur"},
+    {required:true, message: "请输入用户名", trigger: "change"}
+  ],
+  password: [
+    {required:true, message: "请输入密码", trigger: "blur"},
+    {required:true, message: "请输入密码", trigger: "change"}
+  ]
+}
+</script>
+
+
+<style>
+.loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f5f5f5;
-}
-
-.login-form {
-  width: 400px;
-  padding: 20px;
-  background: white;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  width: 100vw;
+  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+  .loginBox {
+    .loginTitle {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    border-radius: 4px;
+    height: 200px;
+    width: 400px;
+    padding: 16px 36px 36px 30px;
+    border: 1px solid #dddddd ;
+    backdrop-filter: blur(10px) brightness(90%);
+    background-color: rgba(255, 255, 255, 0.5);
+  }
 }
 </style>
