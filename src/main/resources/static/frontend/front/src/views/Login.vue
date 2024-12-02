@@ -28,12 +28,13 @@
 </template>
 
 <script setup>
-import {reactive, ref} from 'vue'
+import {ref} from 'vue'
 import axios from "axios";
-import router from "../router";
 import {useUserStore} from "../stores/userStore";
 import {ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
 
+const router = useRouter()
 const userStore = new useUserStore();
 
 const dataFormRef = ref(null)
@@ -43,6 +44,7 @@ const dataForm = ref(
       password: "",
     }
 )
+const formSize = "Default"
 
 const rules = {
   username: [
@@ -56,6 +58,7 @@ const rules = {
 }
 
 const handleLogin = async () => {
+  console.log(router.currentRoute.value.path)
   dataFormRef.value.validate(async (valid) => {
     if (valid) {
       try {
@@ -73,7 +76,7 @@ const handleLogin = async () => {
             username: dataForm.value.username,
             password: dataForm.value.password
           }
-          router.push('/')
+          await router.push('/')
           ElMessage.success("成功登录")
         } else {
           ElMessage.error("登录失败")
