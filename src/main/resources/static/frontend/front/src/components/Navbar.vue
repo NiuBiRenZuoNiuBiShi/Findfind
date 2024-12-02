@@ -1,5 +1,23 @@
+<script>
+import '../assets/jquery-1.12.4.min.js';
+import '../assets/bootstrap.min.js';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+export default {
+    name: 'Navbar',
+    setup() {
+        const route = useRoute(); // 获取当前路由对象
+        // 使用 computed 属性来判断是否显示导航栏
+        const showNavbar = computed(() => route.path !== '/login');
+        return {
+            showNavbar
+        };
+    }
+}
+</script>
+
 <template>
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <nav v-if="showNavbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="">Find</a>
@@ -42,14 +60,7 @@
   </nav><!--导航栏-->
 </template>
 
-<script>
-import '../assets/jquery-1.12.4.min.js';
-import '../assets/bootstrap.min.js';
 
-export default {
-  name: 'Navbar'
-}
-</script>
 
 <style scoped>
 @import '../assets/bootstrap.min.css';
