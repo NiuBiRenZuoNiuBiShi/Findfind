@@ -18,7 +18,9 @@
           <el-input v-model="dataForm.password" type="password" autocomplete="new-password" placeholder="请输入密码"/>
         </el-form-item>
         <el-form-item label=" ">
-          <el-button @click="handleLogin" type="primary" style="width: 100% "> 登录 </el-button>
+          <el-button @click="handleLogin" type="primary" style="width: 100% ;
+          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);" > 登录
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
