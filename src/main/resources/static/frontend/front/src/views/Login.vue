@@ -83,6 +83,7 @@ const handleLogin = async () => {
           await router.push('/')
           ElMessage.success("成功登录")
         } else {
+          //console.log(result)
           ElMessage.error("登录失败")
         }
       } catch (error) {
@@ -98,7 +99,7 @@ const toRegister = async () => {
 </script>
 
 
-<style>
+<style scoped>
 .loginContainer {
   display: flex;
   justify-content: center;
