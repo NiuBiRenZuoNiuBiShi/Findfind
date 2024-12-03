@@ -2,17 +2,32 @@
 import '../assets/jquery-1.12.4.min.js';
 import '../assets/bootstrap.min.js';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
+import {useUserStore} from "../stores/userStore.ts";
 export default {
     name: 'Navbar',
     setup() {
+        const router=useRouter();
         const route = useRoute(); // 获取当前路由对象
-        // 使用 computed 属性来判断是否显示导航栏
-        const showNavbar = computed(() => !(route.path === '/login' || route.path === '/register') );
-        return {
-            showNavbar
+        const userStore=useUserStore();
+        const showNavbar = computed(() => route.path !== '/login' && route.path !== '/register');
+        const token = localStorage.getItem('token');
+        const login = computed(() =>token!== null);
+        const noLogin = computed(() =>token === null);
+        console.log(login);
+        console.log(noLogin);
+        // 定义退出登录的方法
+        const handleLogout = () =>{
+            userStore.logout();
+            router.push('/'); // 重定向到登录页面
         };
-    }
+        return {
+            showNavbar,
+            login,
+            noLogin,
+            handleLogout,
+        };
+    },
 }
 </script>
 
@@ -21,31 +36,25 @@ export default {
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="">Find</a>
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"
-                aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
       </div>
       <div class="collapse navbar-collapse" id="navbar-collapse">
         <ul class="nav navbar-nav">
-          <li class=""><a href="/">首页广场</a></li>
-          <li class=""><a href="">队伍列表</a></li>
-          <li class=""><a href="">用户列表</a></li>
+          <li ><router-link to="/">首页广场</router-link></li>
+          <li ><router-link to="/">队伍列表</router-link></li>
+          <li ><router-link to="/">用户列表</router-link></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">我的邀请</a></li>
-          <li><a href="#">我的申请</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                aria-expanded="false">个人中心<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">详细信息</a></li>
-              <li><a href="#">我的队伍</a></li>
+          <li v-if="login"><router-link to="/">我的邀请</router-link></li>
+            <li v-if="login"><router-link to="/">我的申请</router-link></li>
+            <li v-if="noLogin"><router-link to="/login">登录</router-link></li>
+          <li v-if="login" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">个人中心<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                  <li><router-link to="/">详细信息</router-link></li>
+                  <li><router-link to="/">我的队伍</router-link></li>
               <li role="separator" class="divider"></li>
-              <li><a href="#">退出登录</a></li>
+                  <li ><button @click="handleLogout">退出登录</button></li>
             </ul>
           </li>
         </ul>
@@ -64,7 +73,6 @@ export default {
 
 <style scoped>
 @import '../assets/bootstrap.min.css';
-
 .container-fluid {
   height: 70px;
   font-size: 20px;
