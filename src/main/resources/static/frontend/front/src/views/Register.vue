@@ -142,10 +142,9 @@ const handleRegister = async () => {
         console.log(user)
         const response = await axios.post("user/register", user)
         const result = response.data;
-
         if (result.code === 1) {
           ElMessage.success("2s后进入登录界面")
-          setTimeout(() => { router.push('/login') }, 2000);
+          setTimeout(() => { router.push('/login') }, 1000);
         } else {
           console.log(result)
           ElMessage.error("注册失败");

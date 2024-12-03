@@ -4,6 +4,7 @@ import '../assets/bootstrap.min.js';
 import { computed } from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useUserStore} from "../stores/userStore.ts";
+import {ElMessage} from "element-plus";
 export default {
     name: 'Navbar',
     setup() {
@@ -14,12 +15,14 @@ export default {
         const token = localStorage.getItem('token');
         const login = computed(() =>token!== null);
         const noLogin = computed(() =>token === null);
-        console.log(login);
-        console.log(noLogin);
         // 定义退出登录的方法
         const handleLogout = () =>{
             userStore.logout();
-            router.push('/'); // 重定向到登录页面
+            ElMessage.success("成功退出登录");
+            setTimeout(() => {
+                router.push('/');
+                window.location.reload(); // 强制刷新页面
+            }, 1000);
         };
         return {
             showNavbar,

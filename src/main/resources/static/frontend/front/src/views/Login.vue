@@ -79,9 +79,11 @@ const handleLogin = async () => {
             username: dataForm.value.username,
             password: dataForm.value.password
           })
-          await router.push('/')
-          window.location.reload(); // 强制刷新页面
           ElMessage.success("成功登录")
+            setTimeout(() => {
+                router.push('/');
+                window.location.reload(); // 强制刷新页面
+            }, 2000);
         } else {
           //console.log(result)
           ElMessage.error("登录失败")

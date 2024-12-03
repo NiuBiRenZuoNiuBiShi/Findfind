@@ -8,7 +8,6 @@ export const useUserStore = defineStore("user", () => {
         token.value = '';
         userInfo.value = {};
         localStorage.removeItem('token');
-        window.location.reload(); // 强制刷新页面
     }
     // 定义一个函数来获取当前用户信息
     function getCurrentUser() {
