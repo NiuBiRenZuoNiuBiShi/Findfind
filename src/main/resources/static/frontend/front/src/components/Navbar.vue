@@ -8,7 +8,7 @@ export default {
     setup() {
         const route = useRoute(); // 获取当前路由对象
         // 使用 computed 属性来判断是否显示导航栏
-        const showNavbar = computed(() => route.path !== '/login');
+        const showNavbar = computed(() => !(route.path === '/login' || route.path === '/register') );
         return {
             showNavbar
         };
@@ -40,7 +40,7 @@ export default {
           <li><a href="#">我的申请</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-               aria-expanded="false">个人中心<span class="caret"></span></a>
+                aria-expanded="false">个人中心<span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="#">详细信息</a></li>
               <li><a href="#">我的队伍</a></li>

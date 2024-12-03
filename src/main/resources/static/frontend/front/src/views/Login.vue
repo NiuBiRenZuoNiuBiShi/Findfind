@@ -75,11 +75,11 @@ const handleLogin = async () => {
         if (result.code === 1) {
           const token = result.data
           localStorage.setItem('token', token)
-          userStore.token = token
-          userStore.userInfo = {
+          userStore.token = ref(token)
+          userStore.userInfo = ref({
             username: dataForm.value.username,
             password: dataForm.value.password
-          }
+          })
           await router.push('/')
           ElMessage.success("成功登录")
         } else {

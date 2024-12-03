@@ -1,7 +1,6 @@
 import {createRouter} from 'vue-router'
 import {createWebHistory} from "vue-router";
 import Login from '../views/Login.vue';
-import {useUserStore} from "../stores/userStore.ts";
 import Register from "../views/Register.vue";
 const routes:any = [
     {
@@ -22,8 +21,8 @@ const router:any = createRouter({
 })
 
 router.beforeEach((to, from, next): void => {
-    const userStore = useUserStore();
-    if (userStore.token) {
+    const token = localStorage.getItem('token');
+    if (token) {
         if (to.path === '/login') {
             next('/'); // 已登录用户尝试访问登录页面时重定向到主页
         } else {

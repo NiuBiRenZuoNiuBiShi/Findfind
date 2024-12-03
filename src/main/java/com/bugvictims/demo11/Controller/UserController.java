@@ -27,7 +27,7 @@ public class UserController {
     public Result register(@RequestBody @Validated  UserIgnorePassword user) {
         //注册用的是UserIgnore类，让password也能反序列化
         // 检查必填字段是否已提供
-        System.out.println(user.getUsername() + " " + user.getPassword());
+        //System.out.println(user.getUsername() + " " + user.getPassword());
         if (user.getUsername() == null || user.getPassword()== null || user.getPhone() == null || user.getBiology() == null || (user.getStatus()!=1&&user.getStatus()!=0)){
             return new Result().error("All required fields must be filled out.");
         }
@@ -44,7 +44,7 @@ public class UserController {
 
     @PostMapping("/login")
     public Result login(String username, String password) {
-        System.out.println(username + " " + password);
+        //System.out.println(username + " " + password);
         User loginUser = userService.findByUserName(username);
         if (loginUser == null) {
             return new Result().error("用户名不存在");

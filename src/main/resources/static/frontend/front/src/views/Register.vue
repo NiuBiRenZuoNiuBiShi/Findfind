@@ -1,7 +1,7 @@
 <template>
   <div class="loginContainer">
     <div class="loginBox">
-      <h2 class="loginTitle"> 登录 </h2>
+      <h2 class="loginTitle"> 注册 </h2>
       <el-form
           ref="dataFormRef"
           style="max-width: 600px"
@@ -144,18 +144,8 @@ const handleRegister = async () => {
         const result = response.data;
 
         if (result.code === 1) {
-          const token = result.data.token;
-          localStorage.setItem('token', token);
-          userStore.token = token;
-          userStore.userInfo = {
-            username: dataForm.value.username,
-            password: dataForm.value.password,
-            nickname: dataForm.value.nickname,
-            email: dataForm.value.email,
-            phoneNumber: dataForm.value.phoneNumber,
-          }
-          ElMessage.success("3s后进入主页")
-          setTimeout(() => { router.push('/') }, 3000);
+          ElMessage.success("2s后进入登录界面")
+          setTimeout(() => { router.push('/login') }, 2000);
         } else {
           console.log(result)
           ElMessage.error("注册失败");
