@@ -14,7 +14,7 @@ const router:any = createRouter({
     routes,
     history: createWebHistory(),
 })
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next): void => {
     const userStore = useUserStore();
     if (userStore.token) {
         if (to.path === '/login') {

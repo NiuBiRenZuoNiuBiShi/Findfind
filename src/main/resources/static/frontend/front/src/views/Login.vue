@@ -17,10 +17,14 @@
         <el-form-item label="Password" prop="password">
           <el-input v-model="dataForm.password" type="password" autocomplete="new-password" placeholder="请输入密码"/>
         </el-form-item>
-        <el-form-item label=" ">
-          <el-button @click="handleLogin" type="primary" style="width: 100% ;
-          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);"> 登录
+        <el-form-item >
+          <el-button @click="handleLogin" type="primary" style="width: 80% ;
+          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); margin-left: 35px;"> 登录
           </el-button>
+        </el-form-item>
+        <el-form-item >
+          <el-button @click="toRegister" type="primary" style="width: 80% ;
+          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); margin-left: 35px"> 注册 </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -86,9 +90,11 @@ const handleLogin = async () => {
       }
     }
   })
-
 }
 
+const toRegister = async () => {
+  await router.push('/register');
+}
 </script>
 
 
@@ -108,7 +114,7 @@ const handleLogin = async () => {
     }
 
     border-radius: 4px;
-    height: 200px;
+    height: 230px;
     width: 400px;
     padding: 16px 36px 36px 30px;
     border: 1px solid #dddddd;
