@@ -62,6 +62,7 @@ const rules = {
 }
 
 const handleLogin = async () => {
+  console.log(router.currentRoute.value.path)
   dataFormRef.value.validate(async (valid) => {
     if (valid) {
       try {
@@ -80,10 +81,8 @@ const handleLogin = async () => {
             password: dataForm.value.password
           })
           await router.push('/')
-          window.location.reload(); // 强制刷新页面
           ElMessage.success("成功登录")
         } else {
-          //console.log(result)
           ElMessage.error("登录失败")
         }
       } catch (error) {

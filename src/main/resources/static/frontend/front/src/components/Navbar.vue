@@ -19,6 +19,7 @@ export default {
         // 定义退出登录的方法
         const handleLogout = () =>{
             userStore.logout();
+            localStorage.removeItem('token');
             router.push('/'); // 重定向到登录页面
         };
         return {
@@ -49,7 +50,7 @@ export default {
             <li v-if="noLogin"><router-link to="/login">登录</router-link></li>
           <li v-if="login" class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-               aria-expanded="false">个人中心<span class="caret"></span></a>
+                aria-expanded="false">个人中心<span class="caret"></span></a>
               <ul class="dropdown-menu">
                   <li><router-link to="/">详细信息</router-link></li>
                   <li><router-link to="/">我的队伍</router-link></li>
