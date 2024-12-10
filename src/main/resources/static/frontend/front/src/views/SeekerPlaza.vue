@@ -71,7 +71,7 @@
     <div class="actions-container" v-if="seekers.length > 0">
       <el-button
           type="primary"
-          @click=""
+          @click="goToInviteRequest"
           :disabled="seekers.length !== 1">
       </el-button>
     </div>
@@ -180,6 +180,13 @@ const seeDetail = (seeker) => {
 
 const downloadFile = (file) => {
   downloadUtils.generateDownloadLink(file.data, file.name);
+}
+
+const goToInviteRequest = () => {
+  if (selectedSeeker.value.length === 0) {
+    const seekerId = selectedSeeker.value[0].id;
+    router.push(`/plaza/seeker/${seekerId}`);
+  }
 }
 </script>
 
