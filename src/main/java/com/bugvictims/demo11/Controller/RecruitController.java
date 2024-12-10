@@ -25,9 +25,10 @@ public class RecruitController {
         因此先流程先把recruit插入到相应的数据库中,返回recruit在数据库的id
         在插入文件
     */
-    @PostMapping("/plaza")
+    @PostMapping("/recruit/release/{teamID}")
     public Result releaseRecruit(@ModelAttribute Recruit recruit
     , @RequestParam("files") List<MultipartFile> files) {
+        System.out.println(recruit.getNeedNum());
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         recruit.setReleaserID((int)userClaims.get("userID"));
 

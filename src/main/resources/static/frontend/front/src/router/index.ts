@@ -4,6 +4,8 @@ import Login from '../views/Login.vue';
 import Register from "../views/Register.vue";
 import App from "../App.vue";
 import TeamList from '../views/TeamList.vue';
+import Plaza from "../views/Plaza.vue";
+import JoinRequestForm from "../views/JoinRequestForm.vue";
 
 const routes: any = [
     {
@@ -25,6 +27,19 @@ const routes: any = [
         path: '/teamList',
         name: 'teamList',
         component: TeamList,
+    },
+    {
+        path: '/plaza',
+        name: 'plaza',
+        component: Plaza,
+    },
+    {
+        path: '/plaza/:recruitId',
+        name: 'JoinRequest',
+        component: JoinRequestForm,
+        meta: {
+            title: '申请加入'
+        }
     }
 
 ]
