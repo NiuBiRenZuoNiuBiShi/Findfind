@@ -96,7 +96,7 @@ const submitJoinRequest = async () => {
 
     if (response.data.code === 200) {
       ElMessage.success('申请提交成功')
-      await router.push('/recruit-plaza')
+      await router.push('/plaza')
     } else {
       ElMessage.error('申请提交失败')
     }
