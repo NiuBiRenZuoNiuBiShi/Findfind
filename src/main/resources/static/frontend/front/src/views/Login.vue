@@ -39,7 +39,7 @@ import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
 
 const router = useRouter()
-const userStore = new useUserStore();
+const userStore = useUserStore();
 
 const dataFormRef = ref(null)
 const dataForm = ref(
@@ -74,11 +74,11 @@ const handleLogin = async () => {
         if (result.code === 1) {
           const token = result.data
           localStorage.setItem('token', token)
-          userStore.token = ref(token)
-          userStore.userInfo = ref({
+          userStore.token = token
+          userStore.userInfo = {
             username: dataForm.value.username,
             password: dataForm.value.password
-          })
+          }
           ElMessage.success("成功登录")
             setTimeout(() => {
                 router.push('/');

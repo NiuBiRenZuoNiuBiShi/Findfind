@@ -1,6 +1,6 @@
 <template>
-  <div class="seeker-plaza-container">
-    <el-form :inline="true" class="search-form">
+  <div class="seeker-plaza-container" >
+    <el-form :inline="true" class="search-form" style="margin-top: 75px;margin-bottom: -10px">
       <el-form-item label="添加标签">
         <el-input
             v-model="inputLabel"
@@ -37,12 +37,14 @@
         :data="seekers"
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        stripe
+        border
     >
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="header" label="标题" width="180px"></el-table-column>
-      <el-table-column prop="postion" label="位置" width="180px"></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="180"></el-table-column>
-      <el-table-column prop="label" label="标签" width="180px">
+      <el-table-column type="selection" width="75"></el-table-column>
+      <el-table-column prop="header" label="标题" width="439px" align="center"></el-table-column>
+      <el-table-column prop="postion" label="位置" width="250px" align="center"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="250" align="center"></el-table-column>
+      <el-table-column prop="label" label="标签" width="250px" header-align="center">
         <template #default="scope">
           <el-tag
               v-for="tag in scope.row.label"
@@ -55,7 +57,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="seeDetails" prop="seekerId" width="180">
+      <el-table-column label="seeDetails" prop="seekerId" width="200" align="center">
         <template #default="scope">
           <el-button
               type="text"
@@ -134,8 +136,8 @@ const addLabel = () => {
   }
 }
 
-const removeLabel = () => {
-  selectedLabels.value.splice(selectedLabels.value.indexOf(selectedLabels.value), 1);
+const removeLabel = index => {
+  selectedLabels.value.splice(index, 1);
 }
 
 const searchSeekers = async () => {

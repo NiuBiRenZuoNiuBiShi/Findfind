@@ -31,6 +31,8 @@ public class RecruitController {
         System.out.println(recruit.getNeedNum());
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         recruit.setReleaserID((int)userClaims.get("userID"));
+        recruit.setReceiveNum(0);
+        recruit.setHasNum(0);
 
         Integer recruitID = recruitService.insertRecruit(recruit); // 得到插入的ID
 

@@ -88,14 +88,14 @@ const downloadFile = (file) => {
 
 <template>
 
-  <div class="recruit-plaza-container" style="margin-top: 70px;margin-left: 20px">
+  <div class="recruit-plaza-container" style="margin-top: 50px;margin-left: 20px">
     <el-form :inline="true" class="search-form">
-      <el-form-item label="添加标签">
+      <el-form-item label="添加标签" style="margin-bottom: -20px">
         <el-input
             v-model="inputLabel"
             placeholder="输入标签"
             size="small"
-            style="width: 200px;"
+            style="width: 350px; margin-left: 10px; height: 35px"
             @keyup.enter="addLabel"
         >
           <template #append>
@@ -118,7 +118,7 @@ const downloadFile = (file) => {
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="searchRecruits">搜索</el-button>
+        <el-button type="primary" @click="searchRecruits" style="margin-top: 30px">搜索</el-button>
       </el-form-item>
     </el-form>
 
@@ -126,14 +126,16 @@ const downloadFile = (file) => {
         :data="recruits"
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        stripe
+        border
     >
-      <el-table-column type="selection" width="55" />
+      <el-table-column type="selection" width="75" align="center" />
 
-      <el-table-column prop="header" label="标题" width="180" />
+      <el-table-column prop="header" label="标题" width="439" align="center" />
 
-      <el-table-column prop="needNum" label="需求人数" width="100" />
+      <el-table-column prop="needNum" label="需求人数" width="175" align="center" />
 
-      <el-table-column prop="label" label="标签" width="200">
+      <el-table-column prop="label" label="标签" width="350" header-align="center">
 
         <template #default="scope">
           <el-tag
@@ -147,13 +149,13 @@ const downloadFile = (file) => {
         </template>
       </el-table-column>
 
-      <el-table-column prop="createTime" label="创建时间" width="180">
+      <el-table-column prop="createTime" label="创建时间" width="240" align="center">
         <template #default="scope">
           {{ formatDateTime(scope.row.createTime) }}
         </template>
       </el-table-column>
 
-      <el-table-column label="seeDetail" width="100">
+      <el-table-column label="seeDetail" width="180" align="center">
         <template #default="scope">
           <el-button
               type="text"

@@ -3,15 +3,19 @@ import {ref, onMounted} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {ElMessage} from 'element-plus'
 import axios from 'axios'
+import {useUserStore} from "../stores/userStore.ts";
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
+const inviteRequestFormRef = ref(null)
 
 const seekerId = ref(null)
 const inviteRequestFormInfo = ref({
   teamId: null,
   message: '',
 })
+const userTeams = userStore.userTeams
 const fileList = ref([])
 
 onMounted(() => {
@@ -32,12 +36,15 @@ const submitInviteRequest = async () => {
 
   formData.append("message", inviteRequestFormInfo.value.message)
   formData.append("teamId", inviteRequestFormInfo.value.teamId)
-  fileList.value.forEach((file) => {
-    formData.append("message", file.raw)
-  })
+  if (fileList.value && fileList.value.length > 0) {
+    fileList.value.forEach((file) => {
+      formData.append("files", file.raw);
+    });
+  }
 
   try {
-    const res = await axios.post(`/plaza/seeker/invite/${seekerId.value}/${inviteRequestFormInfo.value.teamId}`, {
+    const res = await axios.post(`/plaza/seeker/invite/${seekerId.value}/${inviteRequestFormInfo.value.teamId}`,
+        formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -54,11 +61,14 @@ const submitInviteRequest = async () => {
   }
 }
 
+const quit = () => {
+  router.push('/plaza')
+}
 </script>
 
 <template>
   <div class="invite-request-container">
-    <el-card>
+    <el-card style="margin-top: 150px">
       <template #header>
         <div class="card-header">
           <span>邀请</span>
@@ -93,13 +103,20 @@ const submitInviteRequest = async () => {
         </el-form-item>
 
         <el-form-item label="哪只队伍">
-          <el-select></el-select>
+          <el-select v-model="inviteRequestFormInfo.teamId" placeholder="选择你的队伍" size="large" clearable>
+            <el-option v-for="team in userTeams"
+                        :key="team.id"
+                        :label="team.name"
+                        :value="team.id">
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item>
           <el-button type="primary" @click="submitInviteRequest">
-            提交邀请
+            提交
           </el-button>
+          <el-button @click="quit" type="danger" style="margin-top: -30px">取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -107,9 +124,9 @@ const submitInviteRequest = async () => {
 </template>
 
 <style scoped>
-.join-request-container {
+.invite-request-container {
   max-width: 600px;
-  margin: 0 auto;
+  margin: auto;
   padding: 20px;
 }
 

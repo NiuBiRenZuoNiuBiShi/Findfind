@@ -6,6 +6,9 @@ import App from "../App.vue";
 import TeamList from '../views/TeamList.vue';
 import Plaza from "../views/Plaza.vue";
 import JoinRequestForm from "../views/JoinRequestForm.vue";
+import SeekerPlaza from "../views/SeekerPlaza.vue";
+import InviteRequestForm from "../views/InviteRequestForm.vue";
+import CreateRecruitForm from "../views/CreateRecruitForm.vue";
 
 const routes: any = [
     {
@@ -40,6 +43,24 @@ const routes: any = [
         meta: {
             title: '申请加入'
         }
+    },
+    {
+        path: '/plaza/seeker',
+        name: 'seeker',
+        component: SeekerPlaza,
+    },
+    {
+        path: '/plaza/seeker/:seekerId',
+        name: 'InviteRequest',
+        component: InviteRequestForm,
+        meta: {
+            title: '邀请用户'
+        }
+    },
+    {
+        path: '/createRecruit',
+        name: 'createRecruit',
+        component: CreateRecruitForm
     }
 
 ]

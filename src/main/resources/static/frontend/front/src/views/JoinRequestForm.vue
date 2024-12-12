@@ -1,6 +1,6 @@
 <template>
   <div class="join-request-container">
-    <el-card>
+    <el-card style="margin-top: 175px">
       <template #header>
         <div class="card-header">
           <span>申请加入招聘</span>
@@ -17,7 +17,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="上传文件">
+        <el-form-item label="上传文件" style="margin-top: 20px;margin-bottom: -5px">
           <el-upload
               v-model:file-list="fileList"
               action=""
@@ -94,7 +94,7 @@ const submitJoinRequest = async () => {
       }
     })
 
-    if (response.data.code === 200) {
+    if (response.data.code === 1) {
       ElMessage.success('申请提交成功')
       await router.push('/plaza')
     } else {
