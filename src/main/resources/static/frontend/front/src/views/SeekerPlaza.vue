@@ -107,7 +107,11 @@
           <p v-else>暂无附件</p>
         </el-descriptions-item>
       </el-descriptions>
+      <el-button @click="goToInvite"> 邀请 </el-button>
+      <el-button @click="quitDetails">关闭</el-button>
     </el-dialog>
+
+    <InviteRequestForm v-if="inviteFormVisible" :seekerID="currentSeeker.id" v-model:visible="inviteFormVisible" />
   </div>
 </template>
 
@@ -115,8 +119,8 @@
 import {ref} from 'vue'
 import {ElMessage} from 'element-plus'
 import axios from 'axios'
-import router from "../router";
 import {downloadUtils} from "../api/downloadUtils.ts";
+import InviteRequestForm from "./InviteRequestForm.vue";
 
 const inputLabel = ref('');
 const selectedLabels = ref([]);
@@ -127,6 +131,7 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 const seekerDetailsDialogVisible = ref(false);
 const currentSeeker = ref(null)
+const inviteFormVisible = ref(false);
 
 const addLabel = () => {
   const label = inputLabel.value;
@@ -185,10 +190,11 @@ const downloadFile = (file) => {
 }
 
 const goToInviteRequest = () => {
-  if (selectedSeeker.value.length === 0) {
-    const seekerId = selectedSeeker.value[0].id;
-    router.push(`/plaza/seeker/${seekerId}`);
-  }
+  inviteFormVisible.value = true;
+}
+
+const goToInvite = () => {
+  inviteFormVisible.value = true;
 }
 </script>
 

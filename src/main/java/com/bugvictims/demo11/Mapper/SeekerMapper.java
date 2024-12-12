@@ -27,4 +27,7 @@ public interface SeekerMapper {
 
     @Select("SELECT seeker_id FROM seeker WHERE id = #{id}")
     Integer selectUserIDBySeekerID(Integer id);
+
+    @Select("SELECT * FROM seeker WHERE seeker_id = #{id}")
+    List<Seeker> selectSeekersByUserID(Integer id);
 }

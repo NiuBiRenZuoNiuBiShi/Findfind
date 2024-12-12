@@ -1,11 +1,10 @@
 package com.bugvictims.demo11.Controller;
 
+import com.bugvictims.demo11.Pojo.JoinRequest;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Team;
 import com.bugvictims.demo11.Pojo.User;
-import com.bugvictims.demo11.Service.TeamService;
-import com.bugvictims.demo11.Service.TeamUserService;
-import com.bugvictims.demo11.Service.UserService;
+import com.bugvictims.demo11.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +22,12 @@ public class TeamController {
 
     @Autowired
     private TeamUserService teamUserService;
+
+    @Autowired
+    private RecruitService recruitService;
+
+    @Autowired
+    private JoinRequestService joinRequestService;
 
     @PostMapping("/create")
     public Result createTeam(@RequestBody Team team) {
@@ -139,5 +144,15 @@ public class TeamController {
             return new Result().error("队伍成员为空");
         }
         return new Result().success(userList);
+    }
+
+    @GetMapping("/teams/recruit/{teamID}")
+    public Result getRecruitsByTeamId(@PathVariable Integer teamID) {
+        return new Result().success(recruitService.getRecruitsByTeamId(teamID));
+    }
+
+    @GetMapping("teams/join/{recruitID}")
+    public Result getJoinByRecruitID(@PathVariable Integer recruitID) {
+        return new Result().success(joinRequestService.getJoinRequestById(recruitID));
     }
 }

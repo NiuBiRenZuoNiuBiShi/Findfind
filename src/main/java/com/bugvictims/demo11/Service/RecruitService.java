@@ -20,4 +20,6 @@ public interface RecruitService {
     void insertRecruitFiles(Recruit recruit);
 
     void insertJoinFiles(JoinRequest joinRequest);
+
+    List<Recruit> getRecruitsByTeamId(Integer teamID);
 }

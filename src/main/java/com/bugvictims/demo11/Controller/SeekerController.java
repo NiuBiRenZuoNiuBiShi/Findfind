@@ -1,6 +1,7 @@
 package com.bugvictims.demo11.Controller;
 
 import com.bugvictims.demo11.Pojo.InviteRequest;
+import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
@@ -70,5 +71,10 @@ public class SeekerController {
         seekerService.insertInviteFiles(inviteRequest);
 
         return new Result().success();
+    }
+
+    @GetMapping("/user/{userID}/seekers")
+    Result getSeekerByUserID(@PathVariable("userID") Integer userID) {
+        return new Result().success(seekerService.getSeekersByUserId(userID));
     }
 }

@@ -3,6 +3,8 @@ package com.bugvictims.demo11.Mapper;
 import com.bugvictims.demo11.Pojo.JoinRequest;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface JoinRequestMapper {
     @Insert("INSERT INTO join_request (user_id, team_id, message, response, create_time, update_time)" + "VALUES (#{userId}, #{teamId}, #{message}, #{response}, #{createTime}, #{updateTime})")
@@ -24,4 +26,12 @@ public interface JoinRequestMapper {
     //删除请求
     @Delete("DELETE FROM join_request WHERE id = #{requestId}")
     void deleteJoinRequest(int requestId);
+
+    @Select("SELECT *" +
+            "FROM join_request WHERE user_id = #{userId}")
+    List<JoinRequest> selectJoinBySeekerId(Integer userId);
+
+    @Select("SELECT *" +
+            "FROM join_request WHERE team_id = #{teamId}")
+    List<JoinRequest> selectJoinByTeamId(Integer teamId);
 }

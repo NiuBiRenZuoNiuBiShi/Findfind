@@ -91,4 +91,20 @@ public class SeekerServiceImpl implements SeekerService {
     public void insertInviteFiles(InviteRequest inviteRequest) {
         inviteRequestFileMapper.insertInviteFile(inviteRequest);
     }
+
+    @Override
+    public List<Seeker> getSeekersByUserId(Integer userID) {
+        List<Seeker> seekers = seekerMapper.selectSeekersByUserID(userID);
+        List<Integer> seekerIDs = seekers.stream().map(Seeker::getId).toList();
+        if (!seekerIDs.isEmpty()) {
+            Map<Integer, List<PojoFile>> fileMap = seekerFileMapper
+                    .selectSeekerFileByIds(seekerIDs)
+                    .stream()
+                    .collect(Collectors.groupingBy(PojoFile::getId));
+            seekers.forEach(seeker -> {
+                seeker.setFiles(fileMap.get(seeker.getId()));
+            });
+        }
+        return seekers;
+    }
 }

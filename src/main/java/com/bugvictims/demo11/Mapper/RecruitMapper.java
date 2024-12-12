@@ -33,4 +33,7 @@ public interface RecruitMapper {
 
     @Select("SELECT (releaser_id) FROM recruit WHERE id = #{recruitID}")
     Integer selectUserIDByRecruitID(Integer recruitID);
+
+    @Select("SELECT * FROM recruit WHERE team_id = #{teamID}")
+    List<Recruit> selectRecruitsByTeamID(Integer teamID);
 }

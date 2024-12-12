@@ -22,4 +22,6 @@ public interface SeekerService {
     void insertSeekerFiles(Seeker seeker);
 
     void insertInviteFiles(InviteRequest inviteRequest);
+
+    List<Seeker> getSeekersByUserId(Integer userID);
 }

@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import router from "../router";
 import {downloadUtils} from "../api/downloadUtils.ts";
-
+import JoinRequestForm from "./JoinRequestForm.vue";
 // 响应式变量
 const inputLabel = ref('')
 const selectedLabels = ref([])
@@ -15,6 +15,7 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const recruitDetailsDialogVisible = ref(false)
 const currentRecruits = ref(null)
+const joinFormVisible = ref(false)
 
 // 添加标签
 const addLabel = () => {
@@ -83,6 +84,15 @@ const seeDetail = (recruit) => {
 
 const downloadFile = (file) => {
   downloadUtils.generateDownloadLink(file.data, file.name)
+}
+
+const goToSubmitJoin = () => {
+  joinFormVisible.value = true;
+}
+
+const quitDetails = () =>{
+  currentRecruits.value = null
+  recruitDetailsDialogVisible.value = false
 }
 </script>
 
@@ -225,9 +235,12 @@ const downloadFile = (file) => {
             <p v-else>暂无附件</p>
           </el-descriptions-item>
         </el-descriptions>
+        <el-button @click="goToSubmitJoin">提交申请</el-button>
+        <el-button @click="quitDetails">关闭</el-button>
       </template>
 
     </el-dialog>
+    <JoinRequestForm v-if="joinFormVisible" :recruitID="currentRecruits.id" v-model:visible="joinFormVisible"></JoinRequestForm>
   </div>
 </template>
 

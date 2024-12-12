@@ -37,7 +37,7 @@
 
         <el-form-item>
           <el-button type="primary" @click="submitJoinRequest">提交申请</el-button>
-          <el-button @click="cancelRequest">取消</el-button>
+          <el-button @click="exit">取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -45,24 +45,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 
 const route = useRoute()
 const router = useRouter()
+const props = defineProps({
+  recruitId: Number,
+  visible: Boolean,
+})
+const emit = defineEmits(['update:visible'])
 
-const recruitId = ref(null)
 const joinRequestForm = ref({
   message: ''
 })
 const fileList = ref([])
-
-onMounted(() => {
-  // 从路由获取招聘ID
-  recruitId.value = route.params.recruitId
-})
 
 // 处理文件数量超出
 const handleExceed = () => {
@@ -88,7 +87,7 @@ const submitJoinRequest = async () => {
   })
 
   try {
-    const response = await axios.post(`/plaza/${recruitId.value}`, formData, {
+    const response = await axios.post(`/plaza/${props.recruitId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -96,7 +95,7 @@ const submitJoinRequest = async () => {
 
     if (response.data.code === 1) {
       ElMessage.success('申请提交成功')
-      await router.push('/plaza')
+      exit();
     } else {
       ElMessage.error('申请提交失败')
     }
@@ -107,8 +106,8 @@ const submitJoinRequest = async () => {
 }
 
 // 取消申请
-const cancelRequest = () => {
-  router.push('/plaza')
+const exit = () => {
+  emit('update:visible', false)
 }
 </script>
 

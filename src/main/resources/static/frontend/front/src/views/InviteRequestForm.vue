@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import {ref} from 'vue'
 import {ElMessage} from 'element-plus'
 import axios from 'axios'
 import {useUserStore} from "../stores/userStore.ts";
 
-const route = useRoute()
-const router = useRouter()
 const userStore = useUserStore()
 const inviteRequestFormRef = ref(null)
+const props = defineProps({
+  seekerID: {
+    type: Number,
+    required: true
+  },
+  visible: {
+    type: Boolean,
+    required: true
+  }
+})
+const emit = defineEmits(["update:visible"])
 
-const seekerId = ref(null)
 const inviteRequestFormInfo = ref({
   teamId: null,
   message: '',
@@ -18,9 +25,6 @@ const inviteRequestFormInfo = ref({
 const userTeams = userStore.userTeams
 const fileList = ref([])
 
-onMounted(() => {
-  seekerId.value = route.params.inviteId
-})
 
 const handleExceed = () => {
   ElMessage.warning("最多五个文件")
@@ -43,16 +47,16 @@ const submitInviteRequest = async () => {
   }
 
   try {
-    const res = await axios.post(`/plaza/seeker/invite/${seekerId.value}/${inviteRequestFormInfo.value.teamId}`,
+    const res = await axios.post(`/plaza/seeker/invite/${props.seekerID}/${inviteRequestFormInfo.value.teamId}`,
         formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
 
     if (res.data.code === 1) {
       ElMessage.success('邀请提交成功')
-      await router.push('/plaza/seeker')
+      quit()
     } else {
       ElMessage.error('邀请提交失败')
     }
@@ -62,7 +66,7 @@ const submitInviteRequest = async () => {
 }
 
 const quit = () => {
-  router.push('/plaza')
+  emit('update:visible', false)
 }
 </script>
 
@@ -105,9 +109,9 @@ const quit = () => {
         <el-form-item label="哪只队伍">
           <el-select v-model="inviteRequestFormInfo.teamId" placeholder="选择你的队伍" size="large" clearable>
             <el-option v-for="team in userTeams"
-                        :key="team.id"
-                        :label="team.name"
-                        :value="team.id">
+                       :key="team.id"
+                       :label="team.name"
+                       :value="team.id">
             </el-option>
           </el-select>
         </el-form-item>

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,4 +98,19 @@ public class RecruitServiceImpl implements RecruitService {
         joinRequestFileMapper.insertJoinFile(joinRequest);
     }
 
+
+    @Override
+    public List<Recruit> getRecruitsByTeamId(Integer teamID) {
+        List<Recruit> recruits = recruitMapper.selectRecruitsByTeamID(teamID);
+        List<Integer> recruitIds = recruits.stream().map(Recruit::getId).toList();
+        if (!recruitIds.isEmpty()) {
+            List<PojoFile> files = recruitFileMapper.selectRecruitFilesByRecruitIds(recruitIds);
+            Map<Integer, List<PojoFile>> filesMap = files.stream()
+                    .collect(Collectors.groupingBy(PojoFile::getLinkedID));
+            recruits.forEach(recruit -> {
+                recruit.setFiles(filesMap.get(recruit.getId()));
+            });
+        }
+        return recruits;
+    }
 }

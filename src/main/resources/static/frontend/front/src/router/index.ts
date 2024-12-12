@@ -4,7 +4,7 @@ import Login from '../views/Login.vue';
 import Register from "../views/Register.vue";
 import App from "../App.vue";
 import TeamList from '../views/TeamList.vue';
-import Plaza from "../views/Plaza.vue";
+import Plaza from "../views/RecruitPlaza.vue";
 import JoinRequestForm from "../views/JoinRequestForm.vue";
 import SeekerPlaza from "../views/SeekerPlaza.vue";
 import InviteRequestForm from "../views/InviteRequestForm.vue";
