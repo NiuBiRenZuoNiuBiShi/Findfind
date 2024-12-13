@@ -39,7 +39,7 @@ export default {
   <nav v-if="showNavbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="">Find</a>
+        <a class="navbar-brand" >Find</a>
       </div>
       <div class="collapse navbar-collapse" id="navbar-collapse">
         <ul class="nav navbar-nav">
@@ -50,7 +50,7 @@ export default {
             <router-link to="/teamList">队伍列表</router-link>
           </li>
           <li>
-            <router-link to="/">用户列表</router-link>
+            <router-link to="/userList">用户列表</router-link>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

@@ -41,7 +41,6 @@ public class UserController {
             return new Result().error("用户名已被占用");
         }
     }
-
     @PostMapping("/login")
     public Result login(String username, String password) {
         //System.out.println(username + " " + password);
@@ -61,7 +60,7 @@ public class UserController {
         }
     }
     //查看用户信息
-    @PostMapping("/userInfo")
+    @GetMapping("/userInfo")
     public Result userInfo(){
         User user=userService.getLoginUser();
         if(user!=null) {
@@ -113,12 +112,12 @@ public class UserController {
             return new Result().error("当前无用户登录");
     }
     //用户列表
-    @PostMapping("/list")
+    @GetMapping("/list")
     public Result getRecruits(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         return new Result().success(userService.getUsers(page, size));
     }
     //用户查看自己当前队伍
-    @PostMapping("/teams")
+    @GetMapping("/teams")
     public Result getTeams(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
         User loginUser = userService.getLoginUser();
         if(loginUser!=null) {
@@ -128,7 +127,7 @@ public class UserController {
             return new Result().error("当前无用户登录");
     }
     //用户查看自己所有邀请
-    @PostMapping("/invites")
+    @GetMapping("/invites")
     public Result getInvites(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
         User loginUser = userService.getLoginUser();
         if(loginUser!=null) {
@@ -138,7 +137,7 @@ public class UserController {
             return new Result().error("当前无用户登录");
     }
     //用户查看自己的所有请求
-    @PostMapping("/joins")
+    @GetMapping("/joins")
     public Result getJoins(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
         User loginUser = userService.getLoginUser();
         if(loginUser!=null) {

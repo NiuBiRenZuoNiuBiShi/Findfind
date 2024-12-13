@@ -137,7 +137,8 @@ const handleRegister = async () => {
           phone: dataForm.value.phoneNumber,
           status: 1,
           position: "",
-          biology: "暂无"
+          biology: "暂无",
+
         }
         console.log(user)
         const response = await axios.post("user/register", user)
