@@ -10,6 +10,7 @@ import SeekerPlaza from "../views/SeekerPlaza.vue";
 import InviteRequestForm from "../views/InviteRequestForm.vue";
 import CreateRecruitForm from "../views/CreateRecruitForm.vue";
 import UserList from "../views/UserList.vue";
+import UserInfo from "../views/UserInfo.vue";
 
 const routes: any = [
     {
@@ -36,6 +37,11 @@ const routes: any = [
         path: '/userList',
         name: 'userList',
         component: UserList
+    },
+    {
+        path: '/userInfo',
+        name: 'userInfo',
+        component: UserInfo
     },
     {
         path: '/plaza',

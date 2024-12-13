@@ -3,12 +3,12 @@ import {ref,onMounted} from 'vue'
 import { getUserList } from '../api/getUserList';
 interface User {
     username: string;
-    nick_name: string;
+    nickName: string;
     id: number;
     email: string;
     phone: string;
     biology: string;
-    postion: string;
+    position: string;
     status: string;
     createTime: string;
     updateTime: string;
@@ -44,19 +44,24 @@ onMounted(async () => {
             <el-header></el-header>
             <el-main>
                 <el-table :data="tableData?.list" stripe style="width: 100%">
+                    <el-table-column prop="id" label="id" width="100" style="height: 150px;" >
+                        <template #default="scope">
+                            {{ scope.row.id || 'null' }}
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="username" label="姓名" width="180">
                         <template #default="scope">
                             {{ scope.row.username || 'null' }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="nick_name" label="昵称" width="180" style="height: 150px;" >
+                    <el-table-column prop="nickName" label="昵称" width="180" style="height: 150px;" >
                         <template #default="scope">
-                            {{ scope.row.nick_name || 'null' }}
+                            {{ scope.row.nickName || 'null1' }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="postion" label="地址" width="180" style="height: 150px;" >
+                    <el-table-column prop="position" label="地址" width="180" style="height: 150px;" >
                         <template #default="scope">
-                            {{ scope.row.postion || 'null' }}
+                            {{ scope.row.position || 'null' }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="phone" label="电话" width="180" style="height: 150px;">
