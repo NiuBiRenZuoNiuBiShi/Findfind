@@ -11,6 +11,7 @@ import InviteRequestForm from "../views/InviteRequestForm.vue";
 import CreateRecruitForm from "../views/CreateRecruitForm.vue";
 import UserList from "../views/UserList.vue";
 import UserInfo from "../views/UserInfo.vue";
+import Team from "../views/Team.vue";
 
 const routes: any = [
     {
@@ -27,6 +28,11 @@ const routes: any = [
         path: '/',
         name: 'index',
         component: App,
+    },
+    {
+        path: '/team',
+        name: 'team',
+        component: Team,
     },
     {
         path: '/teamList',

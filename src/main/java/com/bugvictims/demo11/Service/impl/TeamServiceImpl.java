@@ -146,4 +146,17 @@ public class TeamServiceImpl implements TeamService {
     public Team getTeamByName(String name) {
         return teamMapper.getTeamByName(name);
     }
+
+    @Override
+    public List<Team> getTeamByUser(User loginUser) {
+        int userId = loginUser.getId();
+        //获取用户队伍信息
+        List<Integer> teamIds = teamMapper.findTeamIdsByUserId(userId);
+        List<Team> teams = new ArrayList<>();
+        for (int teamId : teamIds) {
+            Team team = teamMapper.getTeamById(teamId);
+            teams.add(team);
+        }
+        return teams;
+    }
 }

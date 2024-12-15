@@ -35,4 +35,8 @@ public interface TeamMapper {
     //根据队伍名称获取队伍信息
     @Select("select * from teams where name = #{name}")
     Team getTeamByName(String name);
+
+    //根据用户获取队伍信息
+    @Select("select team_id from team_user  where user_id = #{userId} and type != 'none'")
+    List<Integer> findTeamIdsByUserId(int userId);
 }

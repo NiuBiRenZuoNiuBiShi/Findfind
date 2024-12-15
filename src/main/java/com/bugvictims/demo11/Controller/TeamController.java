@@ -77,6 +77,20 @@ public class TeamController {
         return new Result().success();
     }
 
+    //获取用户队伍信息
+    @GetMapping("/getByUser")
+    public Result getTeamByUser() {
+        User loginUser = userService.getLoginUser();
+        if (loginUser == null) {
+            return new Result().error("未登录");
+        }
+        List<Team> teams = teamService.getTeamByUser(loginUser);
+        if (teams == null) {
+            return new Result().error("未加入队伍");
+        }
+        return new Result().success(teams);
+    }
+
     //获取队伍信息By id
     @GetMapping("/get/{id}")
     public Result getTeamById(@PathVariable("id") int id) {

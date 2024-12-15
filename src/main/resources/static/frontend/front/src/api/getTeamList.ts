@@ -8,3 +8,11 @@ export const getTeamList = async (): Promise<any> => {
         }
     });
 };
+export const getTeamFromUser = async (): Promise<any> => {
+    const token = localStorage.getItem('token');
+    return await instance.get('/teams/getByUser', {
+        headers: {
+            Authorization: token
+        }
+    });
+}

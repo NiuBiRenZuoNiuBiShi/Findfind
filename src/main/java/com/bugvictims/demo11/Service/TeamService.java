@@ -36,4 +36,7 @@ public interface TeamService {
 
     //根据队伍名称获取队伍信息
     Team getTeamByName(String name);
+
+    //根据用户获取队伍信息
+    List<Team> getTeamByUser(User loginUser);
 }
