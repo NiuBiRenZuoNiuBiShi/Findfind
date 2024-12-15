@@ -16,7 +16,6 @@ interface User {
 const tableData = ref(null);
 onMounted(async () => {
     try {
-
         const res = await getUserInfo();
         console.log('Raw response:', res); // 打印出完整的响应对象
         if (res){
@@ -55,6 +54,9 @@ onMounted(async () => {
                     <strong>个人简介:</strong> <span>{{ tableData.biology }}</span>
                 </li>
             </ul>
+            <router-link to="/update" class="update-button">
+                更新信息
+            </router-link>
         </div>
         <div v-else class="no-info">
             <p>暂无个人信息</p>
@@ -65,7 +67,7 @@ onMounted(async () => {
 .user-profile {
     max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 25px;
     background-color: #f7f7f7;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -124,5 +126,21 @@ onMounted(async () => {
 /* 添加悬停效果 */
 .user-profile:hover, .user-info:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 悬停时的阴影效果 */
+}
+.update-button {
+    display: block;
+    width: max-content;
+    padding: 10px 20px;
+    margin: 20px auto;
+    background-color: #42b983;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+    background-color: #388e7c;
 }
 </style>

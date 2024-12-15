@@ -11,6 +11,7 @@ import InviteRequestForm from "../views/InviteRequestForm.vue";
 import CreateRecruitForm from "../views/CreateRecruitForm.vue";
 import UserList from "../views/UserList.vue";
 import UserInfo from "../views/UserInfo.vue";
+import UserUpdate from "../views/UserUpdate.vue";
 
 const routes: any = [
     {
@@ -42,6 +43,11 @@ const routes: any = [
         path: '/userInfo',
         name: 'userInfo',
         component: UserInfo
+    },
+    {
+        path: '/update',
+        name: 'userUpdate',
+        component: UserUpdate
     },
     {
         path: '/plaza',
