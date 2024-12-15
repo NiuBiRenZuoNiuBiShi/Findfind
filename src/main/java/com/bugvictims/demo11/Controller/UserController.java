@@ -3,6 +3,7 @@ package com.bugvictims.demo11.Controller;
 import com.bugvictims.demo11.Pojo.*;
 import com.bugvictims.demo11.Service.impl.UserServiceImpl;
 import com.bugvictims.demo11.Utils.JWTUtils;
+import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,14 +64,14 @@ public class UserController {
     @GetMapping("/userInfo")
     public Result userInfo(){
         User user=userService.getLoginUser();
-        if(user!=null) {
+        if(user!=null){
             return new Result().success(user);
         }
         else
             return new Result().error("无用户登录");
     }
     //更新用户信息
-    @PostMapping("/update")
+    @PostMapping ("/update")
     public Result update(@RequestBody @Validated User user){
         User u=userService.getLoginUser();
         if(u!=null){

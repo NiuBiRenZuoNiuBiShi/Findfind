@@ -138,7 +138,6 @@ const handleRegister = async () => {
           status: 1,
           position: "",
           biology: "暂无",
-
         }
         console.log(user)
         const response = await axios.post("user/register", user)
