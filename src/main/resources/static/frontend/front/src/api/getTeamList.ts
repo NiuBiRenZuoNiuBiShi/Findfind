@@ -15,4 +15,12 @@ export const getTeamFromUser = async (): Promise<any> => {
             Authorization: token
         }
     });
-}
+};
+export const getTeamById = async (id): Promise<any> => {
+    const token = localStorage.getItem('token');
+    return await instance.get(`/teams/get/${id}`, {
+        headers: {
+            Authorization: token
+        }
+    });
+};

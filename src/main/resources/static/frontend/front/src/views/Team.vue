@@ -16,6 +16,7 @@ const tableData = ref([
 ])
 //获取队伍列表
 import {getTeamFromUser} from "../api/getTeamList.ts";
+import router from "../router";
 
 const getTeamListData = async () => {
   const res = await getTeamFromUser()
@@ -24,6 +25,12 @@ const getTeamListData = async () => {
 }
 getTeamListData()
 //获取队伍列表
+const Info = (row) => {
+  router.push(`/teamInfo`)
+  //把点击的行的数据传递到teamInfo页面
+  localStorage.setItem('teamInfo', row.id)
+  console.log("click")
+}
 </script>
 
 <template>
@@ -34,7 +41,7 @@ getTeamListData()
 
       </el-header>
       <el-main>
-        <el-table :data="tableData" stripe style="width: 100%">
+        <el-table :data="tableData" stripe style="width: 100%" @row-click="Info">
           <el-table-column prop="name" label="队伍名称" width="180"/>
           <el-table-column prop="type" label="队伍类型" width="180"/>
           <el-table-column prop="description" label="描述"/>

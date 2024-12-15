@@ -13,6 +13,7 @@ import UserList from "../views/UserList.vue";
 import UserInfo from "../views/UserInfo.vue";
 import UserUpdate from "../views/UserUpdate.vue";
 import Team from '../views/Team.vue';
+import TeamInfo from '../views/TeamInfo.vue';
 
 const routes: any = [
     {
@@ -39,6 +40,11 @@ const routes: any = [
         path: '/teamList',
         name: 'teamList',
         component: TeamList,
+    },
+    {
+        path: '/teamInfo',
+        name: 'teamInfo',
+        component: TeamInfo
     },
     {
         path: '/userList',
