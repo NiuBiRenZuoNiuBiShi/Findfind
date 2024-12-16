@@ -11,7 +11,7 @@ public interface UserMapper {
     User findByUserName(String username);
 
     //添加用户
-    @Insert("INSERT INTO user(username, password, phone, biology, status, create_time, update_time) " + "VALUES (#{username}, #{password}, #{phone}, #{biology}, #{status}, NOW(), NOW())")
+    @Insert("INSERT INTO user(username, nick_name,password,email, phone, biology, status, create_time, update_time) " + "VALUES (#{username}, #{nickName},#{password},#{email} ,#{phone}, #{biology}, #{status}, NOW(), NOW())")
     void add(UserIgnorePassword user);
 
     //通过id获取用户

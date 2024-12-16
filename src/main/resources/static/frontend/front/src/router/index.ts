@@ -14,6 +14,8 @@ import UserInfo from "../views/UserInfo.vue";
 import UserUpdate from "../views/UserUpdate.vue";
 import Team from '../views/Team.vue';
 import TeamInfo from '../views/TeamInfo.vue';
+import UserInvites from "../views/UserInvites.vue";
+import UserJoins from "../views/UserJoins.vue";
 
 const routes: any = [
     {
@@ -60,6 +62,16 @@ const routes: any = [
         path: '/update',
         name: 'userUpdate',
         component: UserUpdate
+    },
+    {
+        path: '/userInvites',
+        name: 'userInvites',
+        component: UserInvites
+    },
+    {
+        path: '/userJoins',
+        name: 'userJoins',
+        component: UserJoins
     },
     {
         path: '/plaza',

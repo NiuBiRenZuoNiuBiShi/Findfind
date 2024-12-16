@@ -62,10 +62,10 @@ export default {
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li v-if="login">
-            <router-link to="/">我的邀请</router-link>
+            <router-link to="/userInvites">我的邀请</router-link>
           </li>
           <li v-if="login">
-            <router-link to="/">我的申请</router-link>
+            <router-link to="/userJoins">我的申请</router-link>
           </li>
           <li v-if="noLogin">
             <router-link to="/login">登录</router-link>
