@@ -23,14 +23,23 @@ public class SeekerController {
 
     @PostMapping("/plaza/seeker")
     Result createSeeker(@ModelAttribute Seeker seeker
-                        , @RequestParam("files") List<MultipartFile> files) {
+                        , @RequestParam(value = "labels", required = true) List<String> labels
+                        , @RequestParam(value="files", required = false) List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        seeker.setReleaserID((int)userClaims.get("userID"));
+        if (userClaims == null) {
+            return new Result().error("当前无用户登录");
+        }
+        seeker.setSeekerId((Integer) userClaims.get("userID"));
+        if (labels != null) {
+            seeker.setLabels(labels);
+        }
         seeker.setCreateTime(LocalDateTime.now());
         seeker.setUpdateTime(LocalDateTime.now());
         Integer seekerID = seekerService.insertSeeker(seeker);
-        seeker.setFiles(FileConverter.convertToPojoFileList(files, seekerID));
-        seekerService.insertSeekerFiles(seeker);
+        if (files != null && !files.isEmpty()) {
+            seeker.setFiles(FileConverter.convertToPojoFileList(files, seekerID));
+            seekerService.insertSeekerFiles(seeker);
+        }
         return new Result().success();
     }
 

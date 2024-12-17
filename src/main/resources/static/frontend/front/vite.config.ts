@@ -11,7 +11,19 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, '')
             },
-            '/user': 'http://localhost:8080', // 将 /user 路径的请求代理到后端
+            '/user': {
+                target: 'http://localhost:8080',
+                changeOrigin: true
+            },
+            '/team': {
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+            },
+            '/plaza': {
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+            },
+
         },
     },
 })

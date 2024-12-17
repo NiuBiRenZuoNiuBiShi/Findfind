@@ -49,7 +49,9 @@ import { ref} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
+import {useUserStore} from "../stores/userStore.js";
 
+const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 const props = defineProps({
@@ -89,6 +91,7 @@ const submitJoinRequest = async () => {
   try {
     const response = await axios.post(`/plaza/${props.recruitId}`, formData, {
       headers: {
+        Authorization: userStore.token,
         'Content-Type': 'multipart/form-data'
       }
     })

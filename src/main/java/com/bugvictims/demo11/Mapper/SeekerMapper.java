@@ -9,11 +9,11 @@ import java.util.List;
 public interface SeekerMapper {
 
     @Insert("INSERT INTO seeker (seeker_id, header, message, position, create_time, update_time)" +
-        " VALUES (#{seekerID}, #{header}, #{message}, #{position}, #{createTime}, #{updateTime})" )
+        " VALUES (#{seekerId}, #{header}, #{message}, #{position}, #{createTime}, #{updateTime})" )
     @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer createSeeker(Seeker seeker);
 
-    @Delete("DELETE FROM seeker WHERE seeker_id = #{id}")
+    @Delete("DELETE FROM seeker WHERE id = #{id}")
     void deleteSeeker(Integer id);
 
     @Update("UPDATE seeker SET header = #{header}, message = #{message}" +

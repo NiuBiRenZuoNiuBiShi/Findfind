@@ -12,7 +12,7 @@ const dataForm = ref({
   message: "",
   labels: [],
   teamId: "",
-  needNum: 0,
+  needNum: 1,
   files: []
 })
 const rules = {
@@ -56,11 +56,15 @@ const submitRecruit = () => {
     if (valid) {
       try {
         const recruitData = new FormData();
-        recruitData.append("header", formRef.value.header);
-        recruitData.append("message", formRef.value.message);
-        recruitData.append("labels", formRef.value.labels);
-        recruitData.append("teamId", formRef.value.teamId);
-        recruitData.append("needNum", formRef.value.needNum);
+        recruitData.append("header", dataForm.value.header);
+        recruitData.append("message", dataForm.value.message);
+        if (dataForm.value.labels && dataForm.value.labels.length > 0) {
+          dataForm.value.labels.forEach((label) => {
+            recruitData.append("labels", label);
+          })
+        }
+        recruitData.append("teamId", dataForm.value.teamId);
+        recruitData.append("needNum", dataForm.value.needNum.toString());
         if (dataForm.value.files && dataForm.value.files.length > 0) {
           dataForm.value.files.forEach((f) => {
             recruitData.append("files", f.raw);
@@ -72,6 +76,7 @@ const submitRecruit = () => {
             recruitData,
             {
               headers: {
+                Authorization: userStore.token,
                 "Content-Type": "multipart/form-data"
               }
             }

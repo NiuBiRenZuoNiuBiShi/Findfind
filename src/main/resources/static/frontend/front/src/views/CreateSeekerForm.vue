@@ -3,7 +3,9 @@ import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import axios from "axios";
 import router from "../router";
+import {useUserStore} from "../stores/userStore.ts";
 
+const userStore = useUserStore()
 const formRef = ref(null);
 const dataForm = ref({
   header: "",
@@ -43,9 +45,13 @@ const submitRecruit = () => {
     if (valid) {
       try {
         const recruitData = new FormData();
-        recruitData.append("header", formRef.value.header);
-        recruitData.append("message", formRef.value.message);
-        recruitData.append("labels", formRef.value.labels);
+        recruitData.append("header", dataForm.value.header);
+        recruitData.append("message", dataForm.value.message);
+        if (dataForm.value.labels && dataForm.value.labels.length > 0) {
+          dataForm.value.labels.forEach((label) => {
+            recruitData.append("labels", label);
+          })
+        }
         if (dataForm.value.files && dataForm.value.files.length > 0) {
           dataForm.value.files.forEach((f) => {
             recruitData.append("files", f.raw);
@@ -56,6 +62,7 @@ const submitRecruit = () => {
             recruitData,
             {
               headers: {
+                Authorization: userStore.token,
                 "Content-Type": "multipart/form-data"
               }
             }

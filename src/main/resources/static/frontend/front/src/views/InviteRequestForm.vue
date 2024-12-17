@@ -50,6 +50,7 @@ const submitInviteRequest = async () => {
     const res = await axios.post(`/plaza/seeker/invite/${props.seekerID}/${inviteRequestFormInfo.value.teamId}`,
         formData, {
           headers: {
+            Authorization: userStore.token,
             'Content-Type': 'multipart/form-data'
           }
         })

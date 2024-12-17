@@ -16,6 +16,7 @@ import Team from '../views/Team.vue';
 import TeamInfo from '../views/TeamInfo.vue';
 import UserInvites from "../views/UserInvites.vue";
 import UserJoins from "../views/UserJoins.vue";
+import CreateSeekerForm from "../views/CreateSeekerForm.vue";
 
 const routes: any = [
     {
@@ -104,6 +105,11 @@ const routes: any = [
         name: 'createRecruit',
         component: CreateRecruitForm
     },
+    {
+        path: '/createSeeker',
+        name: 'createSeeker',
+        component: CreateSeekerForm
+    }
 
 ]
 

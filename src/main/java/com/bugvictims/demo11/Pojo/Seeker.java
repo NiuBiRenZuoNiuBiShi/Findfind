@@ -12,9 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Seeker {
     private Integer id;
-    private Integer releaserID;
-    private String Header;
-    private List<String> label;
+    private Integer seekerId; // 本来是releaserID，但是数据库里是seekerId，遂改
+    private String header;
+    private List<String> labels;
     private String message;
     private String position;
     private LocalDateTime createTime;

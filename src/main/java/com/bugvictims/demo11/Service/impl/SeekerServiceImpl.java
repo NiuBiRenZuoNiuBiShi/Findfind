@@ -78,7 +78,7 @@ public class SeekerServiceImpl implements SeekerService {
         inviteRequest.setCreateTime(LocalDateTime.now());
         inviteRequest.setUpdateTime(LocalDateTime.now()); // time
         Seeker seeker = seekerMapper.selectSeekerById(seekerID);
-        inviteRequest.setUserID(seeker.getReleaserID()); // specific invited user
+        inviteRequest.setUserID(seeker.getSeekerId()); // specific invited user
 
         return inviteRequestMapper.insertInviteRequest(inviteRequest);
     }

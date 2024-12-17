@@ -4,13 +4,15 @@ import axios from "axios";
 
 export const useUserStore = defineStore("user", () => {
     const token = ref(localStorage.getItem("token") || "");
-    const userInfo = ref({});
+    const userInfo = ref({
+
+    });
     const userTeams = ref([]);
     const hasValue = ref(false);
 
     function logout() {
         token.value = '';
-        userInfo.value = {};
+        userInfo.value = null;
         hasValue.value = false;
         localStorage.removeItem('token');
     }
@@ -24,9 +26,17 @@ export const useUserStore = defineStore("user", () => {
     }
 
     async function loadUserInfo() {
-        const resOfUserInfo = await axios.post('/user/userInfo',{})
+        const resOfUserInfo = await axios.get('/user/userInfo',{
+            headers: {
+                Authorization: token.value
+            }
+        })
         userInfo.value = resOfUserInfo.data;
-        const resOfTeamsInfo = await axios.get('/user/teams', {})
+        const resOfTeamsInfo = await axios.get('/user/teams', {
+            headers: {
+                Authorization: token.value
+            }
+        })
         userTeams.value = resOfTeamsInfo.data;
     }
 
