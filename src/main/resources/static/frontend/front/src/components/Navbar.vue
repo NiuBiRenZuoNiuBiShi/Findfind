@@ -52,7 +52,7 @@ export default {
         <ul class="nav navbar-nav navbar-left">
             <li class="dropdown">
              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-               aria-expanded="ture">首页广场<span class="caret"></span></a>
+               aria-expanded="true">首页广场<span class="caret"></span></a>
              <ul class="dropdown-menu">
                 <li>
                     <router-link to="/recruitPlaza">Recruit</router-link>
@@ -71,7 +71,7 @@ export default {
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li v-if="login">
-            <router-link to="/userInvites">我的邀请</router-link>
+            <router-link to="/userInvites">邀请信息</router-link>
           </li>
           <li v-if="login">
             <router-link to="/userJoins">我的申请</router-link>

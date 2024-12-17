@@ -111,7 +111,7 @@ const handleUpdate = async () => {
                 const user = {
                     username:dataForm.value.username,
                     id: dataForm.value.id,
-                    nickname: dataForm.value.nickName,
+                    nickName: dataForm.value.nickName,
                     email: dataForm.value.email,
                     phone: dataForm.value.phone,
                     biology: dataForm.value.biology,
