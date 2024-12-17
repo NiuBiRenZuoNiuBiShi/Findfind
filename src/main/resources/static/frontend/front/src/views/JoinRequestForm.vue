@@ -49,7 +49,7 @@ import { ref} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
-import {useUserStore} from "../stores/userStore.js";
+import {useUserStore} from "../stores/userStore.ts";
 
 const userStore = useUserStore()
 const route = useRoute()

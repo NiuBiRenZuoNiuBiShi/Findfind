@@ -49,10 +49,19 @@ export default {
         <a class="navbar-brand">Find</a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li>
-            <router-link to="/">首页广场</router-link>
-          </li>
+        <ul class="nav navbar-nav navbar-left">
+            <li class="dropdown">
+             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="ture">首页广场<span class="caret"></span></a>
+             <ul class="dropdown-menu">
+                <li>
+                    <router-link to="/">Recruit</router-link>
+                </li>
+                <li>
+                    <router-link to="/">Seeker</router-link>
+                </li>
+            </ul>
+            </li>
           <li>
             <router-link to="/teamList">队伍列表</router-link>
           </li>
