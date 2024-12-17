@@ -6,13 +6,13 @@
     <insert id="insertSeekerFile" parameterType="com.bugvictims.demo11.Pojo.Seeker">
         INSERT INTO seeker_file(seeker_id, file, type, create_time, update_time)
         VALUES
-            <foreach collection="files" separator=",">
-                (#{linkedID}, #{fileData}, #{fileType}, #{createTime}, #{updateTime})
+            <foreach collection="seekerFiles" item="seekerFile" separator=",">
+                (#{seekerFile.linkedID}, #{seekerFile.fileData}, #{seekerFile.fileType}, #{seekerFile.createTime}, #{seekerFile.updateTime})
             </foreach>
     </insert>
 
     <select id="selectSeekerFileByIds" parameterType="java.util.List" resultType="com.bugvictims.demo11.Pojo.PojoFile">
-        SELECT (id, seeker_id, file, type, create_time, update_time)
+        SELECT id, seeker_id, file, type, create_time, update_time
         FROM seeker_file
         WHERE id IN 
         <foreach collection="seekerIds" item="seekerID" open="(" separator="," close=")">

@@ -6,8 +6,8 @@
     <insert id="insertInviteFile" parameterType="com.bugvictims.demo11.Pojo.InviteRequest">
         INSERT INTO invite_request_file(file, invite_id, type, create_time, update_time)
         VALUES 
-            <foreach collection="files" separator=",">
-                (#{fileData}, #{linkedID}, #{FileType}, #{createTime}, #{updateTime})
+            <foreach collection="inviteFiles" item="file" separator=",">
+                (#{file.fileData}, #{file.linkedID}, #{file.fileType}, #{file.createTime}, #{file.updateTime})
             </foreach>
     </insert>
 </mapper>

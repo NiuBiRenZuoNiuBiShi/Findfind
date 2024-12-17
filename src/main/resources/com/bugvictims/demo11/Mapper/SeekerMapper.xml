@@ -7,7 +7,7 @@
         SELECT s.*
         FROM seeker s
         WHERE s.id IN (
-            SELECT seeker_label.id
+            SELECT seeker_label.seeker_id
             FROM seeker_label
             WHERE 
                 <foreach collection="labels" item="labelItem" open="" separator="AND" close="">

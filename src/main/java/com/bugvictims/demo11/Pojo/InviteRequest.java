@@ -19,7 +19,7 @@ public class InviteRequest {
     private String message;
     private String response;
     private Integer status;
-    private List<PojoFile> files;
+    private List<PojoFile> inviteFiles;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

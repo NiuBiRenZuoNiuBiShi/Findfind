@@ -6,8 +6,8 @@
     <insert id="insertRecruitFiles" parameterType="com.bugvictims.demo11.Pojo.Recruit" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO recruit_file(recruit_id, file, type, create_time, update_time)
         VALUES
-        <foreach collection="files" item="file" separator="," >
-            (#{linkedID}, #{fileData}, #{fileType}, #{createTime}, #{updateTime})
+        <foreach collection="recruitFiles" item="file" separator="," >
+            (#{file.linkedID}, #{file.fileData}, #{file.fileType}, #{file.createTime}, #{file.updateTime})
         </foreach>
     </insert>
 

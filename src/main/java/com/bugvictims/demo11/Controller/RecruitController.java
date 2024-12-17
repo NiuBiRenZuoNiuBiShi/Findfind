@@ -30,13 +30,13 @@ public class RecruitController {
     , @RequestParam("files") List<MultipartFile> files) {
         System.out.println(recruit.getNeedNum());
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        recruit.setReleaserID((int)userClaims.get("userID"));
+        recruit.setReleaserID((int)userClaims.get("id"));
         recruit.setReceiveNum(0);
         recruit.setHasNum(0);
 
         Integer recruitID = recruitService.insertRecruit(recruit); // 得到插入的ID
 
-        recruit.setFiles(FileConverter.convertToPojoFileList(files, recruitID));
+        recruit.setRecruitFiles(FileConverter.convertToPojoFileList(files, recruitID));
         recruitService.insertRecruitFiles(recruit);
 
         return new Result().success();
@@ -46,7 +46,7 @@ public class RecruitController {
     public Result updateRecruit(@ModelAttribute Recruit recruit
     , @RequestParam("files") List<MultipartFile> files) {
         recruit.setUpdateTime(LocalDateTime.now());
-        recruit.setFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
+        recruit.setRecruitFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
         recruitService.updateRecruit(recruit);
         
         return new Result().success();
@@ -75,9 +75,9 @@ public class RecruitController {
             , @ModelAttribute JoinRequest joinRequest
             , @RequestParam("files") List<MultipartFile> files) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        joinRequest.setUserId((int)userClaims.get("userID"));
+        joinRequest.setUserId((int)userClaims.get("id"));
         Integer joinRequestID = recruitService.insertJoinRequest(recruitID, joinRequest);
-        joinRequest.setFiles(FileConverter.convertToPojoFileList(files, joinRequestID));
+        joinRequest.setJoinFiles(FileConverter.convertToPojoFileList(files, joinRequestID));
         recruitService.insertJoinFiles(joinRequest);
         return new Result().success();
     }

@@ -4,7 +4,6 @@ import Login from '../views/Login.vue';
 import Register from "../views/Register.vue";
 import App from "../App.vue";
 import TeamList from '../views/TeamList.vue';
-import Plaza from "../views/RecruitPlaza.vue";
 import JoinRequestForm from "../views/JoinRequestForm.vue";
 import SeekerPlaza from "../views/SeekerPlaza.vue";
 import InviteRequestForm from "../views/InviteRequestForm.vue";
@@ -17,6 +16,7 @@ import TeamInfo from '../views/TeamInfo.vue';
 import UserInvites from "../views/UserInvites.vue";
 import UserJoins from "../views/UserJoins.vue";
 import CreateSeekerForm from "../views/CreateSeekerForm.vue";
+import RecruitPlaza from "../views/RecruitPlaza.vue";
 
 const routes: any = [
     {
@@ -75,12 +75,12 @@ const routes: any = [
         component: UserJoins
     },
     {
-        path: '/plaza',
-        name: 'plaza',
-        component: Plaza,
+        path: '/recruitPlaza',
+        name: 'recruitPlaza',
+        component: RecruitPlaza,
     },
     {
-        path: '/plaza/:recruitId',
+        path: '/recruitPlaza/:recruitId',
         name: 'JoinRequest',
         component: JoinRequestForm,
         meta: {
@@ -88,12 +88,12 @@ const routes: any = [
         }
     },
     {
-        path: '/plaza/seeker',
-        name: 'seeker',
+        path: '/seekerPlaza',
+        name: 'seekerPlaza',
         component: SeekerPlaza,
     },
     {
-        path: '/plaza/seeker/:seekerId',
+        path: '/seekerPlaza/:seekerId',
         name: 'InviteRequest',
         component: InviteRequestForm,
         meta: {

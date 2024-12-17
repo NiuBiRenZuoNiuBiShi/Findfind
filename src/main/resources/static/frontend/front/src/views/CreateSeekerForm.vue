@@ -11,7 +11,8 @@ const dataForm = ref({
   header: "",
   message: "",
   labels: [],
-  files: []
+  files: [],
+  position: ""
 })
 const rules = {
   header: [
@@ -25,6 +26,10 @@ const rules = {
   labels: [
     {required: true, message: '请至少选择1个', trigger: 'change'},
     {required: true, message: "请至少选择1个", trigger: "blur"},
+  ],
+  position: [
+    {required: true, message: '请输入地址', trigger: 'change'},
+    {required: true, message: '请输入地址', trigger: 'change'},
   ]
 }
 
@@ -44,22 +49,29 @@ const submitRecruit = () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        const recruitData = new FormData();
-        recruitData.append("header", dataForm.value.header);
-        recruitData.append("message", dataForm.value.message);
+        console.log(dataForm.value);
+        const seekerData = new FormData();
+        seekerData.append("header", dataForm.value.header);
+        seekerData.append("message", dataForm.value.message);
+        seekerData.append("position", dataForm.value.position);
         if (dataForm.value.labels && dataForm.value.labels.length > 0) {
           dataForm.value.labels.forEach((label) => {
-            recruitData.append("labels", label);
+            seekerData.append("labels", label);
           })
         }
         if (dataForm.value.files && dataForm.value.files.length > 0) {
+          console.log("test")
           dataForm.value.files.forEach((f) => {
-            recruitData.append("files", f.raw);
+            seekerData.append("files", f.raw || f);
           })
         }
 
+        for (let pair of seekerData.entries()) {
+          console.log(pair[0] + ': ', pair[1]);
+        }
+
         const response = await axios.post(`/plaza/seeker`,
-            recruitData,
+            seekerData,
             {
               headers: {
                 Authorization: userStore.token,
@@ -71,7 +83,7 @@ const submitRecruit = () => {
         if (response.data.code === 1) {
           ElMessage.success("1s后返回")
           setTimeout(() => {
-            router.push('/plaza')
+            router.push('/seekerPlaza')
           }, 1000);
         } else {
           console.log(response)
@@ -85,6 +97,10 @@ const submitRecruit = () => {
 }
 const quit = () => {
   router.push('/plaza')
+}
+
+const handleFileChange = (file, fileList) => {
+  dataForm.value.files = fileList;
 }
 </script>
 
@@ -126,13 +142,18 @@ const quit = () => {
             {{ tag }}
           </el-tag>
         </el-form-item>
+        <el-form-item label="position" prop="position">
+          <el-input v-model="dataForm.position" placeholder="请输入地址"> </el-input>
+        </el-form-item>
         <el-form-item label="files">
           <el-upload
-              v-model="dataForm.files"
               action=""
               :auto-upload="false"
               multiple
               :on-exceed="handExceed"
+              :on-change="handleFileChange"
+              :file-list="dataForm.files"
+              :limit="5"
           >
             <el-button type="primary">选择文件</el-button>
             <template #tip>

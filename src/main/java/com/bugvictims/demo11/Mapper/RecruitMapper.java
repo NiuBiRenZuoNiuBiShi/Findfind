@@ -19,7 +19,7 @@ public interface RecruitMapper {
             "WHERE id = #{id}")
     void updateRecruit(Recruit recruit);
 
-    List<Recruit> getRecruits(@Param("labelCondition") List<String> labelConditions);
+    List<Recruit> getRecruits(@Param("labelConditions") List<String> labelConditions);
 
     @Delete("DELETE FROM recruit WHERE id = #{id}")
     void deleteRecruit(Integer id);

@@ -68,7 +68,7 @@ public class SeekerServiceImpl implements SeekerService {
                     .stream()
                     .collect(Collectors.groupingBy(PojoFile::getId));
             seekers.forEach(seeker -> {
-                seeker.setFiles(fileMap.get(seeker.getId()));
+                seeker.setSeekerFiles(fileMap.get(seeker.getId()));
             });
         }
         return new PageInfo<>(seekers);
@@ -102,7 +102,7 @@ public class SeekerServiceImpl implements SeekerService {
                     .stream()
                     .collect(Collectors.groupingBy(PojoFile::getId));
             seekers.forEach(seeker -> {
-                seeker.setFiles(fileMap.get(seeker.getId()));
+                seeker.setSeekerFiles(fileMap.get(seeker.getId()));
             });
         }
         return seekers;

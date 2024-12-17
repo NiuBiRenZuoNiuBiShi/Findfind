@@ -85,7 +85,7 @@ const submitRecruit = () => {
         if (response.data.code === 1) {
           ElMessage.success("1s后返回")
           setTimeout(() => {
-            router.push('/plaza')
+            router.push('/recruitPlaza')
           }, 1000);
         } else {
           console.log(response)

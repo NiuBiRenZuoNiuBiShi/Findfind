@@ -69,6 +69,10 @@ const submitInviteRequest = async () => {
 const quit = () => {
   emit('update:visible', false)
 }
+
+const handleChange = (file, theFileList) => {
+  fileList.value = theFileList
+}
 </script>
 
 <template>
@@ -97,6 +101,7 @@ const quit = () => {
               multiple
               :limit="5"
               :on-exceed="handleExceed"
+              :on-change="handleChange"
           >
             <el-button type="primary">选择文件</el-button>
             <template #tip>
@@ -121,7 +126,7 @@ const quit = () => {
           <el-button type="primary" @click="submitInviteRequest">
             提交
           </el-button>
-          <el-button @click="quit" type="danger" style="margin-top: -30px">取消</el-button>
+          <el-button @click="quit" type="danger" >取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>

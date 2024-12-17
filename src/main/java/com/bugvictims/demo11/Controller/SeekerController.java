@@ -1,7 +1,6 @@
 package com.bugvictims.demo11.Controller;
 
 import com.bugvictims.demo11.Pojo.InviteRequest;
-import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
@@ -29,7 +28,7 @@ public class SeekerController {
         if (userClaims == null) {
             return new Result().error("当前无用户登录");
         }
-        seeker.setSeekerId((Integer) userClaims.get("userID"));
+        seeker.setSeekerId((Integer) userClaims.get("id"));
         if (labels != null) {
             seeker.setLabels(labels);
         }
@@ -37,7 +36,7 @@ public class SeekerController {
         seeker.setUpdateTime(LocalDateTime.now());
         Integer seekerID = seekerService.insertSeeker(seeker);
         if (files != null && !files.isEmpty()) {
-            seeker.setFiles(FileConverter.convertToPojoFileList(files, seekerID));
+            seeker.setSeekerFiles(FileConverter.convertToPojoFileList(files, seekerID));
             seekerService.insertSeekerFiles(seeker);
         }
         return new Result().success();
@@ -59,7 +58,7 @@ public class SeekerController {
     }
 
     @GetMapping("/plaza/seeker")
-    Result selectSeeker(@RequestParam("label") List<String> labels
+    Result selectSeeker(@RequestParam("labels") List<String> labels
                         , @RequestParam(defaultValue = "1") Integer page
                         , @RequestParam(defaultValue = "10") Integer size) {
         return new Result().success(seekerService.selectSeekers(labels, page, size));
@@ -72,11 +71,11 @@ public class SeekerController {
             , @RequestParam("files") List<MultipartFile> files)  {
 
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        inviteRequest.setReleaserID((int)userClaims.get("userID"));
+        inviteRequest.setReleaserID((int)userClaims.get("id"));
         inviteRequest.setTeamID(teamID);
 
         Integer inviteID = seekerService.insertInviteRequest(inviteRequest, seekerID);
-        inviteRequest.setFiles(FileConverter.convertToPojoFileList(files, inviteID));
+        inviteRequest.setInviteFiles(FileConverter.convertToPojoFileList(files, inviteID));
         seekerService.insertInviteFiles(inviteRequest);
 
         return new Result().success();

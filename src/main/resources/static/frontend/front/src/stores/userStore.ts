@@ -28,20 +28,20 @@ export const useUserStore = defineStore("user", () => {
     async function loadUserInfo() {
         const resOfUserInfo = await axios.get('/user/userInfo',{
             headers: {
-                Authorization: token.value
+                Authorization: localStorage.getItem("token"),
             }
         })
         userInfo.value = resOfUserInfo.data;
-        const resOfTeamsInfo = await axios.get('/user/teams', {
+        const resOfTeamsInfo = await axios.get('/teams/getByUser', {
             headers: {
-                Authorization: token.value
+                Authorization: localStorage.getItem("token"),
             }
         })
         userTeams.value = resOfTeamsInfo.data;
     }
 
     async function initialize() {
-        if (!hasValue.value) {
+        if (!hasValue.value && localStorage.getItem('token') != null) {
             hasValue.value = true;
             await loadUserInfo();
         }

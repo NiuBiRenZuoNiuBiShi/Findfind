@@ -17,7 +17,7 @@ public class JoinRequest {
     private String message;
     private String response;
     private Integer status;//0:未处理 1:已同意 2:已拒绝
-    private List<PojoFile> files;
+    private List<PojoFile> joinFiles;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

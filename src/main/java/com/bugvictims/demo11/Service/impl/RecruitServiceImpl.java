@@ -61,7 +61,7 @@ public class RecruitServiceImpl implements RecruitService {
             Map<Integer, List<PojoFile>> filesMap = files.stream()
                     .collect(Collectors.groupingBy(PojoFile::getLinkedID));
             recruits.forEach(recruit -> {
-                recruit.setFiles(filesMap.get(recruit.getId()));
+                recruit.setRecruitFiles(filesMap.get(recruit.getId()));
             });
         }
         return new PageInfo<>(recruits);
@@ -108,7 +108,7 @@ public class RecruitServiceImpl implements RecruitService {
             Map<Integer, List<PojoFile>> filesMap = files.stream()
                     .collect(Collectors.groupingBy(PojoFile::getLinkedID));
             recruits.forEach(recruit -> {
-                recruit.setFiles(filesMap.get(recruit.getId()));
+                recruit.setRecruitFiles(filesMap.get(recruit.getId()));
             });
         }
         return recruits;

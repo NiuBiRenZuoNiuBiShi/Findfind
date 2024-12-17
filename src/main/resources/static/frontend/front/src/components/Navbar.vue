@@ -55,10 +55,10 @@ export default {
                aria-expanded="ture">首页广场<span class="caret"></span></a>
              <ul class="dropdown-menu">
                 <li>
-                    <router-link to="/">Recruit</router-link>
+                    <router-link to="/recruitPlaza">Recruit</router-link>
                 </li>
                 <li>
-                    <router-link to="/">Seeker</router-link>
+                    <router-link to="/seekerPlaza">Seeker</router-link>
                 </li>
             </ul>
             </li>

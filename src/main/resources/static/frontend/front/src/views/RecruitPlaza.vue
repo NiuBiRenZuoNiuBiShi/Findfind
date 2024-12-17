@@ -5,6 +5,7 @@ import axios from 'axios'
 import router from "../router";
 import {downloadUtils} from "../api/downloadUtils.ts";
 import JoinRequestForm from "./JoinRequestForm.vue";
+import {useUserStore} from "../stores/userStore.ts";
 // 响应式变量
 const inputLabel = ref('')
 const selectedLabels = ref([])
@@ -16,6 +17,7 @@ const pageSize = ref(10)
 const recruitDetailsDialogVisible = ref(false)
 const currentRecruits = ref(null)
 const joinFormVisible = ref(false)
+const userStore = useUserStore();
 
 // 添加标签
 const addLabel = () => {
@@ -34,17 +36,27 @@ const removeLabel = (index) => {
 // 搜索招聘信息
 const searchRecruits = async () => {
   try {
+    const params = new URLSearchParams()
+    selectedLabels.value.forEach((label) => {
+      params.append("labels", label)
+    })
+    params.append("page", currentPage.value.toString())
+    params.append("size", pageSize.value.toString())
     const response = await axios.get('/plaza', {
-      params: {
-        labels: selectedLabels.value,
-        page: currentPage.value,
-        size: pageSize.value
+      params,
+      headers: {
+        Authorization: userStore.token
       }
     })
 
     if (response.data.code === 1) {
-      recruits.value = response.data.data
-      total.value = response.data.total || recruits.value.length
+      const result = response.data.data
+      if (result && result.length > 0) {
+        recruits.value = result.list
+        total.value = response.data.total || recruits.value.length
+      } else{
+        ElMessage.error("无数据")
+      }
     } else {
       ElMessage.error('获取招聘信息失败')
     }
