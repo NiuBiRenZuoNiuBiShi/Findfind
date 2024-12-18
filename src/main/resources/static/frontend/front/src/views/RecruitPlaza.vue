@@ -274,9 +274,9 @@ const quitDetails = () =>{
           <el-descriptions-item label="Attachments" :span="2">
             <ul v-if="currentRecruits.files.length > 0">
               <li v-for="(file, index) in currentRecruits.files" :key="index">
-                <button @click="downloadFile(file)">
+                <el-button @click="downloadFile(file)" type="primary">
                   {{ file.name }}
-                </button>
+                </el-button>
               </li>
             </ul>
             <p v-else>暂无附件</p>

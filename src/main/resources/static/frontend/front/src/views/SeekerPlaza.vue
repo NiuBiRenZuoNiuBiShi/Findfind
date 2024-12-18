@@ -102,9 +102,9 @@
         <el-descriptions-item label="Attachments" :span="2">
           <ul v-if="currentSeeker.files">
             <li v-for="(file, index) in currentSeeker.files" :key="index">
-              <button @click="downloadFile(file)" type="button">
+              <el-button @click="downloadFile(file)" type="primary">
                 {{ file.name }}
-              </button>
+              </el-button>
             </li>
           </ul>
           <p v-else>暂无附件</p>
