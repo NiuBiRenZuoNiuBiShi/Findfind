@@ -19,7 +19,7 @@ public class PojoFile {
     private String fileType;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-
+    private String fileName;
 
     @JsonIgnore
     private MultipartFile originalFile;

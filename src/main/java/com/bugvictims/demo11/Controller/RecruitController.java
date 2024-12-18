@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 @RestController
 public class RecruitController {
@@ -27,26 +28,37 @@ public class RecruitController {
     */
     @PostMapping("/recruit/release/{teamID}")
     public Result releaseRecruit(@ModelAttribute Recruit recruit
-    , @RequestParam("files") List<MultipartFile> files) {
+    , @RequestParam(value = "files", required = false) List<MultipartFile> files
+    , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
         System.out.println(recruit.getNeedNum());
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         recruit.setReleaserID((int)userClaims.get("id"));
         recruit.setReceiveNum(0);
         recruit.setHasNum(0);
 
-        Integer recruitID = recruitService.insertRecruit(recruit); // 得到插入的ID
+        recruitService.insertRecruit(recruit); // 得到插入的ID
 
-        recruit.setRecruitFiles(FileConverter.convertToPojoFileList(files, recruitID));
-        recruitService.insertRecruitFiles(recruit);
+        if (files != null && !files.isEmpty()) {
+            recruit.setRecruitFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
+            IntStream.range(0, recruit.getRecruitFiles().size())
+                    .forEach(i -> recruit.getRecruitFiles().get(i).setFileName(fileNames.get(i)));
+            recruitService.insertRecruitFiles(recruit);
+        }
+
 
         return new Result().success();
     }
 
     @PutMapping("/plaza")
     public Result updateRecruit(@ModelAttribute Recruit recruit
-    , @RequestParam("files") List<MultipartFile> files) {
+    , @RequestParam(value = "files", required = false) List<MultipartFile> files
+    , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
         recruit.setUpdateTime(LocalDateTime.now());
-        recruit.setRecruitFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
+        if (fileNames != null && !fileNames.isEmpty()) {
+            recruit.setRecruitFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
+            IntStream.range(0, recruit.getRecruitFiles().size())
+                    .forEach(i -> recruit.getRecruitFiles().get(i).setFileName(fileNames.get(i)));
+        }
         recruitService.updateRecruit(recruit);
         
         return new Result().success();
@@ -73,12 +85,24 @@ public class RecruitController {
     @PostMapping("/plaza/{recruitID}") // 传入recruitID,在Body里传入具体的内容
     public Result addJoinRequest(@PathVariable Integer recruitID
             , @ModelAttribute JoinRequest joinRequest
-            , @RequestParam("files") List<MultipartFile> files) {
+            , @RequestParam("files") List<MultipartFile> files
+            , @RequestParam("fileNames") List<String> fileNames) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         joinRequest.setUserId((int)userClaims.get("id"));
         Integer joinRequestID = recruitService.insertJoinRequest(recruitID, joinRequest);
-        joinRequest.setJoinFiles(FileConverter.convertToPojoFileList(files, joinRequestID));
-        recruitService.insertJoinFiles(joinRequest);
+        if (fileNames != null && !fileNames.isEmpty()) {
+            joinRequest.setJoinFiles(FileConverter.convertToPojoFileList(files, joinRequestID));
+            IntStream.range(0, joinRequest.getJoinFiles().size())
+                    .forEach(i -> joinRequest.getJoinFiles().get(i).setFileName(fileNames.get(i)));
+            recruitService.insertJoinFiles(joinRequest);
+        }
         return new Result().success();
     }
+
+    @GetMapping("/plaza/recruit/files")
+    public Result getRecruitFiles(@RequestParam Integer recruitId) {
+        return new Result().success(recruitService.selectRecruitFilesByItsId(recruitId));
+    }
+
+    
 }

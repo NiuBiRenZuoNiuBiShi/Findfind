@@ -2,6 +2,7 @@ package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.*;
 import com.bugvictims.demo11.Pojo.JoinRequest;
+import com.bugvictims.demo11.Pojo.Label;
 import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.bugvictims.demo11.Service.RecruitService;
@@ -37,9 +38,9 @@ public class RecruitServiceImpl implements RecruitService {
     public Integer insertRecruit(Recruit recruit) {
         recruit.setCreateTime(LocalDateTime.now()); // 添加一些数据
         recruit.setUpdateTime(LocalDateTime.now());
-        Integer recruitID =  recruitMapper.insertRecruit(recruit); // 调用Mapper
+        recruitMapper.insertRecruit(recruit); // 调用Mapper
         recruitLabelMapper.addRecruitLabel(recruit);
-        return recruitID;
+        return recruit.getId();
     }
 
     public void updateRecruit(Recruit recruit) {
@@ -57,11 +58,12 @@ public class RecruitServiceImpl implements RecruitService {
                 .map(Recruit::getId)
                 .collect(Collectors.toList());
         if (!recruitIds.isEmpty()) {
-            List<PojoFile> files = recruitFileMapper.selectRecruitFilesByRecruitIds(recruitIds);
-            Map<Integer, List<PojoFile>> filesMap = files.stream()
-                    .collect(Collectors.groupingBy(PojoFile::getLinkedID));
+            Map<Integer, List<Label>> labelsMap = recruitLabelMapper
+                    .selectRecruitLabelByRecruitIds(recruitIds)
+                    .stream()
+                    .collect(Collectors.groupingBy(Label::getSeekerId));
             recruits.forEach(recruit -> {
-                recruit.setRecruitFiles(filesMap.get(recruit.getId()));
+                recruit.setLabels(labelsMap.get(recruit.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
             });
         }
         return new PageInfo<>(recruits);
@@ -98,19 +100,24 @@ public class RecruitServiceImpl implements RecruitService {
         joinRequestFileMapper.insertJoinFile(joinRequest);
     }
 
-
     @Override
     public List<Recruit> getRecruitsByTeamId(Integer teamID) {
         List<Recruit> recruits = recruitMapper.selectRecruitsByTeamID(teamID);
         List<Integer> recruitIds = recruits.stream().map(Recruit::getId).toList();
         if (!recruitIds.isEmpty()) {
-            List<PojoFile> files = recruitFileMapper.selectRecruitFilesByRecruitIds(recruitIds);
-            Map<Integer, List<PojoFile>> filesMap = files.stream()
-                    .collect(Collectors.groupingBy(PojoFile::getLinkedID));
+            Map<Integer, List<Label>> labelsMap = recruitLabelMapper
+                    .selectRecruitLabelByRecruitIds(recruitIds)
+                    .stream()
+                    .collect(Collectors.groupingBy(Label::getSeekerId));
             recruits.forEach(recruit -> {
-                recruit.setRecruitFiles(filesMap.get(recruit.getId()));
+                recruit.setLabels(labelsMap.get(recruit.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
             });
         }
         return recruits;
+    }
+
+    @Override
+    public List<PojoFile> selectRecruitFilesByItsId(Integer recruitId) {
+        return recruitFileMapper.selectRecruitFilesByRecruitId(recruitId);
     }
 }

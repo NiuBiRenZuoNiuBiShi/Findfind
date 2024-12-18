@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bugvictims.demo11.Mapper.InviteRequestFileMapper">
     <insert id="insertInviteFile" parameterType="com.bugvictims.demo11.Pojo.InviteRequest">
-        INSERT INTO invite_request_file(file, invite_id, type, create_time, update_time)
+        INSERT INTO invite_request_file(file, invite_id, type, create_time, update_time, file_name)
         VALUES 
-            <foreach collection="inviteFiles" item="file" separator=",">
-                (#{file.fileData}, #{file.linkedID}, #{file.fileType}, #{file.createTime}, #{file.updateTime})
+            <foreach collection="inviteFiles" item="file" separator="," open="(" close=")">
+                #{file.fileData}, #{file.linkedID}, #{file.fileType}, #{file.createTime}, #{file.updateTime}, #{file.fileName}
             </foreach>
     </insert>
 </mapper>

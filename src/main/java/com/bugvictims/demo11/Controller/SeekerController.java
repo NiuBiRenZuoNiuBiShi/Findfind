@@ -4,6 +4,7 @@ import com.bugvictims.demo11.Pojo.InviteRequest;
 import com.bugvictims.demo11.Pojo.Result;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
+import com.bugvictims.demo11.Service.impl.SeekerServiceImpl;
 import com.bugvictims.demo11.Utils.FileConverter;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +14,21 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 @RestController
 public class SeekerController {
 
     @Autowired
     SeekerService seekerService;
+    @Autowired
+    private SeekerServiceImpl seekerServiceImpl;
 
     @PostMapping("/plaza/seeker")
     Result createSeeker(@ModelAttribute Seeker seeker
                         , @RequestParam(value = "labels", required = true) List<String> labels
-                        , @RequestParam(value="files", required = false) List<MultipartFile> files) {
+                        , @RequestParam(value="files", required = false) List<MultipartFile> files
+                        , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         if (userClaims == null) {
             return new Result().error("当前无用户登录");
@@ -35,8 +40,13 @@ public class SeekerController {
         seeker.setCreateTime(LocalDateTime.now());
         seeker.setUpdateTime(LocalDateTime.now());
         Integer seekerID = seekerService.insertSeeker(seeker);
+
         if (files != null && !files.isEmpty()) {
             seeker.setSeekerFiles(FileConverter.convertToPojoFileList(files, seekerID));
+            for (int i = 0; i < fileNames.size(); i++) {
+                seeker.getSeekerFiles().get(i).setFileName(fileNames.get(i));
+                System.out.println(files.get(i).getSize());
+            }
             seekerService.insertSeekerFiles(seeker);
         }
         return new Result().success();
@@ -51,8 +61,14 @@ public class SeekerController {
     }
 
     @PutMapping("/plaza/seeker")
-    Result updateSeeker(@RequestBody Seeker seeker) {
+    Result updateSeeker(@ModelAttribute Seeker seeker
+                        , @RequestParam(value = "files") List<MultipartFile> files
+                        , @RequestParam(value = "fileNames") List<String> fileNames) {
         seeker.setUpdateTime(LocalDateTime.now());
+        if (fileNames != null && !fileNames.isEmpty()) {
+            IntStream.range(0, fileNames.size())
+                    .forEach(i -> seeker.getSeekerFiles().get(i).setFileName(fileNames.get(i)));
+        }
         seekerService.updateSeeker(seeker);
         return new Result().success();
     }
@@ -84,5 +100,10 @@ public class SeekerController {
     @GetMapping("/user/{userID}/seekers")
     Result getSeekerByUserID(@PathVariable("userID") Integer userID) {
         return new Result().success(seekerService.getSeekersByUserId(userID));
+    }
+
+    @GetMapping("/plaza/seeker/files")
+    Result getSeekerFilesBySeekerID(@RequestParam Integer seekerId) {
+        return new Result().success(seekerService.selectSeekerFilesBySeekerId(seekerId));
     }
 }

@@ -20,7 +20,7 @@ public class Recruit {
     private String header;
     private String message;
     private List<PojoFile> recruitFiles;
-    private List<String> label;
+    private List<String> labels;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

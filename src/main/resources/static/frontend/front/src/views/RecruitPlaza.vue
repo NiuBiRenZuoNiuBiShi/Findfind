@@ -89,9 +89,44 @@ const goToJoinRequest = () => {
   }
 }
 
-const seeDetail = (recruit) => {
+const seeDetail = async (recruit) => {
   currentRecruits.value = recruit
   recruitDetailsDialogVisible.value = true
+  try {
+    const params = new URLSearchParams()
+    params.append("recruitId", recruit.id);
+    const res = await axios.get('/plaza/recruit/files', {
+      params,
+      headers: {
+        Authorization: userStore.token
+      }
+    })
+    console.log(res);
+    if (res.data.code === 1) {
+      const result = res.data.data
+      if (result == null) {
+        ElMessage.error("获取文件失败")
+      } else {
+        currentRecruits.value.files = result.map(item => {
+          const decodedData = atob(item.fileData); // 解码 Base64 数据
+
+          // 创建二进制数组
+          const byteArray = new Uint8Array(decodedData.length);
+          for (let i = 0; i < decodedData.length; i++) {
+            byteArray[i] = decodedData.charCodeAt(i);
+          }
+
+          const blob = new Blob([byteArray], { type: 'application/octet-stream' })
+          return {
+            data: blob,
+            name: item.fileName,
+          }
+        })
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const downloadFile = (file) => {
@@ -161,7 +196,7 @@ const quitDetails = () =>{
 
         <template #default="scope">
           <el-tag
-              v-for="tag in scope.row.label"
+              v-for="tag in scope.row.labels"
               :key="tag"
               size="small"
               style="margin-right: 5px;"

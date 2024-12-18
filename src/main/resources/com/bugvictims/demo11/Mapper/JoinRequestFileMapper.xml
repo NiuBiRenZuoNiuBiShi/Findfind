@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bugvictims.demo11.Mapper.JoinRequestFileMapper">
     <insert id="insertJoinFile" parameterType="com.bugvictims.demo11.Pojo.JoinRequest">
-        INSERT INTO join_request_file(join_id, file, type, create_time, update_time)
+        INSERT INTO join_request_file(join_id, file, type, create_time, update_time, file_name)
         VALUES
         <foreach collection="joinFiles" item="file" separator="," >
-            (#{file.linkedID}, #{file.fileData}, #{file.fileType}, #{file.createTime}, #{file.updateTime})
+            (#{file.linkedID}, #{file.fileData}, #{file.fileType}, #{file.createTime}, #{file.updateTime}, #{file.fileName})
         </foreach>
     </insert>
 

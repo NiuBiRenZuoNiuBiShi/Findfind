@@ -1,6 +1,7 @@
 package com.bugvictims.demo11.Service;
 
 import com.bugvictims.demo11.Pojo.JoinRequest;
+import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Recruit;
 import com.github.pagehelper.PageInfo;
 
@@ -22,4 +23,6 @@ public interface RecruitService {
     void insertJoinFiles(JoinRequest joinRequest);
 
     List<Recruit> getRecruitsByTeamId(Integer teamID);
+
+    List<PojoFile> selectRecruitFilesByItsId(Integer recruitId);
 }

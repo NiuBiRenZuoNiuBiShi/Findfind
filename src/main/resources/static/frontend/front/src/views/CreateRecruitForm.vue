@@ -13,7 +13,8 @@ const dataForm = ref({
   labels: [],
   teamId: "",
   needNum: 1,
-  files: []
+  files: [],
+  fileNames: []
 })
 const rules = {
   header: [
@@ -67,7 +68,12 @@ const submitRecruit = () => {
         recruitData.append("needNum", dataForm.value.needNum.toString());
         if (dataForm.value.files && dataForm.value.files.length > 0) {
           dataForm.value.files.forEach((f) => {
-            recruitData.append("files", f.raw);
+            recruitData.append("files", f.raw || f);
+          })
+        }
+        if (dataForm.value.fileNames && dataForm.value.fileNames.length > 0) {
+          dataForm.value.fileNames.forEach((f) => {
+            recruitData.append("fileNames", f);
           })
         }
 
@@ -96,6 +102,15 @@ const submitRecruit = () => {
       }
     }
   })
+}
+
+const fileExchange = (file, fileList) => {
+  dataForm.value.files = fileList.map(f => f.raw)
+  dataForm.value.fileNames = fileList.map(f => f.name)
+}
+
+const quit = () => {
+  router.push('/recruitPlaza')
 }
 </script>
 
@@ -161,6 +176,7 @@ const submitRecruit = () => {
               :auto-upload="false"
               multiple
               :on-exceed="handExceed"
+              :on-change="fileExchange"
           >
             <el-button type="primary">选择文件</el-button>
             <template #tip>
@@ -172,6 +188,7 @@ const submitRecruit = () => {
         </el-form-item>
         <el-form-item label=" ">
           <el-button @click="submitRecruit" type="primary" style="margin-top: -30px">创建</el-button>
+          <el-button @click="quit" type="primary" style="margin-top: -30px">退出</el-button>
         </el-form-item>
       </el-form>
     </el-card>

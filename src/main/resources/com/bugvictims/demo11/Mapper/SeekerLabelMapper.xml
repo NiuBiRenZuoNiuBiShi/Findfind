@@ -10,4 +10,17 @@
             (#{id}, #{labelItem}, #{createTime}, #{updateTime})
         </foreach>
     </insert>
+    
+    <select id="selectSeekerLabelBySeekerID" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT * FROM seeker_label
+        WHERE seeker_id=#{seekerID}
+    </select>
+
+    <select id="selectSeekerLabelBySeekerIDs" parameterType="java.util.List" resultType="com.bugvictims.demo11.Pojo.Label">
+        SELECT * FROM seeker_label
+        WHERE seeker_id IN
+        <foreach collection="seekerIDs" item="seekerID" open="(" close=")" separator=",">
+            #{seekerID}
+        </foreach>
+    </select>
 </mapper>

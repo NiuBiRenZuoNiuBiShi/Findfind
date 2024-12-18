@@ -2,6 +2,7 @@ package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.*;
 import com.bugvictims.demo11.Pojo.InviteRequest;
+import com.bugvictims.demo11.Pojo.Label;
 import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.bugvictims.demo11.Service.SeekerService;
@@ -34,9 +35,9 @@ public class SeekerServiceImpl implements SeekerService {
     private InviteRequestFileMapper inviteRequestFileMapper;
 
     public Integer insertSeeker(Seeker seeker) {
-        Integer seekerID = seekerMapper.createSeeker(seeker);
+        seekerMapper.createSeeker(seeker);
         seekerLabelMapper.insertSeekerLabel(seeker);
-        return seekerID;
+        return seeker.getId();
     }
 
     public boolean deleteSeeker(Integer id) {
@@ -63,12 +64,14 @@ public class SeekerServiceImpl implements SeekerService {
         List<Seeker> seekers = seekerMapper.selectSeekers(labels);
         List<Integer> seekerIDs = seekers.stream().map(Seeker::getId).toList();
         if (!seekerIDs.isEmpty()) {
-            Map<Integer, List<PojoFile>> fileMap = seekerFileMapper
-                    .selectSeekerFileByIds(seekerIDs)
+            Map<Integer, List<Label>> labelsMap = seekerLabelMapper
+                    .selectSeekerLabelBySeekerIDs(seekerIDs)
                     .stream()
-                    .collect(Collectors.groupingBy(PojoFile::getId));
+                    .collect(Collectors.groupingBy(Label::getSeekerId));
             seekers.forEach(seeker -> {
-                seeker.setSeekerFiles(fileMap.get(seeker.getId()));
+                seeker.setLabels(labelsMap.get(seeker.getId()).stream()
+                        .map(Label::getLabel)
+                        .collect(Collectors.toList()));
             });
         }
         return new PageInfo<>(seekers);
@@ -97,14 +100,19 @@ public class SeekerServiceImpl implements SeekerService {
         List<Seeker> seekers = seekerMapper.selectSeekersByUserID(userID);
         List<Integer> seekerIDs = seekers.stream().map(Seeker::getId).toList();
         if (!seekerIDs.isEmpty()) {
-            Map<Integer, List<PojoFile>> fileMap = seekerFileMapper
-                    .selectSeekerFileByIds(seekerIDs)
+            Map<Integer, List<Label>> labelsMap = seekerLabelMapper
+                    .selectSeekerLabelBySeekerIDs(seekerIDs)
                     .stream()
-                    .collect(Collectors.groupingBy(PojoFile::getId));
+                    .collect(Collectors.groupingBy(Label::getSeekerId));
             seekers.forEach(seeker -> {
-                seeker.setSeekerFiles(fileMap.get(seeker.getId()));
+                seeker.setLabels(labelsMap.get(seeker.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
             });
         }
         return seekers;
+    }
+
+    @Override
+    public List<PojoFile> selectSeekerFilesBySeekerId(Integer seekerId) {
+        return seekerFileMapper.selectSeekerFileBySeekerId(seekerId);
     }
 }

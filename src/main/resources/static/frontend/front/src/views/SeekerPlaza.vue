@@ -47,7 +47,7 @@
       <el-table-column prop="label" label="标签" width="250px" header-align="center">
         <template #default="scope">
           <el-tag
-              v-for="tag in scope.row.label"
+              v-for="tag in scope.row.labels"
               :key="tag"
               size="small"
               style="margin-right: 5px"
@@ -102,7 +102,7 @@
         <el-descriptions-item label="Attachments" :span="2">
           <ul v-if="currentSeeker.files">
             <li v-for="(file, index) in currentSeeker.files" :key="index">
-              <button @click="downloadFile(file)">
+              <button @click="downloadFile(file)" type="button">
                 {{ file.name }}
               </button>
             </li>
@@ -199,13 +199,48 @@ const formatDateTime = (dateTime) => {
   return dateTime ? new Data(dateTime).toLocaleDateString() : ' ';
 }
 
-const seeDetail = (seeker) => {
-  console.log(inviteFormVisible.value)
+const seeDetail = async (seeker) => {
   currentSeeker.value = seeker;
   seekerDetailsDialogVisible.value = true;
+  try {
+    const params = new URLSearchParams()
+    params.append("seekerId", seeker.id);
+    const res = await axios.get('/plaza/seeker/files', {
+      params,
+      headers: {
+        Authorization: userStore.token
+      }
+    })
+    console.log(res);
+    if (res.data.code === 1) {
+      const result = res.data.data
+      if (result == null) {
+        ElMessage.error("获取文件失败")
+      } else {
+        currentSeeker.value.files = result.map(item => {
+          const decodedData = atob(item.fileData); // 解码 Base64 数据
+
+          // 创建二进制数组
+          const byteArray = new Uint8Array(decodedData.length);
+          for (let i = 0; i < decodedData.length; i++) {
+            byteArray[i] = decodedData.charCodeAt(i);
+          }
+
+          const blob = new Blob([byteArray], {type: 'application/octet-stream'})
+          return {
+            data: blob,
+            name: item.fileName,
+          }
+        })
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const downloadFile = (file) => {
+  console.log(file)
   downloadUtils.generateDownloadLink(file.data, file.name);
 }
 

@@ -12,7 +12,8 @@ const dataForm = ref({
   message: "",
   labels: [],
   files: [],
-  position: ""
+  position: "",
+  fileNames: []
 })
 const rules = {
   header: [
@@ -60,14 +61,15 @@ const submitRecruit = () => {
           })
         }
         if (dataForm.value.files && dataForm.value.files.length > 0) {
-          console.log("test")
           dataForm.value.files.forEach((f) => {
             seekerData.append("files", f.raw || f);
+            console.log(f.raw)
           })
         }
-
-        for (let pair of seekerData.entries()) {
-          console.log(pair[0] + ': ', pair[1]);
+        if (dataForm.value.fileNames && dataForm.value.fileNames.length > 0) {
+          dataForm.value.fileNames.forEach((f) => {
+            seekerData.append("fileNames", f);
+          })
         }
 
         const response = await axios.post(`/plaza/seeker`,
@@ -100,7 +102,8 @@ const quit = () => {
 }
 
 const handleFileChange = (file, fileList) => {
-  dataForm.value.files = fileList;
+  dataForm.value.files = fileList.map(f => f.raw)
+  dataForm.value.fileNames = fileList.map(f => f.name)
 }
 </script>
 

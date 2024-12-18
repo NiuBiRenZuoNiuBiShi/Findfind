@@ -1,6 +1,7 @@
 package com.bugvictims.demo11.Service;
 
 import com.bugvictims.demo11.Pojo.InviteRequest;
+import com.bugvictims.demo11.Pojo.PojoFile;
 import com.bugvictims.demo11.Pojo.Seeker;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,6 @@ public interface SeekerService {
     void insertInviteFiles(InviteRequest inviteRequest);
 
     List<Seeker> getSeekersByUserId(Integer userID);
+
+    List<PojoFile> selectSeekerFilesBySeekerId(Integer seekerId);
 }
