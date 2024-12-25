@@ -62,21 +62,17 @@ public class TeamController {
             return new Result().error("队伍名称已存在");
         }
         User loginUser = userService.getLoginUser();
-
         //是否存在登录用户
         if (loginUser == null) {
             throw new RuntimeException("未登录");
         }
-
         //检测用户身份
         if (!teamUserService.isTeamLeader(team.getId(), loginUser.getId())) {
             throw new RuntimeException("权限不足，无法修改队伍信息");
         }
-
         teamService.updateTeam(team, loginUser);
         return new Result().success();
     }
-
     //获取用户队伍信息
     @GetMapping("/getByUser")
     public Result getTeamByUser() {
@@ -90,7 +86,6 @@ public class TeamController {
         }
         return new Result().success(teams);
     }
-
     //获取队伍信息By id
     @GetMapping("/get/{id}")
     public Result getTeamById(@PathVariable("id") int id) {
@@ -103,7 +98,6 @@ public class TeamController {
         }
         return new Result().success(team);
     }
-
     //退出队伍
     @PostMapping("/quit/{teamId}")
     public Result quitTeam(@PathVariable("teamId") int teamId) {

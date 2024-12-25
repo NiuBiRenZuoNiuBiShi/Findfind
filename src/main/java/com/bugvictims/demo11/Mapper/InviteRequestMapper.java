@@ -22,6 +22,6 @@ public interface InviteRequestMapper {
     @Select("SELECT * FROM invite_request WHERE user_id = #{userID}")
     List<InviteRequest> getInviteRequestsByUserId(Integer userID);
 
-    @Select("SELECT * FROM invite_request WHERE releaser_id = #{releaserID}")
-    List<InviteRequest> getInviteRequestByReleaserId(Integer releaserID);
+    @Select("SELECT * FROM invite_request WHERE id = #{ID}")
+    List<InviteRequest> getInviteRequestByReleaserId(Integer ID);
 }

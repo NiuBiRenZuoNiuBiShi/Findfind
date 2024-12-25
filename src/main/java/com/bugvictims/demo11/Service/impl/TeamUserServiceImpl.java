@@ -10,10 +10,8 @@ import java.util.List;
 
 @Service
 public class TeamUserServiceImpl implements TeamUserService {
-
     @Autowired
     private TeamUserMapper teamUserMapper;
-
     @Override
     public TeamUser findTeamUserByTeamIdAndUserId(int teamId, int userId) {
         return teamUserMapper.findTeamUserByTeamIdAndUserId(teamId, userId);
