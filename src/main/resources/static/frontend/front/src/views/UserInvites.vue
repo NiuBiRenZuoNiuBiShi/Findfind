@@ -48,7 +48,6 @@ const getTeamInfo = async (teamId: number) => {
         return null;
     }
 };
-
 const fetchInvites = async () => {
     try {
         const res = await getUserInvites(currentPage.value, pageSize.value);
@@ -74,11 +73,9 @@ const fetchInvites = async () => {
         ElMessage.error('获取数据失败');
     }
 };
-
 onMounted(() => {
     fetchInvites();
 });
-
 const handlePageChange = (newPage: number) => {
     currentPage.value = newPage;
     fetchInvites();

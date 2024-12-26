@@ -5,11 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 @Service
 public class InviteRequestServiceImpl {
-    @Autowired
-    private InviteRequestMapper inviteRequestMapper;
-    @Override
-    public InviteRequest getInviteRequestById(int requestId) {
-        return inviteRequestMapper.getInviteRequestByReleaserId(requestId);
-    }
+
 
 }
