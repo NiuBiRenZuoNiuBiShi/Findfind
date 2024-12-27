@@ -17,6 +17,7 @@ const tableData = ref([
 //获取队伍列表
 import {getTeamFromUser} from "../api/getTeamList.ts";
 import router from "../router";
+import {ElMessage} from "element-plus";
 
 const getTeamListData = async () => {
   const res = await getTeamFromUser()
@@ -31,6 +32,47 @@ const Info = (row) => {
   localStorage.setItem('teamInfo', row.id)
   console.log("click")
 }
+
+//控制添加队伍弹窗
+const dialogVisible = ref(false)
+
+//添加队伍数据模型
+const teamModel = ref({
+  description: "",
+  label: ["Aaa"],
+  name: "",
+  type: "",
+  position: "",
+  status: 1
+})
+//添加分类表单校验
+const rules = {
+  teamName: [
+    {required: true, message: '请输入队伍名称', trigger: 'blur'},
+  ],
+  teamType: [
+    {required: true, message: '请输入队伍类型', trigger: 'blur'},
+  ],
+  description: [
+    {required: true, message: '请输入队伍描述', trigger: 'blur'},
+  ]
+}
+import {createTeam} from "../api/team.ts";
+//添加分类
+const addTeam = async () => {
+  //调用接口
+  let result = await createTeam(teamModel.value)
+  //提示
+  ElMessage({
+    message: result.data.message,
+    type: result.data.code === 1 ? 'success' : 'error'
+  })
+  //调用获取分类列表接口
+  await getTeamListData()
+  //关闭弹窗
+  dialogVisible.value = false
+}
+const title = ref('添加队伍')
 </script>
 
 <template>
@@ -49,8 +91,39 @@ const Info = (row) => {
       </el-main>
     </el-container>
   </div>
+  <div class="mb-4 center-button">
+    <el-button type="primary" plain @click="dialogVisible=true">创建队伍</el-button>
+  </div>
+  <!-- 添加队伍弹窗 -->
+  <el-dialog v-model="dialogVisible" :title="title" width="30%">
+    <el-form :model="teamModel" :rules="rules" label-width="100px" style="padding-right: 30px">
+      <el-form-item label="队伍名称" prop="name">
+        <el-input v-model="teamModel.name" minlength="1" maxlength="10"></el-input>
+      </el-form-item>
+      <el-form-item label="队伍类型" prop="type">
+        <el-input v-model="teamModel.type" minlength="1" maxlength="15"></el-input>
+      </el-form-item>
+      <el-form-item label="具体描述" prop="description">
+        <el-input v-model="teamModel.description" minlength="1" maxlength="150"></el-input>
+      </el-form-item>
+      <el-form-item label="位置" prop="position">
+        <el-input v-model="teamModel.position" minlength="1" maxlength="15"></el-input>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+        <span class="dialog-footer">
+            <el-button
+                @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="addTeam()"> 确认 </el-button>
+        </span>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>
-
+.center-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

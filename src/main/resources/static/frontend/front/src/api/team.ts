@@ -3,3 +3,13 @@ import axios from 'axios';
 const baseURL = '/api';
 export const instance = axios.create({baseURL})
 
+export const createTeam = (team: any) => {
+    const token = localStorage.getItem('token');
+    return instance.post('/teams/create',
+        team,
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+}

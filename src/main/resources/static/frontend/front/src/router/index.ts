@@ -11,13 +11,13 @@ import CreateRecruitForm from "../views/CreateRecruitForm.vue";
 import UserList from "../views/UserList.vue";
 import UserInfo from "../views/UserInfo.vue";
 import UserUpdate from "../views/UserUpdate.vue";
-import Team from '../views/Team.vue';
 import TeamInfo from '../views/TeamInfo.vue';
 import UserInvites from "../views/UserInvites.vue";
 import UserJoins from "../views/UserJoins.vue";
 import CreateSeekerForm from "../views/CreateSeekerForm.vue";
 import RecruitPlaza from "../views/RecruitPlaza.vue";
 
+const Team = () => import('../views/Team.vue');
 const routes: any = [
     {
         path: '/login',
