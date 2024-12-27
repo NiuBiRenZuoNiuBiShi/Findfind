@@ -5,6 +5,7 @@ import {onMounted} from "vue";
 import {useUserStore} from "./stores/userStore.ts";
 import BackButton from "./components/BackButton.vue";
 import HomeButton from "./components/HomeButton.vue";
+import MyIndex from "./components/MyIndex.vue";
 const userStore = useUserStore();
 onMounted(async() => {
   const token = localStorage.getItem("token");
@@ -14,14 +15,12 @@ onMounted(async() => {
   }
 })
 </script>
-
 <template>
   <router-view></router-view>
   <Navbar/>
     <BackButton/>
-  <HomeButton/>
+    <HomeButton/>
+    <MyIndex/>
 </template>
-
 <style scoped>
-
 </style>

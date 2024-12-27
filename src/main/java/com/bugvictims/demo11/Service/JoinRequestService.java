@@ -1,7 +1,5 @@
 package com.bugvictims.demo11.Service;
-
 import com.bugvictims.demo11.Pojo.JoinRequest;
-
 public interface JoinRequestService {
 
     //查找处理请求By teamId and userId

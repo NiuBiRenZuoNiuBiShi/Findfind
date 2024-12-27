@@ -6,7 +6,7 @@
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const goHome = () => {
-    router.push({ name: 'index' }); // 假设您的主页路由名称为 'Home'
+    router.push({ name: 'app' });
 };
 </script>
 

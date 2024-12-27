@@ -70,6 +70,9 @@ export default {
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            <li v-if="login">
+                <router-link to="/team">我的队伍</router-link>
+            </li>
           <li v-if="login">
             <router-link to="/userInvites">邀请信息</router-link>
           </li>
@@ -86,9 +89,6 @@ export default {
               <li>
                 <router-link to="/userInfo">详细信息</router-link>
               </li>
-              <li>
-                <router-link to="/team">我的队伍</router-link>
-              </li>
               <li role="separator" class="divider">
               </li>
               <li>
@@ -97,12 +97,6 @@ export default {
             </ul>
           </li>
         </ul>
-        <form class="navbar-form navbar-left">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </form>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav><!--导航栏-->
