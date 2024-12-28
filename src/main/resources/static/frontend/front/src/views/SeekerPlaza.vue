@@ -115,9 +115,13 @@
     </el-dialog>
 
 
-    <el-dialog title="Invite" v-model="inviteFormVisible" :width="'50%'" :center="true">
+    <el-dialog
+        title="Invite"
+        v-model="inviteFormVisible"
+        :width="'50%'"
+        :center="true">
       <InviteRequestForm v-model:visible="inviteFormVisible" :seekerID="currentSeeker.id"
-                         style="margin-top: -60px"/>
+                         />
     </el-dialog>
   </div>
 </template>
