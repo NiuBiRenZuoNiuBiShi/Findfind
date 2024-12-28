@@ -79,7 +79,7 @@ const handlePageChange = (page) => {
 }
 
 // 格式化日期时间
-const formatDateTime = (dateTime) => {
+const formatDateTime = (dateTime:any) => {
   return dateTime ? new Date(dateTime).toLocaleString() : ''
 }
 
