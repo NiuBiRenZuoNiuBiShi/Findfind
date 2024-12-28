@@ -2,7 +2,6 @@ import {createRouter} from 'vue-router'
 import {createWebHistory} from "vue-router";
 import Login from '../views/Login.vue';
 import Register from "../views/Register.vue";
-import App from "../App.vue";
 import TeamList from '../views/TeamList.vue';
 import JoinRequestForm from "../views/JoinRequestForm.vue";
 import SeekerPlaza from "../views/SeekerPlaza.vue";
