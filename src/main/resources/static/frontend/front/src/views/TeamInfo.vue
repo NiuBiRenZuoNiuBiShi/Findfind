@@ -13,9 +13,12 @@ const tableData = ref({
   "updateTime": "2021-08-17T07:00:00.000+00:00"
 });
 import {getTeamById} from "../api/getTeamList.ts";
+import {isTeamLeader} from "../api/team.ts";
 
 const getTeamListData = async () => {
   const id = localStorage.getItem('teamInfo')
+  const leader = await isTeamLeader(id)
+  console.log(leader)
   console.log(id)
   const res = await getTeamById(id)
   tableData.value = res.data.data
@@ -45,8 +48,8 @@ getTeamListData()
           <strong>队伍位置:</strong> <span>{{ tableData.position }}</span>
         </li>
       </ul>
-      <router-link to="" class="update-button">
-        未确定
+      <router-link to="/TeamUpdate" class="update-button">
+        修改队伍信息
       </router-link>
     </div>
     <div v-else class="no-info">

@@ -13,3 +13,22 @@ export const createTeam = (team: any) => {
             }
         });
 }
+export const updateTeam = (team: any) => {
+    const token = localStorage.getItem('token');
+    return instance.post('/teams/update',
+        team,
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+}
+export const isTeamLeader = (teamId: any) => {
+    const token = localStorage.getItem('token');
+    return instance.get(`/teams/isTeamLeader/${teamId}`,
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+}
