@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,7 +106,10 @@ public class SeekerServiceImpl implements SeekerService {
                     .stream()
                     .collect(Collectors.groupingBy(Label::getSeekerId));
             seekers.forEach(seeker -> {
-                seeker.setLabels(labelsMap.get(seeker.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
+                Optional<List<Label>> labelsOptional = Optional.ofNullable(labelsMap.get(seeker.getId()));
+                labelsOptional.ifPresent(labels -> {
+                    seeker.setLabels(labels.stream().map(Label::getLabel).collect(Collectors.toList()));
+                });
             });
         }
         return seekers;
@@ -115,4 +119,5 @@ public class SeekerServiceImpl implements SeekerService {
     public List<PojoFile> selectSeekerFilesBySeekerId(Integer seekerId) {
         return seekerFileMapper.selectSeekerFileBySeekerId(seekerId);
     }
+
 }

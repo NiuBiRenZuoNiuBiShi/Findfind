@@ -1,6 +1,7 @@
 package com.bugvictims.demo11.Controller;
 
 import com.bugvictims.demo11.Pojo.*;
+import com.bugvictims.demo11.Service.impl.SeekerServiceImpl;
 import com.bugvictims.demo11.Service.impl.UserServiceImpl;
 import com.bugvictims.demo11.Utils.JWTUtils;
 import com.sun.tools.jconsole.JConsoleContext;
@@ -20,6 +21,8 @@ import java.util.Map;
 @Validated
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private SeekerServiceImpl seekerService;
     @Autowired
     private UserServiceImpl userService;
     @Autowired
@@ -144,6 +147,16 @@ public class UserController {
         if(loginUser!=null) {
             int id=loginUser.getId();
             return new Result().success(userService.getJoins(id,page, size));
+        }else
+            return new Result().error("当前无用户登录");
+    }
+    //查看自己的招募
+    @GetMapping("/seekers")
+    public Result getSeekerByUserID() {
+        User loginUser = userService.getLoginUser();
+        if(loginUser!=null) {
+            int id=loginUser.getId();
+            return new Result().success(seekerService.getSeekersByUserId(id));
         }else
             return new Result().error("当前无用户登录");
     }

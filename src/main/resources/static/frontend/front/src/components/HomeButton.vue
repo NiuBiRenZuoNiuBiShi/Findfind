@@ -6,7 +6,7 @@
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const goHome = () => {
-    router.push({ name: 'app' });
+    router.push({ path: '/' });
 };
 </script>
 

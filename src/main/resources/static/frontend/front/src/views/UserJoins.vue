@@ -98,7 +98,7 @@ const handlePageChange = (newPage: number) => {
                             {{ scope.row.teamDescription || '无描述' }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="message" label="内容" width="380"></el-table-column>
+                    <el-table-column prop="message" label="内容" width="280"></el-table-column>
                     <el-table-column prop="status" label="处理结果" width="180">
                         <template #default="scope">
                             <span :class="'status-box status-' + scope.row.status">
@@ -106,7 +106,7 @@ const handlePageChange = (newPage: number) => {
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="response" label="回复" width="200"></el-table-column>
+                    <el-table-column prop="response" label="回复" ></el-table-column>
                     <!-- 其他列 -->
                 </el-table>
             </el-main>
