@@ -125,15 +125,12 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void joinTeam(int teamId, User loginUser) {
         int userId = loginUser.getId();
-
         //检测用户是否已加入队伍
         if (teamUserService.isTeamMember(teamId, userId)) {
             throw new RuntimeException("已加入队伍，无法重复加入");
         }
-
         //检测队伍人数
         int count = teamMapper.getTeamUserCount(teamId);
-
         if (count >= 5) {
             throw new RuntimeException("队伍人数已满，无法加入");
         }
