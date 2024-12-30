@@ -22,11 +22,13 @@ import {ElMessage} from "element-plus";
 const getTeamListData = async () => {
   const res = await getTeamFromUser()
   tableData.value = res.data.data
+  tableData.value = tableData.value.filter(item => item !== null)
   console.log(tableData.value)
 }
 getTeamListData()
 //获取队伍列表
 const Info = (row) => {
+  getTeamListData()
   router.push(`/teamInfo`)
   //把点击的行的数据传递到teamInfo页面
   localStorage.setItem('teamInfo', row.id)
@@ -45,6 +47,17 @@ const teamModel = ref({
   position: "",
   status: 1
 })
+//清空数据
+const clearData = () => {
+  teamModel.value = {
+    description: "",
+    label: [""],
+    name: "",
+    type: "",
+    position: "",
+    status: 1
+  }
+}
 //添加分类表单校验
 const rules = {
   teamName: [
@@ -71,6 +84,11 @@ const addTeam = async () => {
   await getTeamListData()
   //关闭弹窗
   dialogVisible.value = false
+  clearData()
+}
+const cancelCreate = () => {
+  dialogVisible.value = false
+  clearData()
 }
 const title = ref('添加队伍')
 </script>
@@ -113,7 +131,7 @@ const title = ref('添加队伍')
     <template #footer>
         <span class="dialog-footer">
             <el-button
-                @click="dialogVisible = false">取消</el-button>
+                @click="cancelCreate">取消</el-button>
             <el-button type="primary" @click="addTeam()"> 确认 </el-button>
         </span>
     </template>

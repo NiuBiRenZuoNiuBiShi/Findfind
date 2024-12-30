@@ -17,7 +17,7 @@ public interface TeamMapper {
     void updateTeam(Team team);
 
     //获取队伍信息By id 排除已解散队伍
-    @Select("select * from teams where id = #{id} and status != 3")
+    @Select("select * from teams where id = #{id} and status = 1")
     Team getTeamById(int id);
 
     //获取队伍人数

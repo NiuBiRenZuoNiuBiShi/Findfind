@@ -32,3 +32,21 @@ export const isTeamLeader = (teamId: any) => {
             }
         });
 }
+
+export const deleteTeamById = (teamId: any) => {
+    const token = localStorage.getItem('token');
+    return instance.post(`/teams/delete/${teamId}`, {}, {
+        headers:
+            {
+                Authorization: token
+            }
+    });
+}
+export const quitTeamById = (teamId: any) => {
+    const token = localStorage.getItem('token');
+    return instance.post(`/teams/quit/${teamId}`, {}, {
+        headers: {
+            Authorization: token
+        }
+    });
+}

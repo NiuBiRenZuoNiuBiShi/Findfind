@@ -10,21 +10,95 @@ const tableData = ref({
   "position": "test",
   "status": "test",
   "createTime": "2021-08-17T07:00:00.000+00:00",
-  "updateTime": "2021-08-17T07:00:00.000+00:00"
+  "updateTime": "2021-08-17T07:00:00.000+00:00",
+  yourType: "队员"
 });
 import {getTeamById} from "../api/getTeamList.ts";
-import {isTeamLeader} from "../api/team.ts";
+import {deleteTeamById, isTeamLeader, quitTeamById} from "../api/team.ts";
+import {ElMessage, ElMessageBox} from "element-plus";
+import router from "../router";
 
 const getTeamListData = async () => {
   const id = localStorage.getItem('teamInfo')
-  const leader = await isTeamLeader(id)
-  console.log(leader)
   console.log(id)
   const res = await getTeamById(id)
   tableData.value = res.data.data
   console.log(tableData.value)
+  const leader = await isTeamLeader(id)
+  console.log(leader.data.data)
+  if (leader.data.data === true) {
+    tableData.value.yourType = "队长"
+  } else {
+    tableData.value.yourType = "队员"
+  }
 }
 getTeamListData()
+//删除队伍
+const deleteTeam = () => {
+  const id = localStorage.getItem('teamInfo')
+  //确认框
+  //删除分类  给删除按钮绑定事件
+  ElMessageBox.confirm(
+      '你确认删除此队伍吗？',
+      '温馨提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    //用户点击了确认
+    ElMessage({
+      type: 'success',
+      message: '删除成功',
+    })
+    //调用接口
+    deleteTeamById(id)
+    //调用获取分类列表接口  刷新
+    getTeamListData()
+    router.push(`/team`)
+  }).catch(() => {
+    //用户点击了取消
+    ElMessage({
+      type: 'info',
+      message: '取消删除',
+    })
+  })
+}
+
+//退出队伍
+const quitTeam = () => {
+  const id = localStorage.getItem('teamInfo')
+  //确认框
+  //删除分类  给删除按钮绑定事件
+  ElMessageBox.confirm(
+      '你确认退出此队伍吗？',
+      '温馨提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    //用户点击了确认
+    ElMessage({
+      type: 'success',
+      message: '退出成功',
+    })
+    //调用接口
+    quitTeamById(id)
+    //调用获取分类列表接口  刷新
+    getTeamListData()
+    router.push(`/team`)
+  }).catch(() => {
+    //用户点击了取消
+    ElMessage({
+      type: 'info',
+      message: '取消退出',
+    })
+  })
+}
+
 </script>
 
 <template>
@@ -47,10 +121,15 @@ getTeamListData()
         <li>
           <strong>队伍位置:</strong> <span>{{ tableData.position }}</span>
         </li>
+        <li>
+          <strong>您的身份:</strong> <span>{{ tableData.yourType }}</span>
+        </li>
       </ul>
-      <router-link to="/TeamUpdate" class="update-button">
+      <router-link to="/TeamUpdate" class="update-button" v-if="tableData.yourType=='队长' ">
         修改队伍信息
       </router-link>
+      <el-button type="danger" @click="deleteTeam" v-if="tableData.yourType=='队长' ">删除队伍</el-button>
+      <el-button type="danger" @click="quitTeam" v-if="tableData.yourType=='队员' ">退出队伍</el-button>
     </div>
     <div v-else class="no-info">
       <p>暂无队伍信息</p>
