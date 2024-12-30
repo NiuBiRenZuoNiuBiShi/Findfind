@@ -17,14 +17,15 @@
         <el-form-item label="Password" prop="password">
           <el-input v-model="dataForm.password" type="password" autocomplete="new-password" placeholder="请输入密码"/>
         </el-form-item>
-        <el-form-item >
+        <el-form-item>
           <el-button @click="handleLogin" type="primary" style="width: 80% ;
           background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); margin-left: 35px;"> 登录
           </el-button>
         </el-form-item>
-        <el-form-item >
+        <el-form-item>
           <el-button @click="toRegister" type="primary" style="width: 80% ;
-          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); margin-left: 35px"> 注册 </el-button>
+          background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); margin-left: 35px"> 注册
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -37,6 +38,7 @@ import axios from "axios";
 import {useUserStore} from "../stores/userStore";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import {instance} from "../api/user.ts";
 
 const router = useRouter()
 const userStore = useUserStore();
@@ -68,7 +70,7 @@ const handleLogin = async () => {
         const params = new URLSearchParams()
         params.append('username', dataForm.value.username)
         params.append('password', dataForm.value.password)
-        const response = await axios.post('/user/login', params)
+        const response = await instance.post('/user/login', params)
         const result = response.data
 
         if (result.code === 1) {
@@ -80,10 +82,10 @@ const handleLogin = async () => {
             password: dataForm.value.password
           }
           ElMessage.success("成功登录")
-            setTimeout(() => {
-                router.push('/');
-                window.location.reload(); // 强制刷新页面
-            }, 2000);
+          setTimeout(() => {
+            router.push('/');
+            window.location.reload(); // 强制刷新页面
+          }, 2000);
         } else {
           //console.log(result)
           ElMessage.error("登录失败")
