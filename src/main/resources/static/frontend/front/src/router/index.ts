@@ -17,6 +17,7 @@ import CreateSeekerForm from "../views/CreateSeekerForm.vue";
 import RecruitPlaza from "../views/RecruitPlaza.vue";
 import TeamUpdate from "../views/TeamUpdate.vue";
 import UserSeekers from "../views/UserSeekers.vue";
+import App from "../App.vue";
 
 const Team = () => import('../views/Team.vue');
 const routes: any = [

@@ -4,7 +4,6 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import router from './router'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-//import '@fortawesome/fontawesome-free/css/all.css'
 import { createPinia } from "pinia"
 // 导入所有图标并进行全局注册
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

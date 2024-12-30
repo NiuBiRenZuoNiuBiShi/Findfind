@@ -377,19 +377,11 @@
 import {computed} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useUserStore} from "../stores/userStore.ts";
-import '../assets/libs/jquery/dist/jquery.min.js';
-import '../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js';
-import '../assets/libs/svg-injector/dist/svg-injector.min.js';
-import '../assets/libs/feather-icons/dist/feather.min.js';
-import '../assets/js/quick-website.js';
 const router = useRouter();
 const route = useRoute(); // 获取当前路由对象
 const userStore = useUserStore();
 const showIndex = computed(() => route.path === '/');
 </script>
-
-
 <style scoped>
-@import '../assets/libs/@fortawesome/fontawesome-free/css/all.min.css';
 @import '../assets/css/quick-website.css';
 </style>

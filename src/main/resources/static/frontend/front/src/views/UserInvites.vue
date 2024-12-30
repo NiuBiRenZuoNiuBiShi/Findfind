@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 import { getUserInvites } from '../api/getUserInvites.ts';
 import { ElMessage } from 'element-plus';
 import { getTeamInfo as apiGetTeamInfo } from "../api/getTeamInfo.ts";
+import {updateInvite} from "../api/updateInvite.ts";
+import {instance} from "../api/user.ts";
 
 interface InviteRequest {
     id: number;
@@ -29,7 +31,10 @@ const tableData = ref<PageInfo<InviteRequest> | null>(null);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
-
+const dialogVisible: ref<boolean> = ref(false);
+const form: ref<{ response: string; status: number;requestId:number }> = ref({ response: '', status: 0,requestId:0 });
+const currentRow: ref<InviteRequest | null> = ref(null);
+const token = localStorage.getItem('token');
 // 根据队伍ID获取队伍信息
 const getTeamInfo = async (teamId: number) => {
     try {
@@ -80,6 +85,39 @@ const handlePageChange = (newPage: number) => {
     currentPage.value = newPage;
     fetchInvites();
 };
+const handleOpenDialog = (row: InviteRequest) => {
+    currentRow.value = row;
+    form.value.requestId=row.id;
+    form.value.response = row.response ;
+    form.value.status = row.status;
+    dialogVisible.value = true;
+};
+const handleDialogSubmit = async () => {
+    console.log(form.value.response);
+    if (currentRow.value) {
+        // 构建请求体
+        const requestData = {
+            requestId: form.value.requestId,
+            status: form.value.status,
+            response: form.value.response.trim() // 去除回复文本两端的空白字符
+        };
+        try {
+            console.log(requestData.requestId,requestData.status,requestData.response);
+            const res = await updateInvite(requestData.requestId, requestData.status, requestData.response);
+            console.log(res);
+            if (res.data.code === 1) {
+                ElMessage.success(res.data.message);
+            }else{
+                ElMessage.error(res.data.message);
+            }
+        } catch (error) {
+            console.error('Failed to handle invite request:', error);
+            ElMessage.error('处理请求失败');
+        }
+        // 关闭弹窗
+        dialogVisible.value = false;
+    }
+};
 </script>
 <template>
         <div class="common-layout">
@@ -87,6 +125,11 @@ const handlePageChange = (newPage: number) => {
                 <el-header></el-header>
                 <el-main>
                     <el-table :data="tableData?.list" stripe style="width: 100%">
+                        <el-table-column prop="id" label="id" width="100" style="height: 150px;">
+                            <template #default="scope">
+                                {{ scope.row.id || 'null' }}
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="teamID" label="队伍id" width="100" style="height: 150px;">
                             <template #default="scope">
                                 {{ scope.row.teamID || 'null' }}
@@ -109,9 +152,9 @@ const handlePageChange = (newPage: number) => {
                         </el-table-column>
                         <el-table-column prop="status" label="处理结果" width="180">
                             <template #default="scope">
-                           <span :class="'status-box status-' + scope.row.status">
-                           {{ scope.row.status === 0 ? '未处理' : scope.row.status === 1 ? '已同意' : scope.row.status === 2 ? '已拒绝' : 'null' }}
-                               </span>
+                               <span :class="'status-box status-' + scope.row.status">
+                                     {{ scope.row.status === 0 ? '未处理' : scope.row.status === 1 ? '已同意' : scope.row.status === 2 ? '已拒绝' : 'null' }}
+                                </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="response" label="回复" style="height: 150px;">
@@ -119,9 +162,37 @@ const handlePageChange = (newPage: number) => {
                                 {{ scope.row.response || 'null' }}
                             </template>
                         </el-table-column>
-
+                        <!-- 按钮列 -->
+                        <el-table-column label="操作" width="120">
+                            <template #default="scope">
+                                <!-- 只有当 status 为 0 时，才显示按钮 -->
+                                <el-button v-if="scope.row.status === 0" @click="handleOpenDialog(scope.row)">处理</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </el-main>
+                <el-dialog
+                    v-model="dialogVisible"
+                    title="处理请求"
+                    width="60%"
+                >
+                    <el-form>
+                        <el-form-item label="回复">
+                            <el-input v-model="form.response" type="textarea"></el-input>
+                        </el-form-item>
+                        <el-form-item label="选择">
+                                <el-radio-group v-model="form.status">
+                                    <el-radio value=0>再想想</el-radio>
+                                    <el-radio value=1>接受</el-radio>
+                                    <el-radio value=2>拒绝</el-radio>
+                                </el-radio-group>
+                        </el-form-item>
+                    </el-form>
+                    <span slot="footer" >
+                          <el-button @click="dialogVisible =false">取消</el-button>
+                         <el-button type="primary" @click="handleDialogSubmit">提交</el-button>
+                       </span>
+                </el-dialog>
             </el-container>
             <el-pagination
                 v-if="total > 0"
@@ -134,7 +205,6 @@ const handlePageChange = (newPage: number) => {
             </el-pagination>
         </div>
 </template>
-
 <style scoped>
 .common-layout {
     padding: 20px;
