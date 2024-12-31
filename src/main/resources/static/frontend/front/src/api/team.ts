@@ -6,6 +6,7 @@ export const instance = axios.create({baseURL})
 
 export const createTeam = (team: any) => {
     const token = localStorage.getItem('token');
+    console.log(team)
     return instance.post('/teams/create',
         team,
         {

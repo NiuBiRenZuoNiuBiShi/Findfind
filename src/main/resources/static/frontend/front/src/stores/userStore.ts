@@ -30,13 +30,14 @@ export const useUserStore = defineStore("user", () => {
                 Authorization: localStorage.getItem("token"),
             }
         })
-        userInfo.value = resOfUserInfo.data;
+        userInfo.value = resOfUserInfo.data.data;
         const resOfTeamsInfo = await instance.get('/teams/getByUser', {
             headers: {
                 Authorization: localStorage.getItem("token"),
             }
         })
-        userTeams.value = resOfTeamsInfo.data;
+        userTeams.value = resOfTeamsInfo.data.data;
+        console.log(userTeams.value);
     }
 
     async function initialize() {
@@ -54,9 +55,19 @@ export const useUserStore = defineStore("user", () => {
         token.value = theToken;
     }
 
+    function addTeam(team) {
+        userTeams.value.push(team);
+    }
+
+    function removeTeam(team) {
+        userTeams.value.splice(team, 1);
+    }
+
+    
+
     return {
         token, userInfo, logout, getCurrentUser,
         userTeams, hasValue, getUserTeams, initialize,
-        setToken
+        setToken, loadUserInfo, addTeam, removeTeam
     };
 })

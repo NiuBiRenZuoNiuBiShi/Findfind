@@ -44,6 +44,14 @@
           >
             搜索
           </el-button>
+          <el-button
+              type="success"
+              @click="goToCreate"
+              class="create-button"
+              style="margin-top: 15px; margin-left: 10px"
+          >
+            发布招募
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -201,6 +209,7 @@ import {downloadUtils} from "../api/downloadUtils.ts";
 import InviteRequestForm from "./InviteRequestForm.vue";
 import {useUserStore} from "../stores/userStore.ts";
 import { Document, Search } from '@element-plus/icons-vue'
+import router from "../router";
 
 
 const inputLabel = ref('');
@@ -329,6 +338,9 @@ const goToInvite = () => {
 const quitDetails = () => {
   seekerDetailsDialogVisible.value = false;
   currentSeeker.value = null;
+}
+const goToCreate = () => {
+  router.push("/createSeeker")
 }
 </script>
 
@@ -491,5 +503,9 @@ const quitDetails = () => {
 .dialog-footer {
   margin-top: 24px;
   text-align: right;
+}
+
+.create-button {
+  padding: 0 24px;
 }
 </style>

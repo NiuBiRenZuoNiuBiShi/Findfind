@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {ElMessage} from "element-plus";
 import {useUserStore} from "../stores/userStore.ts";
 import axios from "axios";
@@ -38,7 +38,8 @@ const rules = {
     {required: true, message: "请至少选择1个", trigger: "blur"},
   ]
 }
-const userTeams = userStore.userTeams;
+
+let userTeams = userStore.userTeams
 
 const inputLabel = ref("");
 const addLabel = () => {
@@ -128,7 +129,7 @@ const quit = () => {
           label-width="120px"
           class="recruit-form"
       >
-        <el-form-item label="队伍" prop="teamId">
+        <el-form-item label="队伍" prop="teamId" v-if="userTeams !== null">
           <el-select
               v-model="dataForm.teamId"
               placeholder="选择你的队伍"
@@ -326,4 +327,6 @@ const quit = () => {
   justify-content: flex-start;
   margin-left: 0 !important;
 }
+
+
 </style>

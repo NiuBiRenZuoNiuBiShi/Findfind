@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import {ElMessage} from 'element-plus'
 import axios from 'axios'
 import {useUserStore} from "../stores/userStore.ts";
@@ -22,9 +22,13 @@ const inviteRequestFormInfo = ref({
   teamId: null,
   message: '',
 })
-const userTeams = userStore.userTeams
+const userTeams = ref(null)
 const fileList = ref([])
 
+onMounted(async () => {
+  await userStore.initialize(); // 确保数据已加载
+  userTeams.value = userStore.userTeams;
+})
 
 const handleExceed = () => {
   ElMessage.warning("最多五个文件")

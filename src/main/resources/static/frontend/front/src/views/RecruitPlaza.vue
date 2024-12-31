@@ -142,6 +142,12 @@ const quitDetails = () =>{
   currentRecruits.value = null
   recruitDetailsDialogVisible.value = false
 }
+console.log(userStore.userTeams)
+
+const goToCreate = () => {
+  router.push('/createRecruit')
+}
+
 </script>
 
 <template>
@@ -189,6 +195,14 @@ const quitDetails = () =>{
               style="margin-top: 15px"
           >
             搜索
+          </el-button>
+          <el-button
+              type="success"
+              @click="goToCreate"
+              class="create-button"
+              style="margin-top: 15px; margin-left: 10px"
+          >
+            发布招募
           </el-button>
         </el-form-item>
       </el-form>
@@ -516,5 +530,9 @@ const quitDetails = () =>{
 .dialog-footer {
   margin-top: 24px;
   text-align: right;
+}
+
+.create-button {
+  padding: 0 24px;
 }
 </style>
