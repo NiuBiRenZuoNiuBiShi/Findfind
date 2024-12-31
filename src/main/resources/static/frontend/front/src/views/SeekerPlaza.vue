@@ -302,7 +302,6 @@ const seeDetail = async (seeker) => {
       } else {
         currentSeeker.value.files = result.map(item => {
           const decodedData = atob(item.fileData); // 解码 Base64 数据
-
           // 创建二进制数组
           const byteArray = new Uint8Array(decodedData.length);
           for (let i = 0; i < decodedData.length; i++) {
@@ -321,20 +320,16 @@ const seeDetail = async (seeker) => {
     console.log(error)
   }
 }
-
 const downloadFile = (file) => {
   console.log(file)
   downloadUtils.generateDownloadLink(file.data, file.name);
 }
-
 const goToInviteRequest = () => {
   inviteFormVisible.value = true;
 }
-
 const goToInvite = () => {
   inviteFormVisible.value = true;
 }
-
 const quitDetails = () => {
   seekerDetailsDialogVisible.value = false;
   currentSeeker.value = null;

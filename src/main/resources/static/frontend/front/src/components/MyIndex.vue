@@ -35,9 +35,9 @@
                     <span  class="badge badge-soft-success badge-pill badge-lg">
                         Get started
                     </span>
-                    <h2   class=" mt-4">本网站已有<strong class="text-primary">20</strong>名用户，
-                        <strong class="text-primary">30</strong>个队伍，
-                        <strong class="text-primary">100</strong>个招募帖子</h2>
+                    <h2   class=" mt-4">本网站已有<strong class="text-primary">{{totalUser}}</strong>名用户，
+                        <strong class="text-primary">{{ totalTeam }}</strong>个队伍
+                    </h2>
                     <div class="mt-2">
                         <p class="lead lh-180">更多用户的选择，值得信赖！</p>
                     </div>
@@ -373,14 +373,66 @@
         </div>
     </footer>
 </template>
-<script setup>
-import {computed} from 'vue';
+<script lang="ts" setup>
+import {computed, onMounted, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useUserStore} from "../stores/userStore.ts";
+import {getUserList} from "../api/getUserList.js";
+import {ElMessage} from "element-plus";
+import {getTeamList} from "../api/getTeamList.ts";
+interface User {
+    username: string;
+    nickName: string;
+    id: number;
+    email: string;
+    phone: string;
+    biology: string;
+    position: string;
+    status: string;
+    createTime: string;
+    updateTime: string;
+}
+interface PageInfo<T> {
+    total: number;
+    list: T[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+}
+const tableData = ref<PageInfo<User> | null>(null);
+const currentPage = ref(1);
+const pageSize = ref(10);
+const totalUser = ref(0);
+const totalTeam = ref(0);
+const totalRecruit = ref(0);
+const inviteFormVisible = ref(false);
 const router = useRouter();
 const route = useRoute(); // 获取当前路由对象
 const userStore = useUserStore();
 const showIndex = computed(() => route.path === '/');
+const fetchUsers = async () => {
+    try {
+        const res = await getUserList(currentPage.value, pageSize.value);
+        if (res && res.data.data && 'list' in res.data.data && Array.isArray(res.data.data.list)) {
+            tableData.value = res.data.data as PageInfo<User>;
+            totalUser.value = res.data.data.total;
+        } else {
+            console.error('API response is not a PageInfo object:', res.data);
+        }
+    } catch (error) {
+        console.error('Failed to fetch user list:', error);
+        ElMessage.error('获取用户列表失败');
+    }
+};const getTeamListData = async () => {
+    const res = await getTeamList()
+    tableData.value = res.data.data;
+    console.log(res.data.data);
+    totalTeam.value = res.data.data.length;
+}
+onMounted(() => {
+    fetchUsers();
+    getTeamListData()
+});
 </script>
 <style scoped>
 @import '../assets/css/quick-website.css';

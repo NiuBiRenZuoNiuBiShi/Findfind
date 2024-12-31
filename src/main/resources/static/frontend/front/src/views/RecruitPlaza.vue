@@ -358,7 +358,6 @@ const goToCreate = () => {
         </div>
       </template>
     </el-dialog>
-
     <JoinRequestForm
         v-if="joinFormVisible"
         :recruitID="currentRecruits.id"

@@ -107,6 +107,9 @@ const handleDialogSubmit = async () => {
             console.log(res);
             if (res.data.code === 1) {
                 ElMessage.success(res.data.message);
+                setTimeout(() => {
+                    window.location.reload(); // 强制刷新页面
+                }, 1000);
             }else{
                 ElMessage.error(res.data.message);
             }
