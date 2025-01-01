@@ -28,13 +28,20 @@ public class RecruitController {
     */
     @PostMapping("/recruit/release/{teamID}")
     public Result releaseRecruit(@ModelAttribute Recruit recruit
-    , @RequestParam(value = "files", required = false) List<MultipartFile> files
-    , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
+            , @RequestParam(value = "labels", required = true) List<String> labels
+            , @RequestParam(value = "files", required = false) List<MultipartFile> files
+            , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
         System.out.println(recruit.getNeedNum());
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        recruit.setReleaserID((int)userClaims.get("id"));
+        recruit.setReleaserID((int) userClaims.get("id"));
         recruit.setReceiveNum(0);
         recruit.setHasNum(0);
+
+        if (labels != null) {
+            recruit.setLabels(labels);
+        } else {
+            return new Result().error("无标签");
+        }
 
         recruitService.insertRecruit(recruit); // 得到插入的ID
 
@@ -51,8 +58,8 @@ public class RecruitController {
 
     @PutMapping("/plaza")
     public Result updateRecruit(@ModelAttribute Recruit recruit
-    , @RequestParam(value = "files", required = false) List<MultipartFile> files
-    , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
+            , @RequestParam(value = "files", required = false) List<MultipartFile> files
+            , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
         recruit.setUpdateTime(LocalDateTime.now());
         if (fileNames != null && !fileNames.isEmpty()) {
             recruit.setRecruitFiles(FileConverter.convertToPojoFileList(files, recruit.getId()));
@@ -60,13 +67,13 @@ public class RecruitController {
                     .forEach(i -> recruit.getRecruitFiles().get(i).setFileName(fileNames.get(i)));
         }
         recruitService.updateRecruit(recruit);
-        
+
         return new Result().success();
     }
 
     @GetMapping("/plaza") // 通过label来筛选，所需要的Recruit，分页查询
     public Result getRecruits(@RequestParam List<String> labels
-    , @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+            , @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         return new Result().success(recruitService.selectRecruits(labels, page, size));
     }
 
@@ -88,7 +95,7 @@ public class RecruitController {
             , @RequestParam("files") List<MultipartFile> files
             , @RequestParam("fileNames") List<String> fileNames) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        joinRequest.setUserId((int)userClaims.get("id"));
+        joinRequest.setUserId((int) userClaims.get("id"));
         Integer joinRequestID = recruitService.insertJoinRequest(recruitID, joinRequest);
         if (fileNames != null && !fileNames.isEmpty()) {
             joinRequest.setJoinFiles(FileConverter.convertToPojoFileList(files, joinRequestID));
@@ -104,5 +111,5 @@ public class RecruitController {
         return new Result().success(recruitService.selectRecruitFilesByItsId(recruitId));
     }
 
-    
+
 }

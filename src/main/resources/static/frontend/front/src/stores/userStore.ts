@@ -63,8 +63,6 @@ export const useUserStore = defineStore("user", () => {
         userTeams.value.splice(team, 1);
     }
 
-    
-
     return {
         token, userInfo, logout, getCurrentUser,
         userTeams, hasValue, getUserTeams, initialize,
