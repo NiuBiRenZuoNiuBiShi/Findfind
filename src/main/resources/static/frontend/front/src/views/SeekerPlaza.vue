@@ -110,7 +110,7 @@
                 link
                 @click="seeDetail(scope.row)"
                 class="detail-button"
-                v-if="inviteFormVisible === false"
+                v-if="inviteFormVisible===false"
             >
               查看详情
             </el-button>
