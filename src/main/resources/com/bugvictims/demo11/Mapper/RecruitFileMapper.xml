@@ -11,13 +11,18 @@
         </foreach>
     </insert>
 
-    <select id="selectRecruitFiles" parameterType="com.bugvictims.demo11.Pojo.Recruit" resultType="com.bugvictims.demo11.Pojo.PojoFile">
+    <resultMap id="recruitFileMap" type="com.bugvictims.demo11.Pojo.PojoFile">
+        <result column="file" property="fileData"/>
+        <result column="recruit_id" property="linkedID"/>
+    </resultMap>
+
+    <select id="selectRecruitFiles" parameterType="com.bugvictims.demo11.Pojo.Recruit" resultMap="recruitFileMap">
         SELECT *
         FROM recruit_file
         WHERE recruit_id = #{id}
     </select>
     
-    <select id="selectRecruitFilesByRecruitIds" parameterType="java.util.List" resultType="com.bugvictims.demo11.Pojo.PojoFile">
+    <select id="selectRecruitFilesByRecruitIds" parameterType="java.util.List" resultMap="recruitFileMap">
         SELECT *
         FROM recruit_file
         WHERE recruit_id IN 

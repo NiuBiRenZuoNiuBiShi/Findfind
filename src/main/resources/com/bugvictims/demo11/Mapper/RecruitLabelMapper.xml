@@ -12,7 +12,8 @@
     </insert>
 
     <select id="selectRecruitLabelByRecruitIds" parameterType="java.util.List" resultType="com.bugvictims.demo11.Pojo.Label">
-        SELECT * FROM recruit_label
+        SELECT recruit_id AS seekerId, id, label, create_time, update_time
+        FROM recruit_label
         WHERE recruit_id IN 
         <foreach collection="recruitIds" separator="," open="(" close=")" item="recruitId">
             #{recruitId}

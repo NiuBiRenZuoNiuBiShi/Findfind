@@ -52,7 +52,8 @@ const searchRecruits = async () => {
 
     if (response.data.code === 1) {
       const result = response.data.data
-      if (result && result.length > 0) {
+      console.log(result)
+      if (result) {
         recruits.value = result.list
         total.value = response.data.total || recruits.value.length
       } else{
@@ -102,13 +103,13 @@ const seeDetail = async (recruit) => {
         Authorization: userStore.token
       }
     })
-    console.log(res);
+    console.log(res.data)
     if (res.data.code === 1) {
       const result = res.data.data
       if (result == null) {
         ElMessage.error("获取文件失败")
       } else {
-        currentRecruits.value.files = result.map(item => {
+          currentRecruits.value.files = result.map(item => {
           const decodedData = atob(item.fileData); // 解码 Base64 数据
 
           // 创建二进制数组
@@ -334,7 +335,7 @@ const goToCreate = () => {
 
           <el-descriptions-item label="附件" :span="2">
             <div class="attachments-container">
-              <template v-if="currentRecruits.files.length > 0">
+              <template v-if="currentRecruits.files">
                 <el-button
                     v-for="(file, index) in currentRecruits.files"
                     :key="index"
