@@ -66,7 +66,7 @@
           border
           class="custom-table"
       >
-        <el-table-column type="selection" width="75" align="center" />
+        <el-table-column type="selection" width="75" align="center"/>
 
         <el-table-column prop="header" label="标题" min-width="250" align="left">
           <template #default="scope">
@@ -110,6 +110,7 @@
                 link
                 @click="seeDetail(scope.row)"
                 class="detail-button"
+                v-if="inviteFormVisible === false"
             >
               查看详情
             </el-button>
@@ -153,16 +154,16 @@
       <template v-if="currentSeeker">
         <el-descriptions :column="2" border class="custom-descriptions">
           <el-descriptions-item label="标题" :span="2">
-            <span class="description-title">{{currentSeeker.header}}</span>
+            <span class="description-title">{{ currentSeeker.header }}</span>
           </el-descriptions-item>
 
           <el-descriptions-item label="位置" :span="2">
-            <span class="position-text">{{currentSeeker.position}}</span>
+            <span class="position-text">{{ currentSeeker.position }}</span>
           </el-descriptions-item>
 
           <el-descriptions-item label="详细信息" :span="2">
             <div class="description-content">
-              {{currentSeeker.message}}
+              {{ currentSeeker.message }}
             </div>
           </el-descriptions-item>
 
@@ -177,11 +178,13 @@
                     @click="downloadFile(file)"
                     class="file-button"
                 >
-                  <el-icon class="file-icon"><Document /></el-icon>
+                  <el-icon class="file-icon">
+                    <Document/>
+                  </el-icon>
                   {{ file.name }}
                 </el-button>
               </template>
-              <el-empty v-else description="暂无附件" />
+              <el-empty v-else description="暂无附件"/>
             </div>
           </el-descriptions-item>
         </el-descriptions>
@@ -208,7 +211,7 @@ import axios from 'axios'
 import {downloadUtils} from "../api/downloadUtils.ts";
 import InviteRequestForm from "./InviteRequestForm.vue";
 import {useUserStore} from "../stores/userStore.ts";
-import { Document, Search } from '@element-plus/icons-vue'
+import {Document, Search} from '@element-plus/icons-vue'
 import router from "../router";
 
 
@@ -328,6 +331,7 @@ const goToInviteRequest = () => {
   inviteFormVisible.value = true;
 }
 const goToInvite = () => {
+  seekerDetailsDialogVisible.value = false;
   inviteFormVisible.value = true;
 }
 const quitDetails = () => {
@@ -382,11 +386,35 @@ const goToCreate = () => {
   font-weight: 500;
 }
 
-.tag-0 { background-color: #e6f4ff; color: #1677ff; border-color: #1677ff; }
-.tag-1 { background-color: #f6ffed; color: #52c41a; border-color: #52c41a; }
-.tag-2 { background-color: #fff7e6; color: #fa8c16; border-color: #fa8c16; }
-.tag-3 { background-color: #fff1f0; color: #f5222d; border-color: #f5222d; }
-.tag-4 { background-color: #f9f0ff; color: #722ed1; border-color: #722ed1; }
+.tag-0 {
+  background-color: #e6f4ff;
+  color: #1677ff;
+  border-color: #1677ff;
+}
+
+.tag-1 {
+  background-color: #f6ffed;
+  color: #52c41a;
+  border-color: #52c41a;
+}
+
+.tag-2 {
+  background-color: #fff7e6;
+  color: #fa8c16;
+  border-color: #fa8c16;
+}
+
+.tag-3 {
+  background-color: #fff1f0;
+  color: #f5222d;
+  border-color: #f5222d;
+}
+
+.tag-4 {
+  background-color: #f9f0ff;
+  color: #722ed1;
+  border-color: #722ed1;
+}
 
 .search-button {
   margin-left: 16px;
