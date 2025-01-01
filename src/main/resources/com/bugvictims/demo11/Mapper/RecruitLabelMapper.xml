@@ -6,7 +6,7 @@
     <insert id="addRecruitLabel" parameterType="com.bugvictims.demo11.Pojo.Recruit" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO recruit_label (recruit_id, label, create_time, update_time)
         VALUES
-        <foreach collection="label" item="labelItem" separator=",">
+        <foreach collection="labels" item="labelItem" separator=",">
             (#{id}, #{labelItem}, #{createTime}, #{updateTime})
         </foreach>
     </insert>
