@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import {ref} from 'vue'
+import {ElMessage} from 'element-plus'
 import axios from 'axios'
 import router from "../router";
 import {downloadUtils} from "../api/downloadUtils.ts";
 import JoinRequestForm from "./JoinRequestForm.vue";
 import {useUserStore} from "../stores/userStore.ts";
-import { Document, Search } from '@element-plus/icons-vue'
+import {Document, Search} from '@element-plus/icons-vue'
 // 响应式变量
 const inputLabel = ref('')
 const selectedLabels = ref([])
@@ -55,7 +55,7 @@ const searchRecruits = async () => {
       if (result && result.length > 0) {
         recruits.value = result.list
         total.value = response.data.total || recruits.value.length
-      } else{
+      } else {
         ElMessage.error("无数据")
       }
     } else {
@@ -79,7 +79,7 @@ const handlePageChange = (page) => {
 }
 
 // 格式化日期时间
-const formatDateTime = (dateTime:any) => {
+const formatDateTime = (dateTime: any) => {
   return dateTime ? new Date(dateTime).toLocaleString() : ''
 }
 
@@ -117,7 +117,7 @@ const seeDetail = async (recruit) => {
             byteArray[i] = decodedData.charCodeAt(i);
           }
 
-          const blob = new Blob([byteArray], { type: 'application/octet-stream' })
+          const blob = new Blob([byteArray], {type: 'application/octet-stream'})
           return {
             data: blob,
             name: item.fileName,
@@ -138,7 +138,7 @@ const goToSubmitJoin = () => {
   joinFormVisible.value = true;
 }
 
-const quitDetails = () =>{
+const quitDetails = () => {
   currentRecruits.value = null
   recruitDetailsDialogVisible.value = false
 }
@@ -218,7 +218,7 @@ const goToCreate = () => {
           border
           class="custom-table"
       >
-        <el-table-column type="selection" width="75" align="center" />
+        <el-table-column type="selection" width="75" align="center"/>
 
         <el-table-column prop="header" label="标题" min-width="250" align="left">
           <template #default="scope">
@@ -230,7 +230,7 @@ const goToCreate = () => {
 
         <el-table-column prop="needNum" label="需求人数" width="120" align="center">
           <template #default="scope">
-            <el-badge :value="scope.row.needNum" type="primary" class="number-badge" />
+            <el-badge :value="scope.row.needNum" type="primary" class="number-badge"/>
           </template>
         </el-table-column>
 
@@ -305,30 +305,30 @@ const goToCreate = () => {
       <template v-if="currentRecruits">
         <el-descriptions :column="2" border class="custom-descriptions">
           <el-descriptions-item label="职位标题" :span="2">
-            <span class="description-title">{{currentRecruits.header}}</span>
+            <span class="description-title">{{ currentRecruits.header }}</span>
           </el-descriptions-item>
 
           <el-descriptions-item label="需求人数">
             <el-tag type="info" effect="plain" class="number-tag">
-              {{currentRecruits.needNum}}
+              {{ currentRecruits.needNum }}
             </el-tag>
           </el-descriptions-item>
 
           <el-descriptions-item label="已有人数">
             <el-tag type="success" effect="plain" class="number-tag">
-              {{currentRecruits.hasNum}}
+              {{ currentRecruits.hasNum }}
             </el-tag>
           </el-descriptions-item>
 
           <el-descriptions-item label="申请人数">
             <el-tag type="warning" effect="plain" class="number-tag">
-              {{currentRecruits.receiveNum}}
+              {{ currentRecruits.receiveNum }}
             </el-tag>
           </el-descriptions-item>
 
           <el-descriptions-item label="职位描述" :span="2">
             <div class="description-content">
-              {{currentRecruits.message}}
+              {{ currentRecruits.message }}
             </div>
           </el-descriptions-item>
 
@@ -343,11 +343,13 @@ const goToCreate = () => {
                     @click="downloadFile(file)"
                     class="file-button"
                 >
-                  <el-icon class="file-icon"><Document /></el-icon>
+                  <el-icon class="file-icon">
+                    <Document/>
+                  </el-icon>
                   {{ file.name }}
                 </el-button>
               </template>
-              <el-empty v-else description="暂无附件" />
+              <el-empty v-else description="暂无附件"/>
             </div>
           </el-descriptions-item>
         </el-descriptions>
@@ -409,11 +411,35 @@ const goToCreate = () => {
   font-weight: 500;
 }
 
-.tag-0 { background-color: #e6f4ff; color: #1677ff; border-color: #1677ff; }
-.tag-1 { background-color: #f6ffed; color: #52c41a; border-color: #52c41a; }
-.tag-2 { background-color: #fff7e6; color: #fa8c16; border-color: #fa8c16; }
-.tag-3 { background-color: #fff1f0; color: #f5222d; border-color: #f5222d; }
-.tag-4 { background-color: #f9f0ff; color: #722ed1; border-color: #722ed1; }
+.tag-0 {
+  background-color: #e6f4ff;
+  color: #1677ff;
+  border-color: #1677ff;
+}
+
+.tag-1 {
+  background-color: #f6ffed;
+  color: #52c41a;
+  border-color: #52c41a;
+}
+
+.tag-2 {
+  background-color: #fff7e6;
+  color: #fa8c16;
+  border-color: #fa8c16;
+}
+
+.tag-3 {
+  background-color: #fff1f0;
+  color: #f5222d;
+  border-color: #f5222d;
+}
+
+.tag-4 {
+  background-color: #f9f0ff;
+  color: #722ed1;
+  border-color: #722ed1;
+}
 
 .search-button {
   margin-left: 16px;

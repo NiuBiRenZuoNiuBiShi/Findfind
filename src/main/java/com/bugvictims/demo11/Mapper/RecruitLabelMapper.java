@@ -15,6 +15,6 @@ public interface RecruitLabelMapper {
 
     @Delete("DELETE FROM recruit_label WHERE recruit_id = #{id}")
     void deleteRecruitLabel(int id);
-
+    
     List<Label> selectRecruitLabelByRecruitIds(List<Integer> recruitIds);
 }

@@ -129,7 +129,7 @@ const quitTeam = () => {
         修改队伍信息
       </router-link>
       <el-button type="danger" @click="deleteTeam" v-if="tableData.yourType=='队长' ">删除队伍</el-button>
-      <el-button type="danger" @click="quitTeam" v-if="tableData.yourType=='队员' ">退出队伍</el-button>
+      <el-button type="danger" @click="quitTeam">退出队伍</el-button>
     </div>
     <div v-else class="no-info">
       <p>暂无队伍信息</p>

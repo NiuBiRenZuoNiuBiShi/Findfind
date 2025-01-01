@@ -54,13 +54,10 @@ public class RecruitServiceImpl implements RecruitService {
     public PageInfo<Recruit> selectRecruits(List<String> labels, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize); //分页查询...
         List<Recruit> recruits = recruitMapper.getRecruits(labels);
-        List<Integer> recruitIds = recruits.stream()
-                .map(Recruit::getId)
-                .collect(Collectors.toList());
+        List<Integer> recruitIds = recruits.stream().map(Recruit::getId).collect(Collectors.toList());
         if (!recruitIds.isEmpty()) {
             Map<Integer, List<Label>> labelsMap = recruitLabelMapper
-                    .selectRecruitLabelByRecruitIds(recruitIds)
-                    .stream()
+                    .selectRecruitLabelByRecruitIds(recruitIds).stream()
                     .collect(Collectors.groupingBy(Label::getSeekerId));
             recruits.forEach(recruit -> {
                 recruit.setLabels(labelsMap.get(recruit.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
@@ -105,10 +102,7 @@ public class RecruitServiceImpl implements RecruitService {
         List<Recruit> recruits = recruitMapper.selectRecruitsByTeamID(teamID);
         List<Integer> recruitIds = recruits.stream().map(Recruit::getId).toList();
         if (!recruitIds.isEmpty()) {
-            Map<Integer, List<Label>> labelsMap = recruitLabelMapper
-                    .selectRecruitLabelByRecruitIds(recruitIds)
-                    .stream()
-                    .collect(Collectors.groupingBy(Label::getSeekerId));
+            Map<Integer, List<Label>> labelsMap = recruitLabelMapper.selectRecruitLabelByRecruitIds(recruitIds).stream().collect(Collectors.groupingBy(Label::getSeekerId));
             recruits.forEach(recruit -> {
                 recruit.setLabels(labelsMap.get(recruit.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
             });

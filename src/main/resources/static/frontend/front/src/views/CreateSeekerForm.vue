@@ -98,7 +98,7 @@ const submitRecruit = () => {
   })
 }
 const quit = () => {
-  router.push('/plaza')
+  router.push('/seekerPlaza')
 }
 
 const handleFileChange = (file, fileList) => {

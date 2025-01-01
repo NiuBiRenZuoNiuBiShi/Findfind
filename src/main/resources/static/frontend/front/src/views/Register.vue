@@ -29,7 +29,7 @@
         <el-form-item label="Phone(Not Necessary)" prop="phoneNumber">
           <el-input v-model="dataForm.phoneNumber" placeholder="请输入手机号"/>
         </el-form-item>
-        <el-form-item >
+        <el-form-item>
           <el-button @click="handleRegister" type="primary" style="width: 80% ;
           background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); margin-left: 35px; margin-top: 10px">
             注册
@@ -46,6 +46,7 @@ import axios from "axios";
 import {useUserStore} from "../stores/userStore";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import {instance} from "../api/user.ts";
 
 const router = useRouter()
 const userStore = new useUserStore();
@@ -74,8 +75,8 @@ const rules = {
     }
   ],
   password: [
-    { required: true, message: "请输入密码", trigger: "blur" },
-    { required: true, message: "请输入密码", trigger: "change" },
+    {required: true, message: "请输入密码", trigger: "blur"},
+    {required: true, message: "请输入密码", trigger: "change"},
     {
       pattern: /^[A-Za-z0-9.]{4,20}$/, // 正则表达式：字母、数字、句点，长度为4到20个字符
       message: "密码必须是4到20个字母、数字或句点（.）",
@@ -106,8 +107,8 @@ const rules = {
     }
   ],
   email: [
-    {required:true, message: "请输入邮箱", trigger: "blur"},
-    {required:true, message: "请输入邮箱", trigger: "change"},
+    {required: true, message: "请输入邮箱", trigger: "blur"},
+    {required: true, message: "请输入邮箱", trigger: "change"},
     {
       pattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
       message: "邮箱格式错误",
@@ -115,8 +116,8 @@ const rules = {
     }
   ],
   phoneNumber: [
-    {required:true, message: "请输入手机号", trigger: "blur"},
-    {required:true, message: "请输入手机号", trigger: "change"},
+    {required: true, message: "请输入手机号", trigger: "blur"},
+    {required: true, message: "请输入手机号", trigger: "change"},
     {
       pattern: /^[0-9]{11}$/,
       message: "手机号格式错误",
@@ -140,11 +141,13 @@ const handleRegister = async () => {
           biology: "暂无",
         }
         console.log(user)
-        const response = await axios.post("user/register", user)
+        const response = await instance.post("user/register", user)
         const result = response.data;
         if (result.code === 1) {
           ElMessage.success("2s后进入登录界面")
-          setTimeout(() => { router.push('/login') }, 1000);
+          setTimeout(() => {
+            router.push('/login')
+          }, 1000);
         } else {
           console.log(result)
           ElMessage.error("注册失败");
