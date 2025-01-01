@@ -26,6 +26,7 @@ interface PageInfo<T> {
   size: number;
 }
 
+const DialogVisible = ref(false);
 const tableData = ref<PageInfo<User> | null>(null);
 const currentPage = ref(1);
 const pageSize = ref(10);
@@ -47,6 +48,7 @@ const goToInviteRequest = async (seekerID: string) => {
     return;
   }
   seekID.value = seekerID;
+  DialogVisible.value = true;
   inviteFormVisible.value = true;
 };
 const fetchUsers = async () => {
@@ -126,10 +128,20 @@ const handlePageChange = (newPage: number) => {
             </template>
           </el-table-column>
         </el-table>
-        <InviteRequestForm
-            v-if="inviteFormVisible" :seekerID="seekID"
-            v-model:visible="inviteFormVisible"
-        />
+        <el-dialog
+            v-model="DialogVisible"
+            title="邀请"
+            width="60%"
+            class="custom-dialog"
+            destroy-on-close
+            v-if="inviteFormVisible"
+        >
+          <InviteRequestForm
+              v-if="inviteFormVisible" :seekerID="seekID"
+              v-model:visible="inviteFormVisible"
+          />
+        </el-dialog>
+
         <el-pagination
             v-if="total > 0"
             layout="total, prev, pager, next"
