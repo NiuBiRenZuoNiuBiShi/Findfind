@@ -45,7 +45,7 @@ const goToSubmitJoin = async (teamId: string, name: string) => {
   const res = await getTeamFromUser()
   for (let i = 0; i < res.data.data.length; i++) {
     if (res.data.data[i].id === teamId) {
-      ElMessage.error('不能申请加入自己的队伍')
+      ElMessage.error('不能申请加入已在的队伍')
       return
     }
   }

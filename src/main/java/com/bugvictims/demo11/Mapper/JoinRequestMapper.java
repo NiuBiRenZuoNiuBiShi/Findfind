@@ -20,18 +20,16 @@ public interface JoinRequestMapper {
     JoinRequest getJoinRequestByTeamIdAndUserId(int teamId, int userId);
 
     //更新请求状态
-    @Update("UPDATE join_request SET status = #{status}, response = #{response} WHERE id = #{requestId}")
+    @Update("UPDATE join_request SET status = #{statue}, response = #{response} WHERE id = #{requestId}")
     void updateJoinRequestStatus(int requestId, int statue, String response);
 
     //删除请求
     @Delete("DELETE FROM join_request WHERE id = #{requestId}")
     void deleteJoinRequest(int requestId);
 
-    @Select("SELECT *" +
-            "FROM join_request WHERE user_id = #{userId}")
+    @Select("SELECT *" + "FROM join_request WHERE user_id = #{userId}")
     List<JoinRequest> selectJoinBySeekerId(Integer userId);
 
-    @Select("SELECT *" +
-            "FROM join_request WHERE team_id = #{teamId}")
+    @Select("SELECT *" + "FROM join_request WHERE team_id = #{teamId}")
     List<JoinRequest> selectJoinByTeamId(Integer teamId);
 }

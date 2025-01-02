@@ -9,6 +9,7 @@ import com.bugvictims.demo11.Service.TeamUserService;
 import com.bugvictims.demo11.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/join")
 public class JoinController {
@@ -66,6 +67,21 @@ public class JoinController {
             return new Result().error("无权限");
         }
         return new Result().success(joinRequest);
+    }
+
+    //更新加入请求
+    @PostMapping("/update/{requestId}/{statue}/{response}")
+    public Result updateJoinRequest(@PathVariable("requestId") int requestId, @PathVariable(value = "statue") int statue, @PathVariable(value = "response", required = false) String response) {
+        User loginUser = userService.getLoginUser();
+        if (loginUser == null) {
+            return new Result().error("未登录");
+        }
+        JoinRequest joinRequest = joinRequestService.getJoinRequestById(requestId);
+        if (joinRequest == null) {
+            return new Result().error("请求不存在");
+        }
+        joinRequestService.handleJoinRequest(requestId, statue, response);
+        return new Result().success();
     }
 
     //处理加入请求
