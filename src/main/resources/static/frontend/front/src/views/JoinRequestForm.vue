@@ -60,7 +60,7 @@ const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 const props = defineProps({
-  recruitId: Number,
+  recruitID: Number,
   visible: Boolean,
 })
 const emit = defineEmits(['update:visible'])
@@ -91,10 +91,12 @@ const submitJoinRequest = async () => {
   // 添加文件
   fileList.value.forEach((file) => {
     formData.append('files', file.raw)
+    formData.append("fileNames", file.name);
   })
 
   try {
-    const response = await axios.post(`/plaza/${props.recruitId}`, formData, {
+    console.log(props.recruitID)
+    const response = await axios.post(`/plaza/${props.recruitID}`, formData, {
       headers: {
         Authorization: userStore.token,
         'Content-Type': 'multipart/form-data'

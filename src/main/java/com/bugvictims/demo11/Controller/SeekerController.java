@@ -45,7 +45,7 @@ public class SeekerController {
             seeker.setSeekerFiles(FileConverter.convertToPojoFileList(files, seekerID));
             for (int i = 0; i < fileNames.size(); i++) {
                 seeker.getSeekerFiles().get(i).setFileName(fileNames.get(i));
-                System.out.println(files.get(i).getSize());
+                //System.out.println(files.get(i).getSize());
             }
             seekerService.insertSeekerFiles(seeker);
         }
@@ -81,18 +81,23 @@ public class SeekerController {
     }
 
     @PostMapping("/plaza/seeker/invite/{seekerID}/{teamID}")
-    Result inviteSeeker(@RequestBody InviteRequest inviteRequest
+    Result inviteSeeker(@ModelAttribute InviteRequest inviteRequest
             , @PathVariable("seekerID") Integer seekerID
             , @PathVariable("teamID") Integer teamID
-            , @RequestParam("files") List<MultipartFile> files)  {
+            , @RequestParam("files") List<MultipartFile> files
+            , @RequestParam("fileNames") List<String> fileNames)  {
 
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         inviteRequest.setReleaserID((int)userClaims.get("id"));
         inviteRequest.setTeamID(teamID);
 
-        Integer inviteID = seekerService.insertInviteRequest(inviteRequest, seekerID);
-        inviteRequest.setInviteFiles(FileConverter.convertToPojoFileList(files, inviteID));
-        seekerService.insertInviteFiles(inviteRequest);
+        seekerService.insertInviteRequest(inviteRequest, seekerID);
+        if (fileNames != null && !fileNames.isEmpty()) {
+            inviteRequest.setInviteFiles(FileConverter.convertToPojoFileList(files, inviteRequest.getId()));
+            IntStream.range(0, inviteRequest.getInviteFiles().size())
+                    .forEach(i -> inviteRequest.getInviteFiles().get(i).setFileName(fileNames.get(i)));
+            seekerService.insertInviteFiles(inviteRequest);
+        }
 
         return new Result().success();
     }

@@ -47,6 +47,7 @@ const submitInviteRequest = async () => {
   if (fileList.value && fileList.value.length > 0) {
     fileList.value.forEach((file) => {
       formData.append("files", file.raw);
+      formData.append("fileNames", file.name);
     });
   }
 
