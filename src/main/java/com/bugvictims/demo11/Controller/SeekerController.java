@@ -25,10 +25,7 @@ public class SeekerController {
     private SeekerServiceImpl seekerServiceImpl;
 
     @PostMapping("/plaza/seeker")
-    Result createSeeker(@ModelAttribute Seeker seeker
-                        , @RequestParam(value = "labels", required = true) List<String> labels
-                        , @RequestParam(value="files", required = false) List<MultipartFile> files
-                        , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
+    Result createSeeker(@ModelAttribute Seeker seeker, @RequestParam(value = "labels", required = true) List<String> labels, @RequestParam(value = "files", required = false) List<MultipartFile> files, @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         if (userClaims == null) {
             return new Result().error("当前无用户登录");
@@ -54,48 +51,39 @@ public class SeekerController {
 
     @DeleteMapping("/plaza/seeker/{id}")
     Result deleteSeeker(@PathVariable Integer id) {
-        if (seekerService.deleteSeeker(id))
-            return new Result().success();
-        else
-            return new Result().error("delete seeker failed maybe cuz it is released by U");
+        if (seekerService.deleteSeeker(id)) return new Result().success();
+        else return new Result().error("delete seeker failed maybe cuz it is released by U");
     }
 
     @PutMapping("/plaza/seeker")
-    Result updateSeeker(@ModelAttribute Seeker seeker
-                        , @RequestParam(value = "files") List<MultipartFile> files
-                        , @RequestParam(value = "fileNames") List<String> fileNames) {
+    Result updateSeeker(@ModelAttribute Seeker seeker, @RequestParam(value = "files") List<MultipartFile> files, @RequestParam(value = "fileNames") List<String> fileNames) {
         seeker.setUpdateTime(LocalDateTime.now());
         if (fileNames != null && !fileNames.isEmpty()) {
-            IntStream.range(0, fileNames.size())
-                    .forEach(i -> seeker.getSeekerFiles().get(i).setFileName(fileNames.get(i)));
+            IntStream.range(0, fileNames.size()).forEach(i -> seeker.getSeekerFiles().get(i).setFileName(fileNames.get(i)));
         }
         seekerService.updateSeeker(seeker);
         return new Result().success();
     }
 
     @GetMapping("/plaza/seeker")
-    Result selectSeeker(@RequestParam("labels") List<String> labels
-                        , @RequestParam(defaultValue = "1") Integer page
-                        , @RequestParam(defaultValue = "10") Integer size) {
+    Result selectSeeker(@RequestParam("labels") List<String> labels, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         return new Result().success(seekerService.selectSeekers(labels, page, size));
     }
 
     @PostMapping("/plaza/seeker/invite/{seekerID}/{teamID}")
-    Result inviteSeeker(@ModelAttribute InviteRequest inviteRequest
-            , @PathVariable("seekerID") Integer seekerID
-            , @PathVariable("teamID") Integer teamID
-            , @RequestParam("files") List<MultipartFile> files
-            , @RequestParam("fileNames") List<String> fileNames)  {
+    Result inviteSeeker(@ModelAttribute InviteRequest inviteRequest, @PathVariable("seekerID") Integer seekerID, @PathVariable("teamID") Integer teamID, @RequestParam("files") List<MultipartFile> files, @RequestParam("fileNames") List<String> fileNames) {
 
         Map<String, Object> userClaims = ThreadLocalUtil.get();
-        inviteRequest.setReleaserID((int)userClaims.get("id"));
+        inviteRequest.setReleaserID((int) userClaims.get("id"));
         inviteRequest.setTeamID(teamID);
 
-        seekerService.insertInviteRequest(inviteRequest, seekerID);
+        if (seekerService.insertInviteRequest(inviteRequest, seekerID) == -1) {
+            return new Result().error("重复邀请");
+        }
+
         if (fileNames != null && !fileNames.isEmpty()) {
             inviteRequest.setInviteFiles(FileConverter.convertToPojoFileList(files, inviteRequest.getId()));
-            IntStream.range(0, inviteRequest.getInviteFiles().size())
-                    .forEach(i -> inviteRequest.getInviteFiles().get(i).setFileName(fileNames.get(i)));
+            IntStream.range(0, inviteRequest.getInviteFiles().size()).forEach(i -> inviteRequest.getInviteFiles().get(i).setFileName(fileNames.get(i)));
             seekerService.insertInviteFiles(inviteRequest);
         }
 

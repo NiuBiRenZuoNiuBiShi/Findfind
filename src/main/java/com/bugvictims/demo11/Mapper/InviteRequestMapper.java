@@ -10,14 +10,12 @@ import java.util.List;
 public interface InviteRequestMapper {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("INSERT INTO invite_request (user_id, team_id, releaser_id, message, response, create_time, update_time)" +
-            " VALUES (#{userID}, #{teamID}, #{releaserID}, #{message}, #{response}, #{createTime}, #{updateTime})")
+    @Insert("INSERT INTO invite_request (user_id, team_id, releaser_id, message, response, create_time, update_time)" + " VALUES (#{userID}, #{teamID}, #{releaserID}, #{message}, #{response}, #{createTime}, #{updateTime})")
     Integer insertInviteRequest(InviteRequest inviteRequest);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("INSERT INTO invite_request (user_id, team_id,  message, create_time, update_time)" +
-            " VALUES (#{userID}, #{teamID}, #{message}, #{createTime}, #{updateTime})")
-    void  createInviteRequest(int teamId, int userId, String message);
+    @Insert("INSERT INTO invite_request (user_id, team_id,  message, create_time, update_time)" + " VALUES (#{userID}, #{teamID}, #{message}, #{createTime}, #{updateTime})")
+    void createInviteRequest(int teamId, int userId, String message);
 
     @Select("SELECT * FROM invite_request WHERE team_id = #{teamID}")
     List<InviteRequest> getInviteRequestsByTeamId(Integer teamID);

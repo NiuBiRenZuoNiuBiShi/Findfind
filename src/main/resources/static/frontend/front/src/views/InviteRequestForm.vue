@@ -63,6 +63,8 @@ const submitInviteRequest = async () => {
     if (res.data.code === 1) {
       ElMessage.success('邀请提交成功')
       quit()
+    } else if (res.data.message === '重复邀请') {
+      ElMessage.error('已经邀请过了')
     } else {
       ElMessage.error('邀请提交失败')
     }

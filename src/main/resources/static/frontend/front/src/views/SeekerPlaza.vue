@@ -190,7 +190,7 @@
         </el-descriptions>
 
         <div class="dialog-footer">
-          <el-button type="primary" @click="goToInvite">发送邀请</el-button>
+          <el-button type="primary" @click="goToInvite(currentSeeker)">发送邀请</el-button>
           <el-button @click="quitDetails">关闭</el-button>
         </div>
       </template>
@@ -213,6 +213,7 @@ import InviteRequestForm from "./InviteRequestForm.vue";
 import {useUserStore} from "../stores/userStore.ts";
 import {Document, Search} from '@element-plus/icons-vue'
 import router from "../router";
+import {instance} from "../api/user.ts";
 
 
 const inputLabel = ref('');
@@ -328,9 +329,21 @@ const downloadFile = (file) => {
   downloadUtils.generateDownloadLink(file.data, file.name);
 }
 const goToInviteRequest = () => {
+
   inviteFormVisible.value = true;
 }
-const goToInvite = () => {
+const goToInvite = async (currentSeeker) => {
+  const token = localStorage.getItem('token');
+  const userAll = await instance.get('/user/userInfo', {
+    headers: {
+      Authorization: token
+    }
+  });
+  console.log(userAll)
+  if (currentSeeker.id === userAll.data.data.id) {
+    ElMessage.error('不能邀请自己')
+    return
+  }
   seekerDetailsDialogVisible.value = false;
   inviteFormVisible.value = true;
 }

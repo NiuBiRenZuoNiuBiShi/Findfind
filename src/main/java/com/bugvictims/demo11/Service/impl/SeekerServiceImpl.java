@@ -65,14 +65,9 @@ public class SeekerServiceImpl implements SeekerService {
         List<Seeker> seekers = seekerMapper.selectSeekers(labels);
         List<Integer> seekerIDs = seekers.stream().map(Seeker::getId).toList();
         if (!seekerIDs.isEmpty()) {
-            Map<Integer, List<Label>> labelsMap = seekerLabelMapper
-                    .selectSeekerLabelBySeekerIDs(seekerIDs)
-                    .stream()
-                    .collect(Collectors.groupingBy(Label::getSeekerId));
+            Map<Integer, List<Label>> labelsMap = seekerLabelMapper.selectSeekerLabelBySeekerIDs(seekerIDs).stream().collect(Collectors.groupingBy(Label::getSeekerId));
             seekers.forEach(seeker -> {
-                seeker.setLabels(labelsMap.get(seeker.getId()).stream()
-                        .map(Label::getLabel)
-                        .collect(Collectors.toList()));
+                seeker.setLabels(labelsMap.get(seeker.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
             });
         }
         return new PageInfo<>(seekers);
@@ -83,7 +78,10 @@ public class SeekerServiceImpl implements SeekerService {
         inviteRequest.setUpdateTime(LocalDateTime.now()); // time
         Seeker seeker = seekerMapper.selectSeekerById(seekerID);
         inviteRequest.setUserID(seeker.getSeekerId()); // specific invited user
-
+        //不重复插入
+        if (inviteRequestMapper.getInviteRequestByTeamIdAndUserId(inviteRequest.getTeamID(), seekerID) != null) {
+            return -1;
+        }
         return inviteRequestMapper.insertInviteRequest(inviteRequest);
     }
 
@@ -101,10 +99,7 @@ public class SeekerServiceImpl implements SeekerService {
         List<Seeker> seekers = seekerMapper.selectSeekersByUserID(userID);
         List<Integer> seekerIDs = seekers.stream().map(Seeker::getId).toList();
         if (!seekerIDs.isEmpty()) {
-            Map<Integer, List<Label>> labelsMap = seekerLabelMapper
-                    .selectSeekerLabelBySeekerIDs(seekerIDs)
-                    .stream()
-                    .collect(Collectors.groupingBy(Label::getSeekerId));
+            Map<Integer, List<Label>> labelsMap = seekerLabelMapper.selectSeekerLabelBySeekerIDs(seekerIDs).stream().collect(Collectors.groupingBy(Label::getSeekerId));
             seekers.forEach(seeker -> {
                 Optional<List<Label>> labelsOptional = Optional.ofNullable(labelsMap.get(seeker.getId()));
                 labelsOptional.ifPresent(labels -> {
