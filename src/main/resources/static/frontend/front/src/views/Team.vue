@@ -71,6 +71,7 @@ const rules = {
   ]
 }
 import {createTeam} from "../api/team.ts";
+import {useUserStore} from "../stores/userStore.ts";
 //添加分类
 const addTeam = async () => {
   //调用接口
@@ -80,6 +81,10 @@ const addTeam = async () => {
     message: result.data.message,
     type: result.data.code === 1 ? 'success' : 'error'
   })
+  if (result.data.code === 1) {
+    await useUserStore().initialize()
+    window.location.reload()
+  }
   //调用获取分类列表接口
   await getTeamListData()
   //关闭弹窗

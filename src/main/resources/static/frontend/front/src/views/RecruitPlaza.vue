@@ -109,7 +109,7 @@ const seeDetail = async (recruit) => {
       if (result == null) {
         ElMessage.error("获取文件失败")
       } else {
-          currentRecruits.value.files = result.map(item => {
+        currentRecruits.value.files = result.map(item => {
           const decodedData = atob(item.fileData); // 解码 Base64 数据
 
           // 创建二进制数组
@@ -136,6 +136,7 @@ const downloadFile = (file) => {
 }
 
 const goToSubmitJoin = () => {
+  recruitDetailsDialogVisible.value = false
   joinFormVisible.value = true;
 }
 
@@ -263,6 +264,7 @@ const goToCreate = () => {
                 link
                 @click="seeDetail(scope.row)"
                 class="detail-button"
+                v-if="joinFormVisible===false"
             >
               查看详情
             </el-button>
