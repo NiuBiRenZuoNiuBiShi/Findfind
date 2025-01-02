@@ -3,6 +3,7 @@ import {onMounted, ref} from 'vue'
 import {ElMessage} from 'element-plus'
 import axios from 'axios'
 import {useUserStore} from "../stores/userStore.ts";
+import {isTeamLeader} from "../api/team.ts";
 
 const userStore = useUserStore()
 const inviteRequestFormRef = ref(null)
@@ -28,6 +29,16 @@ const fileList = ref([])
 onMounted(async () => {
   await userStore.initialize(); // 确保数据已加载
   userTeams.value = userStore.userTeams;
+  //排除不是队长的队伍
+  console.log(userTeams.value)
+  for (let i = 0; i < userTeams.value.length; i++) {
+    const leader = await isTeamLeader(userTeams.value[i].id)
+    if (leader.data.data === false) {
+      console.log(userTeams.value[i].id)
+      userTeams.value.splice(i, 1)
+      i--
+    }
+  }
 })
 
 const handleExceed = () => {
