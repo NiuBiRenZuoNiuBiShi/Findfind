@@ -4,7 +4,6 @@ import {getUserList} from '../api/getUserList';
 import {ElMessage} from 'element-plus';
 import InviteRequestForm from "./InviteRequestForm.vue";
 import {instance} from "../api/user.ts";
-import InviteRequestNoFile from "./inviteRequestNoFile.vue";
 
 interface User {
   username: string;
@@ -137,9 +136,10 @@ const handlePageChange = (newPage: number) => {
             destroy-on-close
             v-if="inviteFormVisible"
         >
-          <invite-request-no-file
-              v-if="inviteFormVisible" :userId="seekID"
+          <InviteRequestForm
+              v-if="inviteFormVisible" :seekerID="seekID"
               v-model:visible="inviteFormVisible"
+
           />
         </el-dialog>
 
