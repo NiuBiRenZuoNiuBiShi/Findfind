@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bugvictims.demo11.Mapper.RecruitFileMapper">
-    <insert id="insertRecruitFiles" parameterType="com.bugvictims.demo11.Pojo.Recruit" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertRecruitFiles" parameterType="com.bugvictims.demo11.Pojo.Recruit">
         INSERT INTO recruit_file(recruit_id, file, type, create_time, update_time, file_name)
         VALUES
         <foreach collection="recruitFiles" item="file" separator="," >

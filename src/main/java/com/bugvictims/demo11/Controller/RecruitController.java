@@ -31,7 +31,7 @@ public class RecruitController {
             , @RequestParam(value = "labels", required = true) List<String> labels
             , @RequestParam(value = "files", required = false) List<MultipartFile> files
             , @RequestParam(value = "fileNames", required = false) List<String> fileNames) {
-        System.out.println(recruit.getNeedNum());
+        //System.out.println(recruit.getNeedNum());
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         recruit.setReleaserID((int) userClaims.get("id"));
         recruit.setReceiveNum(0);
@@ -96,9 +96,9 @@ public class RecruitController {
             , @RequestParam("fileNames") List<String> fileNames) {
         Map<String, Object> userClaims = ThreadLocalUtil.get();
         joinRequest.setUserId((int) userClaims.get("id"));
-        Integer joinRequestID = recruitService.insertJoinRequest(recruitID, joinRequest);
+        recruitService.insertJoinRequest(recruitID, joinRequest);
         if (fileNames != null && !fileNames.isEmpty()) {
-            joinRequest.setJoinFiles(FileConverter.convertToPojoFileList(files, joinRequestID));
+            joinRequest.setJoinFiles(FileConverter.convertToPojoFileList(files, joinRequest.getId()));
             IntStream.range(0, joinRequest.getJoinFiles().size())
                     .forEach(i -> joinRequest.getJoinFiles().get(i).setFileName(fileNames.get(i)));
             recruitService.insertJoinFiles(joinRequest);

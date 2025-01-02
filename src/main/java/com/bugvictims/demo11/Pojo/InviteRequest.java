@@ -15,7 +15,6 @@ public class InviteRequest {
     private Integer userID;
     private Integer teamID;
     private Integer releaserID;
-    private Integer header;
     private String message;
     private String response;
     private Integer status;

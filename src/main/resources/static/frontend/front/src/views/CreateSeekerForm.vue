@@ -63,7 +63,7 @@ const submitRecruit = () => {
         if (dataForm.value.files && dataForm.value.files.length > 0) {
           dataForm.value.files.forEach((f) => {
             seekerData.append("files", f.raw || f);
-            console.log(f.raw)
+            //console.log(f.raw)
           })
         }
         if (dataForm.value.fileNames && dataForm.value.fileNames.length > 0) {
