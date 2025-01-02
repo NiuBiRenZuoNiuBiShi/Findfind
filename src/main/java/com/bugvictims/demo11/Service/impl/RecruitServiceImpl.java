@@ -1,10 +1,7 @@
 package com.bugvictims.demo11.Service.impl;
 
 import com.bugvictims.demo11.Mapper.*;
-import com.bugvictims.demo11.Pojo.JoinRequest;
-import com.bugvictims.demo11.Pojo.Label;
-import com.bugvictims.demo11.Pojo.PojoFile;
-import com.bugvictims.demo11.Pojo.Recruit;
+import com.bugvictims.demo11.Pojo.*;
 import com.bugvictims.demo11.Service.RecruitService;
 import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import com.github.pagehelper.PageHelper;
@@ -56,9 +53,7 @@ public class RecruitServiceImpl implements RecruitService {
         List<Recruit> recruits = recruitMapper.getRecruits(labels);
         List<Integer> recruitIds = recruits.stream().map(Recruit::getId).collect(Collectors.toList());
         if (!recruitIds.isEmpty()) {
-            Map<Integer, List<Label>> labelsMap = recruitLabelMapper
-                    .selectRecruitLabelByRecruitIds(recruitIds).stream()
-                    .collect(Collectors.groupingBy(Label::getSeekerId));
+            Map<Integer, List<Label>> labelsMap = recruitLabelMapper.selectRecruitLabelByRecruitIds(recruitIds).stream().collect(Collectors.groupingBy(Label::getSeekerId));
             recruits.forEach(recruit -> {
                 recruit.setLabels(labelsMap.get(recruit.getId()).stream().map(Label::getLabel).collect(Collectors.toList()));
             });
@@ -81,6 +76,9 @@ public class RecruitServiceImpl implements RecruitService {
     public Integer insertJoinRequest(Integer recruitID, JoinRequest joinRequest) {
         Recruit recruit = recruitMapper.getRecruitById(recruitID); // 需要通过recruitID来得到team_id
         joinRequest.setTeamId(recruit.getTeamID());
+        if (joinRequestMapper.getJoinRequestByTeamIdAndUserId(joinRequest.getTeamId(), joinRequest.getUserId()) != null) {
+            return -1;
+        }
         joinRequest.setCreateTime(LocalDateTime.now());
         joinRequest.setUpdateTime(LocalDateTime.now());
         recruitMapper.addJoinRequest(recruitID);

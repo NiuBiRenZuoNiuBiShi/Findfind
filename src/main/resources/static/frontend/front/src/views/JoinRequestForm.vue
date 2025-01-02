@@ -50,9 +50,9 @@
 </template>
 
 <script setup>
-import { ref} from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import {ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {ElMessage} from 'element-plus'
 import axios from 'axios'
 import {useUserStore} from "../stores/userStore.ts";
 
@@ -102,10 +102,12 @@ const submitJoinRequest = async () => {
         'Content-Type': 'multipart/form-data'
       }
     })
-
+    console.log(response)
     if (response.data.code === 1) {
       ElMessage.success('申请提交成功')
       exit();
+    } else if (response.data.message === '已经申请过了') {
+      ElMessage.error('您已经申请过了')
     } else {
       ElMessage.error('申请提交失败')
     }
