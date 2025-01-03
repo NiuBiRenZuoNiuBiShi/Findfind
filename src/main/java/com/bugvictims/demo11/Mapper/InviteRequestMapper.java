@@ -1,7 +1,6 @@
 package com.bugvictims.demo11.Mapper;
 
 import com.bugvictims.demo11.Pojo.InviteRequest;
-import com.bugvictims.demo11.Pojo.JoinRequest;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

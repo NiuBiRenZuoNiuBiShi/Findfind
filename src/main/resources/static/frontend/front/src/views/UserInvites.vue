@@ -4,7 +4,7 @@ import {getUserInvites} from '../api/getUserInvites.ts';
 import {ElMessage} from 'element-plus';
 import {getTeamInfo as apiGetTeamInfo} from "../api/getTeamInfo.ts";
 import {updateInvite} from "../api/updateInvite.ts";
-import {instance} from "../api/user.ts";
+import {getUserInfoById} from "../api/getUserInfo.ts";
 
 interface InviteRequest {
   id: number;
@@ -19,6 +19,7 @@ interface InviteRequest {
   updateTime: string;
   teamName?: string; // 队伍名称
   teamDescription?: string; // 队伍描述
+  releaserName?: string; // 发布者名称
 }
 
 interface PageInfo<T> {
@@ -64,6 +65,7 @@ const fetchInvites = async () => {
       total.value = res.data.data.total;
       await Promise.all(tableData.value.list.map(async (invite) => {
         const teamInfo = await getTeamInfo(invite.teamID);
+        invite.releaserName = await getUserName(invite.releaserID)
         if (teamInfo) {
           console.log('Raw response2:', teamInfo); // 打印出完整的响应对象
           invite.teamName = teamInfo.name;
@@ -122,6 +124,11 @@ const handleDialogSubmit = async () => {
     dialogVisible.value = false;
   }
 };
+const getUserName = async (userId: number) => {
+  const res = await getUserInfoById(userId)
+  console.log(res.data.data.username)
+  return res.data.data.username
+}
 </script>
 <template>
   <div class="common-layout">
@@ -129,9 +136,9 @@ const handleDialogSubmit = async () => {
       <el-header></el-header>
       <el-main>
         <el-table :data="tableData?.list" stripe style="width: 100%">
-          <el-table-column prop="id" label="id" width="100" style="height: 150px;">
+          <el-table-column prop="releaserName" label="邀请人" width="100" style="height: 150px;">
             <template #default="scope">
-              {{ scope.row.id || 'null' }}
+              {{ scope.row.releaserName || 'null' }}
             </template>
           </el-table-column>
           <el-table-column prop="teamID" label="队伍id" width="100" style="height: 150px;">
