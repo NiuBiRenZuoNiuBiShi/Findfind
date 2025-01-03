@@ -17,7 +17,7 @@ import CreateSeekerForm from "../views/CreateSeekerForm.vue";
 import RecruitPlaza from "../views/RecruitPlaza.vue";
 import TeamUpdate from "../views/TeamUpdate.vue";
 import UserSeekers from "../views/UserSeekers.vue";
-import App from "../App.vue";
+import HandleJoin from "../views/HandleJoin.vue";
 
 const Team = () => import('../views/Team.vue');
 const routes: any = [
@@ -117,6 +117,11 @@ const routes: any = [
         path: '/teamUpdate',
         name: 'teamUpdate',
         component: TeamUpdate
+    },
+    {
+        path: '/handleJoin',
+        name: 'handleJoin',
+        component: HandleJoin
     }
 
 ]

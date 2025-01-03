@@ -27,7 +27,7 @@ public interface InviteRequestMapper {
     InviteRequest getInviteRequestById(Integer ID);
 
     //查找处理请求By teamId and userId
-    @Select("SELECT * FROM invite_request WHERE team_id = #{teamId} AND user_id = #{userId}")
+    @Select("SELECT * FROM invite_request WHERE team_id = #{teamId} AND user_id = #{userId} AND status = 0")
     InviteRequest getInviteRequestByTeamIdAndUserId(int teamId, int userId);
 
     //更新请求状态

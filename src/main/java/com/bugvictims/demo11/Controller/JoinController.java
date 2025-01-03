@@ -69,6 +69,15 @@ public class JoinController {
         return new Result().success(joinRequest);
     }
 
+    @GetMapping("/joins")
+    public Result getJoins(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, @RequestParam int teamId) {
+        User loginUser = userService.getLoginUser();
+        if (loginUser != null) {
+            int id = loginUser.getId();
+            return new Result().success(joinRequestService.getJoins(id, page, size, teamId));
+        } else return new Result().error("当前无用户登录");
+    }
+
     //更新加入请求
     @PostMapping("/update/{requestId}/{statue}/{response}")
     public Result updateJoinRequest(@PathVariable("requestId") int requestId, @PathVariable(value = "statue") int statue, @PathVariable(value = "response", required = false) String response) {
@@ -126,7 +135,7 @@ public class JoinController {
         if (joinRequest == null) {
             return new Result().error("请求不存在");
         }
-        if (joinRequest.getUserId() != loginUser.getId()) {
+        if (joinRequest.getUserId() != loginUser.getId() && !teamUserService.isTeamLeader(joinRequest.getTeamId(), loginUser.getId())) {
             return new Result().error("无权限");
         }
         joinRequestService.deleteJoinRequest(requestId);

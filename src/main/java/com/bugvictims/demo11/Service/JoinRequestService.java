@@ -1,5 +1,8 @@
 package com.bugvictims.demo11.Service;
+
 import com.bugvictims.demo11.Pojo.JoinRequest;
+import com.github.pagehelper.PageInfo;
+
 public interface JoinRequestService {
 
     //查找处理请求By teamId and userId
@@ -19,4 +22,7 @@ public interface JoinRequestService {
 
     //删除加入请求
     void deleteJoinRequest(int requestId);
+
+    //获取别人的加入请求
+    PageInfo<JoinRequest> getJoins(int id, Integer page, Integer size, int teamId);
 }

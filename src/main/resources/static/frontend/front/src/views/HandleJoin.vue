@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import {ref, onMounted} from 'vue';
-import {getUserInvites} from '../api/getUserInvites.ts';
-import {ElMessage} from 'element-plus';
+import {getOtherUserJoins, getUserJoins, updateUserJoin} from '../api/getUserJoins.ts';
 import {getTeamInfo as apiGetTeamInfo} from "../api/getTeamInfo.ts";
-import {updateInvite} from "../api/updateInvite.ts";
-import {instance} from "../api/user.ts";
+import {ElMessage, ElMessageBox} from 'element-plus';
+import {getTeamFromUser} from "../api/getTeamList.ts";
+import {deleteJoinRequest, handleJoinRequest} from "../api/joinRequest.ts";
+import {getUserInfoById} from "../api/getUserInfo.ts";
 
-interface InviteRequest {
+interface JoinRequest {
   id: number;
-  userID: number;
-  teamID: number;
-  releaserID: number;
-  header: string;
+  userId: number;
+  teamId: number;
   message: string;
   response: string;
   status: number; // 0:未处理 1:已同意 2:已拒绝
@@ -19,6 +18,7 @@ interface InviteRequest {
   updateTime: string;
   teamName?: string; // 队伍名称
   teamDescription?: string; // 队伍描述
+  userName?: string; // 用户名
 }
 
 interface PageInfo<T> {
@@ -29,19 +29,31 @@ interface PageInfo<T> {
   size: number;
 }
 
-const tableData = ref<PageInfo<InviteRequest> | null>(null);
+const tableData = ref<PageInfo<JoinRequest> | null>(null);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
-const dialogVisible: ref<boolean> = ref(false);
-const form: ref<{ response: string; status: number; requestId: number }> = ref({response: '', status: 0, requestId: 0});
-const currentRow: ref<InviteRequest | null> = ref(null);
-const token = localStorage.getItem('token');
+//处理用户通过其他方式加入队伍
+const changeJoinStates = async () => {
+  //判断用户是否已经加入队伍
+  const teamBelongUser = await getTeamFromUser()
+  const res = await getUserJoins(currentPage.value, pageSize.value);
+  for (let i = 0; i < res.data.data.list.length; i++) {
+    for (let j = 0; j < teamBelongUser.data.data.length; j++) {
+      if (res.data.data.list[i].teamId === teamBelongUser.data.data[j].id) {
+        res.data.data.list[i].status = 1
+        console.log(res.data.data.list[i].teamId)
+        await updateUserJoin(res.data.data.list[i].id)
+      }
+    }
+  }
+}
+changeJoinStates();
 // 根据队伍ID获取队伍信息
 const getTeamInfo = async (teamId: number) => {
   try {
     const response = await apiGetTeamInfo(teamId);
-    console.log('Raw response3:', response); // 打印出完整的
+    console.log('Raw response3:', response); // 打印出完整的响应对象
     if (response && response.data.data) {
       console.log('Raw response:', response.data.data); // 打印出完整的响应对象
       return response.data.data; // 确保后端返回的数据结构中包含name和description字段
@@ -55,21 +67,23 @@ const getTeamInfo = async (teamId: number) => {
     return null;
   }
 };
-const fetchInvites = async () => {
+
+const fetchJoins = async () => {
   try {
-    const res = await getUserInvites(currentPage.value, pageSize.value);
+    const teamId = localStorage.getItem('teamInfo');
+    console.log('teamId:', teamId);
+    const res = await getOtherUserJoins(currentPage.value, pageSize.value, teamId);
     console.log('Raw response:', res); // 打印出完整的响应对象
     if (res && res.data.data && 'list' in res.data.data && Array.isArray(res.data.data.list)) {
-      tableData.value = res.data.data as PageInfo<InviteRequest>;
+      tableData.value = res.data.data as PageInfo<JoinRequest>;
       total.value = res.data.data.total;
-      await Promise.all(tableData.value.list.map(async (invite) => {
-        const teamInfo = await getTeamInfo(invite.teamID);
+      await Promise.all(tableData.value.list.map(async (join) => {
+        join.userName = await getUserName(join.userId)
+        const teamInfo = await getTeamInfo(join.teamId);
         if (teamInfo) {
-          console.log('Raw response2:', teamInfo); // 打印出完整的响应对象
-          invite.teamName = teamInfo.name;
-          invite.teamDescription = teamInfo.description;
-        } else
-          console.log('no'); // 打印出完整的响应对象
+          join.teamName = teamInfo.name;
+          join.teamDescription = teamInfo.description;
+        }
       }));
     } else {
       console.error('API response is not a PageInfo object:', res.data);
@@ -79,22 +93,26 @@ const fetchInvites = async () => {
     ElMessage.error('获取数据失败');
   }
 };
+
 onMounted(() => {
-  fetchInvites();
+  fetchJoins();
 });
+
 const handlePageChange = (newPage: number) => {
   currentPage.value = newPage;
-  fetchInvites();
+  fetchJoins();
 };
-const handleOpenDialog = (row: InviteRequest) => {
-  currentRow.value = row;
+const dialogVisible = ref(false);
+const form = ref({response: '', status: 0, requestId: 0});
+const currentRow = ref<JoinRequest | null>(null);
+const handleOpenDialog = (row: JoinRequest) => {
   form.value.requestId = row.id;
   form.value.response = row.response;
   form.value.status = row.status;
   dialogVisible.value = true;
+  currentRow.value = row;
 };
 const handleDialogSubmit = async () => {
-  console.log(form.value.response);
   if (currentRow.value) {
     // 构建请求体
     const requestData = {
@@ -104,10 +122,15 @@ const handleDialogSubmit = async () => {
     };
     try {
       console.log(requestData.requestId, requestData.status, requestData.response);
-      const res = await updateInvite(requestData.requestId, requestData.status, requestData.response);
+      const res = await handleJoinRequest(requestData.requestId, requestData.status, requestData.response);
       console.log(res);
       if (res.data.code === 1) {
         ElMessage.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload(); // 强制刷新页面
+        }, 1000);
+      } else if (res.data.message === '参数错误') {
+        ElMessage.success("回复内容已保存");
         setTimeout(() => {
           window.location.reload(); // 强制刷新页面
         }, 1000);
@@ -115,13 +138,51 @@ const handleDialogSubmit = async () => {
         ElMessage.error(res.data.message);
       }
     } catch (error) {
-      console.error('Failed to handle invite request:', error);
+      console.error('Failed to handle join request:', error);
       ElMessage.error('处理请求失败');
     }
     // 关闭弹窗
     dialogVisible.value = false;
   }
 };
+const closeDia = () => {
+  form.value.response = '';
+  dialogVisible.value = false;
+};
+const deleteRow = async (row: JoinRequest) => {
+  ElMessageBox.confirm(
+      '你确认删除此申请吗？',
+      '温馨提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    //用户点击了确认
+    ElMessage({
+      type: 'success',
+      message: '删除成功',
+    })
+    //调用接口
+    const res = deleteJoinRequest(row.id)
+    console.log(res)
+    //调用获取分类列表接口  刷新
+    fetchJoins()
+    location.reload();
+  }).catch(() => {
+    //用户点击了取消
+    ElMessage({
+      type: 'info',
+      message: '取消删除',
+    })
+  })
+};
+const getUserName = async (userId: number) => {
+  const res = await getUserInfoById(userId)
+  console.log(res.data.data.username)
+  return res.data.data.username
+}
 </script>
 <template>
   <div class="common-layout">
@@ -129,50 +190,34 @@ const handleDialogSubmit = async () => {
       <el-header></el-header>
       <el-main>
         <el-table :data="tableData?.list" stripe style="width: 100%">
-          <el-table-column prop="id" label="id" width="100" style="height: 150px;">
-            <template #default="scope">
-              {{ scope.row.id || 'null' }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="teamID" label="队伍id" width="100" style="height: 150px;">
-            <template #default="scope">
-              {{ scope.row.teamID || 'null' }}
-            </template>
-          </el-table-column>
+          <el-table-column prop="teamId" label="队伍id" width="200"></el-table-column>
           <el-table-column prop="teamName" label="队伍名称" width="180">
             <template #default="scope">
               {{ scope.row.teamName || '未知队伍' }}
             </template>
           </el-table-column>
-          <el-table-column prop="teamDescription" label="队伍描述" width="280">
+          <el-table-column prop="userName" label="申请用户" width="280">
             <template #default="scope">
-              {{ scope.row.teamDescription || '无描述' }}
+              {{ scope.row.userName || 'error' }}
             </template>
           </el-table-column>
-          <el-table-column prop="message" label="内容" width="280">
-            <template #default="scope">
-              {{ scope.row.message || 'null' }}
-            </template>
-          </el-table-column>
+          <el-table-column prop="message" label="内容" width="280"></el-table-column>
           <el-table-column prop="status" label="处理结果" width="180">
             <template #default="scope">
-                               <span :class="'status-box status-' + scope.row.status">
-                                     {{
-                                   scope.row.status === 0 ? '未处理' : scope.row.status === 1 ? '已同意' : scope.row.status === 2 ? '已拒绝' : 'null'
-                                 }}
-                                </span>
+                            <span :class="'status-box status-' + scope.row.status">
+                                {{
+                                scope.row.status === 0 ? '未处理' : scope.row.status === 1 ? '已同意' : scope.row.status === 2 ? '已拒绝' : 'null'
+                              }}
+                            </span>
             </template>
           </el-table-column>
-          <el-table-column prop="response" label="回复" style="height: 150px;">
-            <template #default="scope">
-              {{ scope.row.response || 'null' }}
-            </template>
-          </el-table-column>
-          <!-- 按钮列 -->
+          <el-table-column prop="response" label="回复"></el-table-column>
+          <!-- 其他列 -->
           <el-table-column label="操作" width="120">
             <template #default="scope">
               <!-- 只有当 status 为 0 时，才显示按钮 -->
               <el-button v-if="scope.row.status === 0" @click="handleOpenDialog(scope.row)">处理</el-button>
+              <el-button v-if="scope.row.status !=0" @click="deleteRow(scope.row)">删除已处理</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -195,20 +240,20 @@ const handleDialogSubmit = async () => {
           </el-form-item>
         </el-form>
         <span slot="footer">
-                          <el-button @click="dialogVisible =false">取消</el-button>
+                          <el-button @click="closeDia">取消</el-button>
                          <el-button type="primary" @click="handleDialogSubmit">提交</el-button>
                        </span>
       </el-dialog>
+      <el-pagination
+          v-if="total > 0"
+          layout="total, prev, pager, next"
+          :total="total"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          @current-change="handlePageChange"
+          class="pagination">
+      </el-pagination>
     </el-container>
-    <el-pagination
-        v-if="total > 0"
-        layout="total, prev, pager, next"
-        :total="total"
-        :current-page="currentPage"
-        :page-size="pageSize"
-        @current-change="handlePageChange"
-        class="pagination">
-    </el-pagination>
   </div>
 </template>
 <style scoped>
@@ -221,6 +266,7 @@ const handleDialogSubmit = async () => {
   text-align: center;
 }
 
+/* 定义一个 CSS 类，用于设置带颜色的方框 */
 .status-box {
   display: inline-block;
   padding: 2px 8px;

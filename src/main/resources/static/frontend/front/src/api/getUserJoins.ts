@@ -21,3 +21,16 @@ export const updateUserJoin = async (joinId: number) => {
         }
     });
 }
+export const getOtherUserJoins = async (page: number, size: number, teamId: any): Promise<any> => {
+    const token = localStorage.getItem('token');
+    return await instance.get('/join/joins', {
+        params: {
+            page: page,
+            size: size,
+            teamId: teamId
+        },
+        headers: {
+            Authorization: token
+        }
+    });
+}

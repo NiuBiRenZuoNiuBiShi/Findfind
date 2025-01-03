@@ -16,7 +16,7 @@ public interface JoinRequestMapper {
     JoinRequest getJoinRequestById(int requestId);
 
     //查找处理请求By teamId and userId
-    @Select("SELECT * FROM join_request WHERE team_id = #{teamId} AND user_id = #{userId}")
+    @Select("SELECT * FROM join_request WHERE team_id = #{teamId} AND user_id = #{userId} AND status = 0")
     JoinRequest getJoinRequestByTeamIdAndUserId(int teamId, int userId);
 
     //更新请求状态

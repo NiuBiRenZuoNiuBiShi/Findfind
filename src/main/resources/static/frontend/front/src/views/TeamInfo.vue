@@ -33,6 +33,7 @@ const getTeamListData = async () => {
   }
 }
 getTeamListData()
+
 //删除队伍
 const deleteTeam = () => {
   const id = localStorage.getItem('teamInfo')
@@ -130,6 +131,9 @@ const quitTeam = () => {
       </router-link>
       <el-button type="danger" @click="deleteTeam" v-if="tableData.yourType=='队长' ">删除队伍</el-button>
       <el-button type="danger" @click="quitTeam">退出队伍</el-button>
+      <router-link to="/handleJoin" class="join-button" v-if="tableData.yourType=='队长' ">
+        查看他人申请
+      </router-link>
     </div>
     <div v-else class="no-info">
       <p>暂无队伍信息</p>
@@ -219,6 +223,22 @@ const quitTeam = () => {
 }
 
 .update-button:hover {
+  background-color: #388e7c;
+}
+
+.join-button {
+  width: max-content;
+  padding: 10px 20px;
+  margin-left: 235px;
+  background-color: #42b983;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.join-button:hover {
   background-color: #388e7c;
 }
 </style>
