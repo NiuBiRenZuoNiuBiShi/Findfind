@@ -25,4 +25,7 @@ public interface JoinRequestService {
 
     //获取别人的加入请求
     PageInfo<JoinRequest> getJoins(int id, Integer page, Integer size, int teamId);
+
+    //获取所有加入请求
+    PageInfo<JoinRequest> getJoinsAll(int id, Integer page, Integer size);
 }

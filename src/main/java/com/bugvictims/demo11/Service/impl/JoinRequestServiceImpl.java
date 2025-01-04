@@ -66,4 +66,15 @@ public class JoinRequestServiceImpl implements JoinRequestService {
         List<JoinRequest> joinRequests = joinRequestMapper.selectJoinByTeamId(teamId);
         return new PageInfo<>(joinRequests);
     }
+
+    @Override
+    public PageInfo<JoinRequest> getJoinsAll(int id, Integer page, Integer size) {
+        PageHelper.startPage(page, size); //分页查询...
+        List<Integer> teamIds = teamMapper.findTeamIdsByUserId(id);
+        List<JoinRequest> joinRequests = new ArrayList<>();
+        for (Integer teamId : teamIds) {
+            joinRequests.addAll(joinRequestMapper.selectJoinByTeamId(teamId));
+        }
+        return new PageInfo<>(joinRequests);
+    }
 }

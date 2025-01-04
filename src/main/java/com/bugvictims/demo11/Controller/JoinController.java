@@ -78,6 +78,15 @@ public class JoinController {
         } else return new Result().error("当前无用户登录");
     }
 
+    @GetMapping("/joins/all")
+    public Result getJoins(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+        User loginUser = userService.getLoginUser();
+        if (loginUser != null) {
+            int id = loginUser.getId();
+            return new Result().success(joinRequestService.getJoinsAll(id, page, size));
+        } else return new Result().error("当前无用户登录");
+    }
+
     //更新加入请求
     @PostMapping("/update/{requestId}/{statue}/{response}")
     public Result updateJoinRequest(@PathVariable("requestId") int requestId, @PathVariable(value = "statue") int statue, @PathVariable(value = "response", required = false) String response) {

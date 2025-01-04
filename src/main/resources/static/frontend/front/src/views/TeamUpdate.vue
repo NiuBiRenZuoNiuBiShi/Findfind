@@ -71,7 +71,8 @@ onMounted(async () => {
   const teamInfo = await getTeamById(id);
   if (teamInfo) {
     // 假设后端返回的用户信息结构与dataForm的结构一致
-    Object.assign(dataForm.value, teamInfo);
+    console.log(teamInfo.data.data)
+    Object.assign(dataForm.value, teamInfo.data.data);
   }
 })
 const formSize = "Default"
@@ -114,6 +115,8 @@ const handleUpdate = async () => {
           setTimeout(() => {
             router.push('/teamInfo')
           }, 1000);
+        } else if (res.data.message === "队伍名称已存在") {
+          ElMessage.error(res.data.message);
         } else {
           console.log(res)
           ElMessage.error("更新失败");

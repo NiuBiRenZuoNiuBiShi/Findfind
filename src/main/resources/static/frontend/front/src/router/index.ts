@@ -18,6 +18,7 @@ import RecruitPlaza from "../views/RecruitPlaza.vue";
 import TeamUpdate from "../views/TeamUpdate.vue";
 import UserSeekers from "../views/UserSeekers.vue";
 import HandleJoin from "../views/HandleJoin.vue";
+import handleAll from '../views/handleAll.vue';
 
 const Team = () => import('../views/Team.vue');
 const routes: any = [
@@ -122,6 +123,11 @@ const routes: any = [
         path: '/handleJoin',
         name: 'handleJoin',
         component: HandleJoin
+    },
+    {
+        path: '/handleAll',
+        name: 'handleAll',
+        component: handleAll
     }
 
 ]

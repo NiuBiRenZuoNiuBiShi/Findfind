@@ -34,3 +34,15 @@ export const getOtherUserJoins = async (page: number, size: number, teamId: any)
         }
     });
 }
+export const getAllOtherUserJoins = async (page: number, size: number): Promise<any> => {
+    const token = localStorage.getItem('token');
+    return await instance.get('/join/joins/all', {
+        params: {
+            page: page,
+            size: size
+        },
+        headers: {
+            Authorization: token
+        }
+    });
+}

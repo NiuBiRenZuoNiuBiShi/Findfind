@@ -50,18 +50,18 @@ export default {
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-left">
-            <li class="dropdown">
-             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                aria-expanded="true">首页广场<span class="caret"></span></a>
-             <ul class="dropdown-menu">
-                <li>
-                    <router-link to="/recruitPlaza">Recruit</router-link>
-                </li>
-                <li>
-                    <router-link to="/seekerPlaza">Seeker</router-link>
-                </li>
+            <ul class="dropdown-menu">
+              <li>
+                <router-link to="/recruitPlaza">Recruit</router-link>
+              </li>
+              <li>
+                <router-link to="/seekerPlaza">Seeker</router-link>
+              </li>
             </ul>
-            </li>
+          </li>
           <li>
             <router-link to="/teamList">队伍列表</router-link>
           </li>
@@ -70,17 +70,20 @@ export default {
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li v-if="login">
-                <router-link to="/team">我的队伍</router-link>
-            </li>
-            <li v-if="login">
-                <router-link to="/userSeekers">我的招募</router-link>
-            </li>
+          <li v-if="login">
+            <router-link to="/team">我的队伍</router-link>
+          </li>
+          <li v-if="login">
+            <router-link to="/userSeekers">我的招募</router-link>
+          </li>
           <li v-if="login">
             <router-link to="/userInvites">邀请信息</router-link>
           </li>
           <li v-if="login">
             <router-link to="/userJoins">我的申请</router-link>
+          </li>
+          <li v-if="login">
+            <router-link to="/handleAll">处理他人申请</router-link>
           </li>
           <li v-if="noLogin">
             <router-link to="/login">登录</router-link>
