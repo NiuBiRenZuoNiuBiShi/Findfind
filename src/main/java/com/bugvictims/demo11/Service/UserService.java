@@ -21,12 +21,19 @@ public interface UserService {
     void userJoin(JoinRequest joinRequest);
 
     void logout(User loginUser);
+
     //用户列表
-    PageInfo<User>getUsers(Integer page, Integer size);
+    PageInfo<User> getUsers(Integer page, Integer size);
+
     //队伍列表
-    PageInfo<Team>getTeams(int id,Integer page, Integer size);
+    PageInfo<Team> getTeams(int id, Integer page, Integer size);
+
     //用户当前收到邀请
-    PageInfo<InviteRequest>getInvites(int id,Integer page, Integer size);
+    PageInfo<InviteRequest> getInvites(int id, Integer page, Integer size);
+
     //用户当前申请
-    PageInfo<JoinRequest>getJoins(int id,Integer page, Integer size);
+    PageInfo<JoinRequest> getJoins(int id, Integer page, Integer size);
+
+    //发送邮件
+    void sendEmail(ToEmail email, Integer fromId, String from);
 }

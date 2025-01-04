@@ -7,7 +7,11 @@ import com.bugvictims.demo11.Utils.ThreadLocalUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -83,16 +87,41 @@ public class UserServiceImpl implements UserService {
         List<Team> teams = userMapper.getTeams(id);
         return new PageInfo<>(teams);
     }
+
     //用户当前收到邀请
-    public PageInfo<InviteRequest>getInvites(int id, Integer pageNum, Integer pageSize){
+    public PageInfo<InviteRequest> getInvites(int id, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize); //分页查询...
         List<InviteRequest> inviteRequests = userMapper.getInviteRequests(id);
         return new PageInfo<>(inviteRequests);
     }
+
     //用户当前申请
-    public PageInfo<JoinRequest>getJoins(int id, Integer pageNum, Integer pageSize){
+    public PageInfo<JoinRequest> getJoins(int id, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize); //分页查询...
         List<JoinRequest> joinRequests = userMapper.getJoinRequests(id);
         return new PageInfo<>(joinRequests);
+    }
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Override
+    public void sendEmail(ToEmail toEmail, Integer fromId, String from) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String fromUser = userMapper.getUserById(fromId).getUsername();
+        //发件人
+        message.setFrom(from);
+        //收件人
+        message.setTo(toEmail.getTos());
+        //邮件标题
+        message.setSubject(toEmail.getSubject());
+        //邮件内容
+        message.setText(fromUser + "：\n" + toEmail.getContent());
+        try {
+            mailSender.send(message);
+        } catch (MailException e) {
+            e.printStackTrace();
+        }
     }
 }

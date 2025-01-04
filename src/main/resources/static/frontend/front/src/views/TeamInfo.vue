@@ -17,6 +17,7 @@ import {getTeamById, getTeamUsers} from "../api/getTeamList.ts";
 import {deleteTeamById, isTeamLeader, isTeamLeaderByUserId, quitTeamById} from "../api/team.ts";
 import {ElMessage, ElMessageBox} from "element-plus";
 import router from "../router";
+import {sendEmailto} from "../api/sendEmail.ts";
 
 const getTeamListData = async () => {
   const id = localStorage.getItem('teamInfo')
@@ -143,9 +144,82 @@ getMembers()
 const handleChange = (val: string[]) => {
   console.log(val)
 }
+
+const dialogVisible = ref(false)
+const email = ref(
+    {
+      tos: "",
+      subject: "",
+      content: ""
+    }
+)
+const sendEmailDia = (to: string) => {
+  dialogVisible.value = true
+  email.value.tos = to
+}
+const closeDia = () => {
+  dialogVisible.value = false
+  email.value.subject = ""
+  email.value.content = ""
+}
+const sendEmail = () => {
+  ElMessageBox.confirm(
+      '你确认发送邮件吗？',
+      '温馨提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    if (email.value.subject === "" || email.value.content === "") {
+      ElMessage({
+        type: 'error',
+        message: '请填写完整信息',
+      })
+      return
+    }
+    //用户点击了确认
+    ElMessage({
+      type: 'success',
+      message: '发送成功',
+    })
+    //调用接口
+    sendEmailto(email.value)
+    closeDia()
+  }).catch(() => {
+    //用户点击了取消
+    ElMessage({
+      type: 'info',
+      message: '取消发送',
+    })
+  })
+}
 </script>
 
 <template>
+  <el-dialog
+      title="发送邮件"
+      v-model="dialogVisible"
+      width="40%"
+      :before-close="closeDia"
+  >
+    <el-form>
+      <el-form-item label="收件人">
+        <el-input v-model="email.tos" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="主题">
+        <el-input v-model="email.subject"></el-input>
+      </el-form-item>
+      <el-form-item label="内容">
+        <el-input type="textarea" :autosize="{minRows:8}" v-model="email.content"></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="closeDia">取 消</el-button>
+      <el-button type="primary" @click="sendEmail">确 定</el-button>
+    </span>
+  </el-dialog>
   <div class="user-profile">
     <h1 style="flex-direction: column">队伍信息</h1>
     <div style="display: flex">
@@ -173,6 +247,12 @@ const handleChange = (val: string[]) => {
                 </li>
                 <li>
                   <strong>邮箱:</strong> <span>{{ item.email }}</span>
+                </li>
+                <li v-if="item.type=='队员' ">
+                  <el-button type="primary" @click="sendEmailDia(item.email)">发送邮件</el-button>
+                </li>
+                <li v-if="item.type=='队员' ">
+                  <el-button type="danger">踢出队伍</el-button>
                 </li>
               </ul>
             </div>
@@ -213,9 +293,8 @@ const handleChange = (val: string[]) => {
         <p>暂无队伍信息</p>
       </div>
     </div>
-
-
   </div>
+
 </template>
 
 <style scoped>

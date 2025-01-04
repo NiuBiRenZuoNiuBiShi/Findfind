@@ -6,6 +6,7 @@ import com.bugvictims.demo11.Service.impl.UserServiceImpl;
 import com.bugvictims.demo11.Utils.JWTUtils;
 import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -165,5 +166,28 @@ public class UserController {
         if (user != null) {
             return new Result().success(user);
         } else return new Result().error("用户不存在");
+    }
+
+    @Value("${spring.mail.username}")
+    private String from;
+
+    //发送邮件
+    @PostMapping("/sendEmail")
+    public Result sendEmail(@RequestBody ToEmail email) {
+        System.out.println(email);
+        User loginUser = userService.getLoginUser();
+        if (loginUser != null) {
+            if (email.getTos() == null) {
+                return new Result().error("无收件人");
+            }
+            if (email.getSubject() == null) {
+                return new Result().error("无主题");
+            }
+            if (email.getContent() == null) {
+                return new Result().error("无内容");
+            }
+            userService.sendEmail(email, loginUser.getId(), from);
+            return new Result().success();
+        } else return new Result().error("当前无用户登录");
     }
 }

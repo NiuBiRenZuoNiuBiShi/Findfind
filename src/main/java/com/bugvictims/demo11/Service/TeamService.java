@@ -39,4 +39,5 @@ public interface TeamService {
 
     //根据用户获取队伍信息
     List<Team> getTeamByUser(User loginUser);
+
 }
