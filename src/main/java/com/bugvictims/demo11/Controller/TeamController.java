@@ -73,6 +73,7 @@ public class TeamController {
         teamService.updateTeam(team, loginUser);
         return new Result().success();
     }
+
     //获取用户队伍信息
     @GetMapping("/getByUser")
     public Result getTeamByUser() {
@@ -86,6 +87,7 @@ public class TeamController {
         }
         return new Result().success(teams);
     }
+
     //获取队伍信息By id
     @GetMapping("/get/{id}")
     public Result getTeamById(@PathVariable("id") int id) {
@@ -98,6 +100,7 @@ public class TeamController {
         }
         return new Result().success(team);
     }
+
     //退出队伍
     @PostMapping("/quit/{teamId}")
     public Result quitTeam(@PathVariable("teamId") int teamId) {
@@ -162,5 +165,19 @@ public class TeamController {
     @GetMapping("teams/join/{recruitID}")
     public Result getJoinByRecruitID(@PathVariable Integer recruitID) {
         return new Result().success(joinRequestService.getJoinRequestById(recruitID));
+    }
+
+    //踢出队伍
+    @PostMapping("/kick/{teamId}/{userId}")
+    public Result kickUser(@PathVariable("teamId") int teamId, @PathVariable("userId") int userId) {
+        if (teamId <= 0 || userId <= 0) {
+            return new Result().error("队伍id或用户id不合法");
+        }
+        User loginUser = userService.getLoginUser();
+        if (!teamUserService.isTeamLeader(teamId, loginUser.getId())) {
+            return new Result().error("权限不足，无法踢出队伍成员");
+        }
+        teamService.kickUser(teamId, userId);
+        return new Result().success();
     }
 }

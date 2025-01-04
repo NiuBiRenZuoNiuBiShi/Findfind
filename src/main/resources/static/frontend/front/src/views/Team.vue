@@ -74,6 +74,13 @@ import {createTeam} from "../api/team.ts";
 import {useUserStore} from "../stores/userStore.ts";
 //添加分类
 const addTeam = async () => {
+  if (teamModel.value.name === '' || teamModel.value.type === '' || teamModel.value.description === '') {
+    ElMessage({
+      message: '请填写完整信息',
+      type: 'error'
+    })
+    return
+  }
   //调用接口
   let result = await createTeam(teamModel.value)
   //提示

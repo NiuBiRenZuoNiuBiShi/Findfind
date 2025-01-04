@@ -14,10 +14,11 @@ const tableData = ref({
   yourType: "队员"
 });
 import {getTeamById, getTeamUsers} from "../api/getTeamList.ts";
-import {deleteTeamById, isTeamLeader, isTeamLeaderByUserId, quitTeamById} from "../api/team.ts";
+import {deleteTeamById, isTeamLeader, isTeamLeaderByUserId, OUTTeamUser, quitTeamById} from "../api/team.ts";
 import {ElMessage, ElMessageBox} from "element-plus";
 import router from "../router";
 import {sendEmailto} from "../api/sendEmail.ts";
+import {getUserInfo} from "../api/getUserInfo.ts";
 
 const getTeamListData = async () => {
   const id = localStorage.getItem('teamInfo')
@@ -195,6 +196,39 @@ const sendEmail = () => {
     })
   })
 }
+const deleteTeamUser = (userId: any) => {
+  ElMessageBox.confirm(
+      '你确认踢出此队员吗？',
+      '温馨提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    //用户点击了确认
+    ElMessage({
+      type: 'success',
+      message: '踢出成功',
+    })
+    //调用接口
+    const teamId = localStorage.getItem('teamInfo')
+    OUTTeamUser(teamId, userId)
+    window.location.reload()
+  }).catch(() => {
+    //用户点击了取消
+    ElMessage({
+      type: 'info',
+      message: '取消踢出',
+    })
+  })
+}
+let yourId = ref(0)
+const getUser = async () => {
+  const res = await getUserInfo()
+  yourId = res.data.data.id
+}
+getUser()
 </script>
 
 <template>
@@ -248,18 +282,18 @@ const sendEmail = () => {
                 <li>
                   <strong>邮箱:</strong> <span>{{ item.email }}</span>
                 </li>
-                <li v-if="item.type=='队员' ">
+                <li v-if="item.id!=yourId ">
                   <el-button type="primary" @click="sendEmailDia(item.email)">发送邮件</el-button>
                 </li>
-                <li v-if="item.type=='队员' ">
-                  <el-button type="danger">踢出队伍</el-button>
+                <li v-if="item.type=='队员' && tableData.yourType=='队长' ">
+                  <el-button type="danger" @click="deleteTeamUser(item.id)">踢出队伍</el-button>
                 </li>
               </ul>
             </div>
           </el-collapse-item>
         </el-collapse>
       </div>
-      <div v-if="tableData" class="user-info">
+      <div v-if="tableData" class="user-info" style="width: 600px">
         <ul>
           <li>
             <strong>队伍名:</strong> <span>{{ tableData.name }}</span>

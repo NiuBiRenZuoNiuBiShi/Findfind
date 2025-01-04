@@ -40,4 +40,6 @@ public interface TeamService {
     //根据用户获取队伍信息
     List<Team> getTeamByUser(User loginUser);
 
+    //踢出队伍
+    void kickUser(int teamId, int userId);
 }

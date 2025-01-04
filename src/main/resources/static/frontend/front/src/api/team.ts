@@ -60,3 +60,11 @@ export const isTeamLeaderByUserId = (teamId: any, userId: any) => {
         }
     });
 }
+export const OUTTeamUser = (teamId: any, userId: any) => {
+    const token = localStorage.getItem('token');
+    return instance.post(`/teams/kick/${teamId}/${userId}`, {}, {
+        headers: {
+            Authorization: token
+        }
+    })
+}

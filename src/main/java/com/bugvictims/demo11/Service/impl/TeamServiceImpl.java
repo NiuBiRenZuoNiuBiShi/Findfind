@@ -156,4 +156,13 @@ public class TeamServiceImpl implements TeamService {
         }
         return teams;
     }
+
+    @Override
+    public void kickUser(int teamId, int userId) {
+        if (!teamUserService.isTeamMember(teamId, userId)) {
+            throw new RuntimeException("不是队伍成员，无法退出队伍");
+        }
+
+        teamUserService.deleteTeamUser(teamId, userId);
+    }
 }
