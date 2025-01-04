@@ -52,3 +52,11 @@ export const quitTeamById = (teamId: any) => {
         }
     });
 }
+export const isTeamLeaderByUserId = (teamId: any, userId: any) => {
+    const token = localStorage.getItem('token');
+    return instance.get(`/teams/isTeamMember/${teamId}/${userId}`, {
+        headers: {
+            Authorization: token
+        }
+    });
+}

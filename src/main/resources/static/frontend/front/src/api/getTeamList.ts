@@ -24,3 +24,11 @@ export const getTeamById = async (id): Promise<any> => {
         }
     });
 };
+export const getTeamUsers = async (id): Promise<any> => {
+    const token = localStorage.getItem('token');
+    return await instance.get(`/teams/listUsers/${id}`, {
+        headers: {
+            Authorization: token
+        }
+    });
+}

@@ -23,4 +23,9 @@ public class TeamUserController {
         int userId = loginUser.getId();
         return new Result().success(teamUserService.isTeamLeader(teamId, userId));
     }
+
+    @GetMapping("/isTeamMember/{teamId}/{userId}")
+    public Result isTeamMember(@PathVariable("teamId") int teamId, @PathVariable("userId") int userId) {
+        return new Result().success(teamUserService.isTeamLeader(teamId, userId));
+    }
 }

@@ -106,7 +106,8 @@ const title = ref('添加队伍')
 
       </el-header>
       <el-main>
-        <el-table :data="tableData" stripe style="width: 100%" @row-click="Info">
+        <el-table :data="tableData" stripe style="width: 100%;font-size: 15px" row-style="height:50px"
+                  @row-click="Info">
           <el-table-column prop="name" label="队伍名称" width="180"/>
           <el-table-column prop="type" label="队伍类型" width="180"/>
           <el-table-column prop="description" label="描述"/>

@@ -13,8 +13,8 @@ const tableData = ref({
   "updateTime": "2021-08-17T07:00:00.000+00:00",
   yourType: "队员"
 });
-import {getTeamById} from "../api/getTeamList.ts";
-import {deleteTeamById, isTeamLeader, quitTeamById} from "../api/team.ts";
+import {getTeamById, getTeamUsers} from "../api/getTeamList.ts";
+import {deleteTeamById, isTeamLeader, isTeamLeaderByUserId, quitTeamById} from "../api/team.ts";
 import {ElMessage, ElMessageBox} from "element-plus";
 import router from "../router";
 
@@ -100,50 +100,136 @@ const quitTeam = () => {
   })
 }
 
+const teamMemmbers = ref([
+  {
+    "id": 1,
+    "username": "test",
+    "nickName": "test",
+    "type": "test",
+    "email": "test",
+    "phone": "test"
+  },
+  {
+    "id": 2,
+    "username": "test",
+    "nickName": "test",
+    "type": "test",
+    "email": "test",
+    "phone": "test"
+  }
+])
+const getMembers = async () => {
+  const id = localStorage.getItem('teamInfo')
+  const res = await getTeamUsers(id)
+  teamMemmbers.value = res.data.data
+  for (let i = 0; i < teamMemmbers.value.length; i++) {
+    const res2 = await isTeamLeaderByUserId(id, teamMemmbers.value[i].id)
+    if (res2.data.data === true) {
+      teamMemmbers.value[i].type = "队长"
+    } else {
+      teamMemmbers.value[i].type = "队员"
+    }
+  }
+  //把队长放在第一个
+  for (let i = 0; i < teamMemmbers.value.length; i++) {
+    if (teamMemmbers.value[i].type === "队长") {
+      const temp = teamMemmbers.value[0]
+      teamMemmbers.value[0] = teamMemmbers.value[i]
+      teamMemmbers.value[i] = temp
+    }
+  }
+}
+getMembers()
+const handleChange = (val: string[]) => {
+  console.log(val)
+}
 </script>
 
 <template>
   <div class="user-profile">
-    <h1>队伍信息</h1>
-    <div v-if="tableData" class="user-info">
-      <ul>
-        <li>
-          <strong>队伍名:</strong> <span>{{ tableData.name }}</span>
-        </li>
-        <li>
-          <strong>队伍类型:</strong> <span>{{ tableData.type }}</span>
-        </li>
-        <li>
-          <strong>队伍描述:</strong> <span>{{ tableData.description }}</span>
-        </li>
-        <li>
-          <strong>队伍状态:</strong> <span>{{ tableData.status }}</span>
-        </li>
-        <li>
-          <strong>队伍位置:</strong> <span>{{ tableData.position }}</span>
-        </li>
-        <li>
-          <strong>您的身份:</strong> <span>{{ tableData.yourType }}</span>
-        </li>
-      </ul>
-      <router-link to="/TeamUpdate" class="update-button" v-if="tableData.yourType=='队长' ">
-        修改队伍信息
-      </router-link>
-      <el-button type="danger" @click="deleteTeam" v-if="tableData.yourType=='队长' ">删除队伍</el-button>
-      <el-button type="danger" @click="quitTeam">退出队伍</el-button>
-      <router-link to="/handleJoin" class="join-button" v-if="tableData.yourType=='队长' ">
-        查看他人申请
-      </router-link>
+    <h1 style="flex-direction: column">队伍信息</h1>
+    <div style="display: flex">
+      <div class="demo-collapse float" style="width: 200px">
+        <div class="users-info">
+          队伍成员
+        </div>
+        <el-collapse>
+          <el-collapse-item v-for="(item) in teamMemmbers" @change="handleChange" class="users-info">
+            <template #title>
+              <div class="custom-title">
+                {{ item.username }}
+              </div>
+            </template>
+            <div>
+              <ul>
+                <li>
+                  <strong>昵称:</strong> <span>{{ item.nickName }}</span>
+                </li>
+                <li>
+                  <strong>身份:</strong> <span>{{ item.type }}</span>
+                </li>
+                <li>
+                  <strong>电话:</strong> <span>{{ item.phone }}</span>
+                </li>
+                <li>
+                  <strong>邮箱:</strong> <span>{{ item.email }}</span>
+                </li>
+              </ul>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+      <div v-if="tableData" class="user-info">
+        <ul>
+          <li>
+            <strong>队伍名:</strong> <span>{{ tableData.name }}</span>
+          </li>
+          <li>
+            <strong>队伍类型:</strong> <span>{{ tableData.type }}</span>
+          </li>
+          <li>
+            <strong>队伍描述:</strong> <span>{{ tableData.description }}</span>
+          </li>
+          <li>
+            <strong>队伍状态:</strong> <span>{{ tableData.status }}</span>
+          </li>
+          <li>
+            <strong>队伍位置:</strong> <span>{{ tableData.position }}</span>
+          </li>
+          <li>
+            <strong>您的身份:</strong> <span>{{ tableData.yourType }}</span>
+          </li>
+        </ul>
+        <router-link to="/TeamUpdate" class="update-button" v-if="tableData.yourType=='队长' ">
+          修改队伍信息
+        </router-link>
+        <el-button type="danger" @click="deleteTeam" v-if="tableData.yourType=='队长' ">删除队伍</el-button>
+        <el-button type="danger" @click="quitTeam">退出队伍</el-button>
+        <router-link to="/handleJoin" class="join-button" v-if="tableData.yourType=='队长' ">
+          查看他人申请
+        </router-link>
+      </div>
+      <div v-else class="no-info">
+        <p>暂无队伍信息</p>
+      </div>
     </div>
-    <div v-else class="no-info">
-      <p>暂无队伍信息</p>
-    </div>
+
+
   </div>
 </template>
 
 <style scoped>
+.custom-title {
+  color: #333;
+  font-size: 20px;
+}
+
+.float {
+  float: left;
+}
+
 .user-profile {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 25px;
   background-color: #f7f7f7;
@@ -159,6 +245,14 @@ const quitTeam = () => {
 }
 
 .user-info {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 20px;
+  transition: box-shadow 0.3s ease-in-out; /* 添加过渡效果 */
+}
+
+.users-info {
   background-color: #fff;
   padding: 15px;
   border-radius: 4px;
@@ -241,4 +335,37 @@ const quitTeam = () => {
 .join-button:hover {
   background-color: #388e7c;
 }
+
+
+.users-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.users-info li {
+  margin-bottom: 10px; /* 增加间距 */
+  font-size: 15px;
+  color: #555;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* 添加过渡效果 */
+  padding: 5px 10px; /* 为悬停效果添加一些内边距 */
+  border-radius: 4px; /* 为悬停效果添加边框圆角 */
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between; /* 键和值之间的间距 */
+}
+
+.users-info li strong {
+  font-weight: 500;
+  color: #333;
+  margin-right: 10px; /* 在标签和值之间增加一些间距 */
+}
+
+.users-info li span {
+  flex-grow: 1; /* 让值占据剩余空间 */
+}
+
+.users-info li:hover {
+  background-color: #e9e9e9; /* 悬停时的背景颜色 */
+  color: #333; /* 悬停时的文字颜色 */
+}
+
 </style>
