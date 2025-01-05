@@ -16,7 +16,7 @@ public interface InviteRequestFileMapper {
             " WHERE invite_id = #{id}")
     @Results({
             @Result(property = "fileData", column = "file"),
-            @Result(property = "linkedID", column = "seeker_id")
+            @Result(property = "linkedID", column = "invite_id")
     })
     List<PojoFile> selectInviteFiles(InviteRequest inviteRequest);
 
