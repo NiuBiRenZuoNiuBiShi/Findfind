@@ -47,7 +47,6 @@ const getTeamInfo = async (teamId: number) => {
       console.log('Raw response:', response.data.data); // 打印出完整的响应对象
       return response.data.data; // 确保后端返回的数据结构中包含name和description字段
     } else {
-      ElMessage.error('获取队伍信息失败');
       return null;
     }
   } catch (error) {

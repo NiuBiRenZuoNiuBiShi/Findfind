@@ -7,6 +7,7 @@ import {downloadUtils} from "../api/downloadUtils.ts";
 import JoinRequestForm from "./JoinRequestForm.vue";
 import {useUserStore} from "../stores/userStore.ts";
 import {Document, Search} from '@element-plus/icons-vue'
+import {getTeamFromUser} from "../api/getTeamList.ts";
 // 响应式变量
 const inputLabel = ref('')
 const selectedLabels = ref([])
@@ -135,7 +136,15 @@ const downloadFile = (file) => {
   downloadUtils.generateDownloadLink(file.data, file.name)
 }
 
-const goToSubmitJoin = () => {
+const goToSubmitJoin = async () => {
+  const res = await getTeamFromUser()
+  const teamId = currentRecruits.value.teamID
+  for (let i = 0; i < res.data.data.length; i++) {
+    if (res.data.data[i].id === teamId) {
+      ElMessage.error('不能申请加入已在的队伍')
+      return
+    }
+  }
   recruitDetailsDialogVisible.value = false
   joinFormVisible.value = true;
 }

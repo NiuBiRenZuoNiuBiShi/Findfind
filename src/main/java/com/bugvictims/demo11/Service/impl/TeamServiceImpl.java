@@ -96,6 +96,12 @@ public class TeamServiceImpl implements TeamService {
         if (!teamUserService.isTeamLeader(teamId, userId)) {
             throw new RuntimeException("权限不足，无法删除队伍");
         }
+        //获取队伍成员
+        List<TeamUser> teamUsers = teamUserService.findTeamUsersByTeamId(teamId);
+        for (TeamUser teamUser : teamUsers) {
+            //删除队伍成员
+            teamUserService.deleteTeamUser(teamId, teamUser.getUserId());
+        }
 
         //删除队伍
         teamMapper.deleteTeam(teamId);
