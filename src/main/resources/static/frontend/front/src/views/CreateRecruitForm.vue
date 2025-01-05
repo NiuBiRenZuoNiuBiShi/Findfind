@@ -4,6 +4,7 @@ import {ElMessage} from "element-plus";
 import {useUserStore} from "../stores/userStore.ts";
 import axios from "axios";
 import router from "../router";
+import {isTeamLeader} from "../api/team.ts";
 
 const userStore = useUserStore();
 const formRef = ref(null);
@@ -41,6 +42,7 @@ const rules = {
 
 let userTeams = userStore.userTeams
 
+
 const inputLabel = ref("");
 const addLabel = () => {
   if (inputLabel.value && !dataForm.value.labels.includes(inputLabel.value)) {
@@ -66,6 +68,11 @@ const submitRecruit = () => {
           })
         }
         recruitData.append("teamId", dataForm.value.teamId);
+        const resLeader = await isTeamLeader(dataForm.value.teamId);
+        if (!resLeader.data.data) {
+          ElMessage.error("只有队长可以发布此队伍的招募信息");
+          return;
+        }
         recruitData.append("needNum", dataForm.value.needNum.toString());
         if (dataForm.value.files && dataForm.value.files.length > 0) {
           dataForm.value.files.forEach((f) => {
