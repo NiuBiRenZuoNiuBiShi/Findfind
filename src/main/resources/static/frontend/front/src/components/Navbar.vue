@@ -74,7 +74,7 @@ export default {
             <router-link to="/team">我的队伍</router-link>
           </li>
           <li v-if="login">
-            <router-link to="/userSeekers">我的招募</router-link>
+            <router-link to="/userSeekers">我的帖子</router-link>
           </li>
           <li v-if="login">
             <router-link to="/userInvites">邀请信息</router-link>
