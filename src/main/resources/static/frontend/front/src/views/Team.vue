@@ -103,6 +103,14 @@ const cancelCreate = () => {
   clearData()
 }
 const title = ref('添加队伍')
+const search = ref('')
+const getTeamListData2 = async () => {
+  const res = await getTeamFromUser()
+  tableData.value = res.data.data
+  tableData.value = tableData.value.filter(item => item !== null)
+  tableData.value = tableData.value.filter(item => item.name.includes(search.value))
+  console.log(tableData.value)
+}
 </script>
 
 <template>
@@ -113,6 +121,17 @@ const title = ref('添加队伍')
 
       </el-header>
       <el-main>
+        <el-input
+            placeholder="请输入队伍名称"
+            v-model="search"
+            clearable
+            @clear="getTeamListData"
+            @change="getTeamListData"
+            style="width: 300px;margin-bottom: 0px"
+        >
+        </el-input>
+        <el-button type="primary" @click="getTeamListData2">搜索</el-button>
+
         <el-table :data="tableData" stripe style="width: 100%;font-size: 15px" row-style="height:50px"
                   @row-click="Info">
           <el-table-column prop="name" label="队伍名称" width="180"/>

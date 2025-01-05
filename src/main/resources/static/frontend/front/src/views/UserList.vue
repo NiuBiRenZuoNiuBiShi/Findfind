@@ -75,12 +75,38 @@ const handlePageChange = (newPage: number) => {
   currentPage.value = newPage;
   fetchUsers();
 };
+const search = ref('');
+const getUserListDataS = async () => {
+  for (let i = 0; i < tableData.value?.list.length; i++) {
+    if (tableData.value?.list[i].username.includes(search.value)) {
+      tableData.value = {
+        total: 1,
+        list: [tableData.value?.list[i]],
+        pageNum: 1,
+        pageSize: 10,
+        size: 1
+      };
+      return;
+    }
+  }
+};
 </script>
 <template>
   <div class="common-layout">
     <el-container>
       <el-header></el-header>
       <el-main>
+        <el-input
+            placeholder="请输入姓名"
+            v-model="search"
+            clearable
+            @clear="fetchUsers"
+            @change="fetchUsers"
+            style="width: 300px;margin-bottom: 0px"
+        >
+        </el-input>
+        <el-button type="primary" @click="getUserListDataS">搜索</el-button>
+
         <el-table :data="tableData?.list" stripe style="width: 100%">
           <el-table-column prop="id" label="ID" width="100" style="height: 150px;">
             <template #default="scope">

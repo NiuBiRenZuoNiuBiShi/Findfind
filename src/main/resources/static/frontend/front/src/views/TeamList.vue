@@ -99,6 +99,13 @@ const getTeamListData = async () => {
 }
 getTeamListData()
 //获取队伍列表
+const search = ref('')
+const getTeamListData2 = async () => {
+  const res = await getTeamList()
+  tableData.value = res.data.data.filter((item: any) => {
+    return item.name.includes(search.value)
+  })
+}
 </script>
 <template>
   <div class="common-layout">
@@ -106,6 +113,17 @@ getTeamListData()
       <el-header>
       </el-header>
       <el-main>
+        <el-input
+            placeholder="请输入队伍名称"
+            v-model="search"
+            clearable
+            @clear="getTeamListData"
+            @change="getTeamListData"
+            style="width: 300px;margin-bottom: 0px"
+        >
+        </el-input>
+        <el-button type="primary" @click="getTeamListData2">搜索</el-button>
+
         <el-table :data="tableData" stripe style="width: 100%;font-size: 15px" row-style="height:50px">
           <el-table-column prop="name" label="队伍名称" width="280"/>
           <el-table-column prop="type" label="队伍类型" width="380"/>
